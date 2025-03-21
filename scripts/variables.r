@@ -24,8 +24,8 @@ species_predictors <- list(`Pseudacris triseriata` = c("wetland"),
 
 #climate_vars <- names(p)[1:19]
 #climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
-#climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
-climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount", "mean_diurnal_air_temperature_range")
+climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
+#climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount", "mean_diurnal_air_temperature_range")
 #climate_vars <- c("mean_annual_air_temperature", "mean_diurnal_air_temperature_range")
 #other_vars <- names(predictors)[20:nlyr(predictors)]
 other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_0-5cm", "clay_0-5cm", "forest", "urban", "water", "wetland", "crop")
@@ -33,7 +33,7 @@ other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_
 
 
 #vars <- c(names(p)[1:19], other_vars)
-#vars <- c(climate_vars, other_vars)
+vars <- c(climate_vars, other_vars)
 #vars <- c(climate_vars[c(2, 3)], other_vars)
 #vars <- c(climate_vars[1:2], other_vars[1:2])
 #vars <- c(climate_vars[1:2])#, other_vars)
@@ -41,8 +41,8 @@ other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_
 #vars <- c(other_vars[c(1, 2, 9, 10)])
 #vars <- climate_vars[c(1, 3, 4)]
 #vars <- c(other_vars)#, other_vars)
-vars <- climate_vars[c(1)]
-#vars <- c(climate_vars, other_vars)
+#vars <- climate_vars[c(1)]
+#vars <- c(climate_vars[1], other_vars[c(2, 10)])
 #vars <- c(other_vars)
 
 

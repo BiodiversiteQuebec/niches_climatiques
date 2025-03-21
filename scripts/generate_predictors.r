@@ -837,3 +837,29 @@ it_obj[['features']]
 lc1<-rast(paste0('/vsicurl/',it_obj[['features']][[1]]$assets$data$href), proxy = TRUE)
 
 
+####################
+####################
+if(FALSE){
+  twi <- lapply(c("21E05NO", "21E05SO"),
+  #twi <- lapply(c("31H08NO", "31H08NE", "31H08SO", "31H08SE"), 
+  function(i){
+    r <- rast(file.path("/vsicurl/https://diffusion.mffp.gouv.qc.ca/Diffusion/DonneeGratuite/Foret/IMAGERIE/Produits_derives_LiDAR/Hydrographie/Indice_humidite_topographique/3-Donnees", substr(i, 1, 3), i, paste0("TWI_", i, ".tif")))
+  }) 
+  twi <- merge(twi[[1]], twi[[2]], twi[[3]], twi[[4]])
+  twi2 <- aggregate(twi, 4)
+
+  mhc <- lapply(c("21E05NO", "21E05SO"),
+  #mhc <- lapply(c("31H08NO", "31H08NE", "31H08SO", "31H08SE"), 
+  function(i){
+    r <- rast(file.path("/vsicurl/https://diffusion.mffp.gouv.qc.ca/Diffusion/DonneeGratuite/Foret/IMAGERIE/Produits_derives_LiDAR", substr(i, 1, 3), i, paste0("MHC_", i, ".tif")))
+  }) 
+  mhc <- merge(mhc[[1]], mhc[[2]], mhc[[3]], mhc[[4]])
+  mhc2 <- aggregate(mhc, 4)
+
+
+  r <- rast(resolution = 5, ext = ext(qc), crs = crs(qc))
+  r <- crop(r, c(-265700, -263500, 157000, 160000))
+  r <- project(twi[[1]], r, threads = TRUE)
+  plot(trim(r))
+}
+

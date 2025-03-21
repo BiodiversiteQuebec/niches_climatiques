@@ -7,6 +7,6 @@ m <- MaxEnt(p[[vars]],
             silent = FALSE,
             #args=c("replicatetype=bootstrap","replicates=1","threads=4")
             #args=c("linear","quadratic","product","hinge","nothreshold","replicatetype=bootstrap","replicates=1","threads=4")
-            args = c("linear", "quadratic", "noproduct","nohinge", "nothreshold", "noautofeature","replicatetype=bootstrap","replicates=1", "threads=4"
+            args = c("linear", "quadratic", "noproduct","nohinge", "threshold", "noautofeature","replicatetype=bootstrap","replicates=1", "threads=4"
             )
 )
