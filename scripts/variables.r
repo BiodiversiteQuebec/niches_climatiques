@@ -31,9 +31,9 @@ climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_tempera
 other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_0-5cm", "clay_0-5cm", "forest", "urban", "water", "wetland", "crop")
 
 
-
+#vars <- c(names(p)[1:19])
 #vars <- c(names(p)[1:19], other_vars)
-vars <- c(climate_vars, other_vars)
+#vars <- c(climate_vars, other_vars)
 #vars <- c(climate_vars[c(2, 3)], other_vars)
 #vars <- c(climate_vars[1:2], other_vars[1:2])
 #vars <- c(climate_vars[1:2])#, other_vars)
@@ -44,7 +44,10 @@ vars <- c(climate_vars, other_vars)
 #vars <- climate_vars[c(1)]
 #vars <- c(climate_vars[1], other_vars[c(2, 10)])
 #vars <- c(other_vars)
-
+#vars <- c(climate_vars[c(1, 2, 3, 4)])
+#vars <- c(climate_vars[c(1:4)])
+#vars <- c(climate_vars[c(1:4)], other_vars)
+#vars <- c(other_vars)
 
 other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_0-5cm", "clay_0-5cm", "forest", "urban", "water", "wetland", "crop")
 pp <- p[[other_vars]]
@@ -52,6 +55,10 @@ name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", 
 names(pp) <- name_vars
 
 
-#png("results/graphics/non_climate_predictors.png", width = 10, height = 8, units = "in", res = 300)
-#plot(crop(pp[[name_vars]], qc, mask = TRUE), axes = FALSE)
-#dev.off()
+models <- list(
+  "climat" = climate_vars[c(1)],
+  "habitat" = c(other_vars),
+  "climat + habitat" = c(climate_vars[c(1)], other_vars),
+  "climat (habitat)" = c(1, 2) 
+)
+

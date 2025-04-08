@@ -29,6 +29,8 @@ na <- na[!na$NAME_1 %in% c("Hawaii", "Alaska"), ]
 #region <- na[na$NAME_1 %in% c("Québec", "New Brunswick", "Maine", "Vermont", "New Hampshire", "New York", "Ontario", "Nova Scotia", "Prince Edward Island", "Massachusetts", "Connecticut", "Rhode Island"),]
 region <- na[!na$NAME_1 %in% c("Yukon", "British Columbia", "Washington", "Oregon", "California", "Arizona", "Nevada", "Idaho", "Utah"), ]
 
+#region <- na[na$NAME_1 %in% c("Québec"), ]
+
 # split NF into different polygons
 labrador <- ms_explode(na[na$NAME_1 %in% c("Newfoundland and Labrador"), ]) 
 labrador <- labrador[which.max(st_area(labrador)), ] # keep Labarador
