@@ -43,7 +43,7 @@ threshold1 <- 0.99
 threshold2 <- 0.95
 e1 <- extract(predictions, obs[qc, ])
 e2 <- extract(predictions, obs[st_difference(region, qc), ])
-e <- rbind(e1, e2)
+e <- rbind(e1)#, e2)
 e <- e[rev(order(e[,2])), ]
 val <- e[round(threshold1 * nrow(e)), 2]
 

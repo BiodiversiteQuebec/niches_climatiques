@@ -351,6 +351,49 @@ proj <- lapply(w, function(i){
 names(proj) <- chelsa_vars$longname[match(sub("_.*$", "", ids[w]), chelsa_vars$name)]
 
 
+################################################
+### Milieux humides 2003 ######################
+################################################
+
+coll <- "mhp2023"
+
+ids <- io |>
+  stac_search(collections = coll) |>
+  post_request() |> 
+  items_fetch() |>
+  _$features |>
+  sapply(X = _, function(i){i$id})
+
+url <- io |>
+  stac_search(collections = coll) |>
+  post_request() |> 
+  items_fetch() |>
+  _$features[[1]]$assets[[1]]$href
+
+mhp <- rast(paste0("/vsicurl/", url))
+mhp <- rast(url)
+
+#r <- ifel(mhp == 1, 1, 0)
+
+for i in {1..9}; do
+  gdal_calc.py -A input.tif --outfile=class_${i}_mask.tif --calc="(A==${i})" --NoDataValue=0 --overwrite
+done
+
+gdal_calc.py -A input.tif --outfile=class_1_mask.tif --calc="(A==${i})" --NoDataValue=0 --type=Byte --overwrite
+
+for i in {1..2}; do
+  gdal_calc.py -A input.tif --outfile=tmp_class_${i}.tif --calc="(A==${i})" --NoDataValue=0 --type=Byte --quiet
+  gdalwarp -tr 30 30 -te xmin ymin xmax ymax -r average tmp_class_${i}.tif class_${i}_pct.tif
+  rm tmp_class_${i}.tif
+done
+
+
+library(terra)
+lf <- list.files("data", pattern = "class_", full = TRUE)
+r <- lapply(lf, rast) |>
+  rast()
+
+r <- rast("data/mh2023.tif")
 
 
 ################################################
