@@ -16,8 +16,248 @@ library(knitr)
 library(gdalcubes)
 library(vegan)
 library(FNN)
+library(geodata)
+library(doParallel)
+library(foreach)
+
+
+#library(terra)
+#r <- rast("data/predictors.tif")
+#r <- rast("data/predictors_100m_band1.tif")
+#plot(r)
 
 options(width = 150)
+terraOptions(tempdir = tmpath, memfrac = 0.8)
+
+tmpath <- "/home/frousseu/data2/tmp"
+epsg <- 6624
+
+get_ids <- function(coll, stac){
+  stac |>
+    stac_search(collections = coll) |>
+    post_request() |> 
+    items_fetch() |>
+    _$features |>
+    sapply(X = _, function(i){i$id})
+}
+
+get_urls <- function(coll, ids, stac){
+  gids <- get_ids(coll, stac)
+  w <- which(gids %in% ids)
+  w <- w[order(match(gids[w], ids))]
+  items <- stac |>
+    stac_search(collections = coll) |>
+    post_request() |> 
+    items_fetch() 
+  sapply(w, function(i){
+    items$features[[i]]$assets[[1]]$href
+  })
+}
+
+# Downloads polygons using package geodata
+can <- gadm("CAN", level = 2, path = tmpath) |> st_as_sf()
+usa <- gadm("USA", level = 2, path = tmpath) |> st_as_sf()
+na <- rbind(can, usa)
+na <- st_transform(na, epsg)
+na <- na[!na$NAME_1 %in% c("Hawaii"), ]
+na <- na[-grep("Aleutians", na$NAME_2), ]
+region <- na
+st_write(region, file.path(tmpath, "NA.gpkg"))
+
+
+
+io <- stac("https://io.biodiversite-quebec.ca/stac/")
+coll <- "chelsa-clim"
+
+###############################################
+### add simple collections ####################
+
+collections <- list(
+  "earthenv_topography_derived" = c(
+    "geomflat_perc", "geomflat", 
+    "geomfootslope_per", "geomfootslope"
+  ),
+  "earthenv_topography" = c(
+    "elevation", "elevation",
+    "vrm", "ruggedness"
+  ),
+  "soilgrids" = c(
+    "sand_0-5cm", "sand",
+    "clay_0-5cm", "clay",
+    "silt_0-5cm", "silt",
+    "phh2o_0-5cm", "ph",
+    "nitrogen_0-5cm", "nitrogen",
+    "bdod_0-5cm", "bulk_density",
+    "soc_0-5cm", "soil_organic_carbon",
+    "ocd_0-5cm", "organic_carbon_density"
+  ),
+  "distance_to_roads" = c(
+    "distance_to_roads", "distance_to_roads"
+  ),
+  "silvis" = c(
+   "NDVI16_cumulative", "ndvi",
+   "LAI8_cumulative", "lai"
+  ),
+  "ghmts" = c(
+    "GHMTS", "human_modification"
+  )
+)
+
+collections <- lapply(collections, function(i){
+  list(
+    var = i[seq(1, length(i), by = 2)],
+    name = i[seq(2, length(i), by = 2)]   
+  )
+})
+
+
+
+
+###############################################
+### add collections with automated names ######
+
+collections[["chelsa-clim"]]$var <- paste0("bio", 1:19)
+collections[["chelsa-clim"]]$name <- gsub(" ", "_", c(
+    "mean annual air temperature",
+    "mean diurnal air temperature range",
+    "isothermality",
+    "temperature seasonality",
+    "mean daily maximum air temperature of the warmest month",
+    "mean daily minimum air temperature of the coldest month",
+    "annual range of air temperature",
+    "mean daily mean air temperatures of the wettest quarter",
+    "mean daily mean air temperatures of the driest quarter",
+    "mean daily mean air temperatures of the warmest quarter",
+    "mean daily mean air temperatures of the coldest quarter",
+    "annual precipitation amount",
+    "precipitation amount of the wettest month",
+    "precipitation amount of the driest month",
+    "precipitation seasonality",
+    "mean monthly precipitation amount of the wettest quarter",
+    "mean monthly precipitation amount of the driest quarter",
+    "mean monthly precipitation amount of the warmest quarter",
+    "mean monthly precipitation amount of the coldest quarter"
+  ))
+
+collections[["cec_land_cover_percentage"]]$var <- paste0("cec_land_cover_percent_class_", 1:19)
+collections[["cec_land_cover_percentage"]]$name <- c("coniferous", "taiga", "tropical_evergreen", "tropical_deciduous", "temperate_deciduous", "mixed", "tropical_shrub", "temperate_shrub", "tropical_grass", "temperate_grass", "polar_shrub", "polar_grass", "polar_lichen", "wetland", "cropland", "barren", "urban", "water", "snow")
+
+
+###############################################
+### add collections with more complex names ###
+coll <- "chelsa-clim-proj"
+
+ids <- get_ids(coll, io)
+
+table(sapply(strsplit(ids, "_"), "[", 2))
+lapply(strsplit(ids, "_"), "[", 3:4) |>
+  do.call("rbind", args = _) |>
+  as.data.table() |>
+  setnames(c("model", "ssp")) |>
+  _[ , (n = .N), by = .(model, ssp)]
+invisible(lapply(2:4, function(i){
+  dput(unique(sapply(strsplit(ids, "_"), "[", i)))
+}))
+
+timeperiod <- c("2071-2100", "2041-2070", "2011-2040")[2]
+model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")[4]
+ssp <- c("ssp585", "ssp370", "ssp126")[3]
+
+variables <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
+      apply(1, function(i){paste(i, collapse = "_")})
+ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]      
+
+#collections[["chelsa-clim-proj"]]$var <- ids
+#collections[["chelsa-clim-proj"]]$name <- ids
+
+
+
+#add <- data.frame(var = variables, url = urls)
+
+variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE))
+
+
+urls <- lapply(seq_along(collections), function(i){
+  get_urls(names(collections)[[i]], collections[[i]]$var, io)
+})
+
+variables$url <- unlist(urls, use.names = FALSE)
+
+
+cl <- makeCluster(10)
+registerDoParallel(cl)
+getDoParWorkers()
+foreach(i = 1:nrow(variables[1:10, ])) %dopar% {
+cmd <- sprintf('gdalwarp -overwrite -cutline %s/NA.gpkg -crop_to_cutline -dstnodata -9999.0 -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$var[i])
+system(cmd)
+}
+stopCluster(cl)
+
+
+
+
+if(FALSE){
+
+cmd <- sprintf('
+  gdalbuildvrt -separate %s/stacked.vrt %s/*.tif
+
+  gdal_translate -of COG -co COMPRESS=DEFLATE -co PREDICTOR=2 -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_NA.tif', tmpath, tmpath, tmpath, tmpath
+)
+system(cmd)
+
+r <- rast("/home/frousseu/data2/tmp/vrm.tif")
+global(r, "range", na.rm = TRUE)
+
+r <- rast("/home/frousseu/data/sdm_method_explorer/data/predictors_300.tif")
+global(r, "range", na.rm = TRUE)
+
+
+
+get_ids <- function(coll, stac){
+  stac |>
+    stac_search(collections = coll) |>
+    post_request() |> 
+    items_fetch() |>
+    _$features |>
+    sapply(X = _, function(i){i$id})
+}
+
+ids <- get_ids(coll, io)
+ids
+variables <- c("bio1", "bio2")
+
+
+get_urls <- function(coll, ids, stac){
+  w <- which(ids %in% get_ids(coll, stac))
+  sapply(w, function(i){
+    stac |>
+      stac_search(collections = coll) |>
+      post_request() |> 
+      items_fetch() |>
+      _$features[[i]]$assets[[1]]$href
+  })
+}
+urls <- get_urls(coll, variables, io)
+
+
+
+
+
+
+
+# Downloads polygons using package geodata
+can <- gadm("CAN", level = 2, path = tmpath) |> st_as_sf()
+usa <- gadm("USA", level = 2, path = tmpath) |> st_as_sf()
+na <- rbind(can, usa)
+na <- st_transform(na, epsg)
+na <- na[!na$NAME_1 %in% c("Hawaii"), ]
+na <- na[-grep("Aleutians", na$NAME_2), ]
+#na <- na[!na$NAME_1 %in% c("Hawaii", "Alaska"), ]
+
+# keep Québec and bordering provinces/states as a buffer
+#region <- na[na$NAME_1 %in% c("Québec", "New Brunswick", "Maine", "Vermont", "New Hampshire", "New York", "Ontario", "Nova Scotia", "Prince Edward Island", "Massachusetts", "Connecticut", "Rhode Island"),]
+region <- na
+#region <- na[!na$NAME_1 %in% c("Yukon", "British Columbia", "Washington", "Oregon", "California", "Arizona", "Nevada", "Idaho", "Utah"), ]
 
 #terraOptions(memfrac = 0.8)
 #terraOptions(verbose = TRUE)
@@ -54,7 +294,8 @@ kable(df)
 
 #p <- rast(ext(region), resolution = 1000, crs = crs(region))
 ex <- c(xmin = -3828412.27173732, xmax = 1182937.28491704, ymin = -1949713.76131365, ymax = 4123691.94410149)
-p <- rast(ext(ex), resolution = 1000, crs = crs("EPSG:6624"))
+ex <- c(xmin = -4828412.27173732, xmax = 1182937.28491704, ymin = -1949713.76131365, ymax = 4123691.94410149)
+p <- rast(ext(region), resolution = 100, crs = crs(paste0("EPSG:", epsg)))
 
 #plot(st_geometry(region))
 #plot(ext(p), add = TRUE)
@@ -153,17 +394,15 @@ chelsa <- lapply(w, function(i){
   print(url)
   paste0('/vsicurl/', url) |>
     rast() |>
-    project(p)
+    project(p, tempdir = tmpath)
 }) |> rast()
 
 names(chelsa) <- chelsa_vars$longname[match(ids[w], chelsa_vars$name)]
 
-rr <- aggregate(chelsa, 10, na.rm = TRUE)
-
-screeplot(rda(values(rr), scale = TRUE))
-pca <- rda(values(rr), scale = TRUE)
-
-barplot(cumsum(eigenvals(pca)/sum(eigenvals(pca))))
+#rr <- aggregate(chelsa, 10, na.rm = TRUE)
+#screeplot(rda(values(rr), scale = TRUE))
+#pca <- rda(values(rr), scale = TRUE)
+#barplot(cumsum(eigenvals(pca)/sum(eigenvals(pca))))
 
 #######################################
 ### EarthEnv geom #####################
@@ -191,10 +430,21 @@ geom <- lapply(w, function(i){
   print(url)
   paste0('/vsicurl/', url) |>
     rast() |>
-    project(p)
+    project(p, tempdir = tmpath)
 }) |> rast()
 
 names(geom) <- ids[w]
+
+geom <- mask(geom, vect(region))
+
+writeRaster(geom, file.path(tmpath, "geom.tif"), gdal = c("COMPRESS=DEFLATE"))
+
+st_write(region, file.path(tmpath, "NA.gpkg"))
+
+gdalwarp -overwrite -cutline NA.gpkg -crop_to_cutline -dstnodata 32767 -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 '/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/io/CHELSA/climatologies/CHELSA_bio9_1981-2010_V.2.1.tif' chelsa.tif
+
+r <- rast(file.path(tmpath, "chelsa.tif"))
+plot(r)
 
 #######################################
 ### EarthEnv topo #####################
@@ -394,6 +644,13 @@ r <- lapply(lf, rast) |>
   rast()
 
 r <- rast("data/mh2023.tif")
+
+
+
+r <- rast("tmp/CEC_land_cover_percent_class1_2020-01-01.tif")
+plot(r)
+
+
 
 
 ################################################
@@ -820,40 +1077,6 @@ for (i in 1:length(it_obj$features)){
 st <- stac_image_collection(it_obj$features, asset_names = c('data'), property_filter = function(f){f[['class']] %in% c('1', '2', '3', '4')}, srs = 'EPSG:4326')
 st
 
-bbox <- st_bbox(c(xmin = -80, xmax = -58, ymin = 42 , ymax = 60), crs = st_crs(4326)) |> 
-          st_as_sfc() |>
-          st_as_sf() |>
-          st_transform(6624) |>
-          st_bbox()
-
-v <- cube_view(srs = "EPSG:6624", extent = list(t0 = "2000-01-01", t1 = "2000-01-01", left = bbox$xmin, right =bbox$xmax, top = bbox$ymax, bottom = bbox$ymin), dx = 5000, dy = 5000, dt="P1D", aggregation = "sum", resampling = "mean")
-
-v <- cube_view(srs = "EPSG:6624", extent = list(t0 = "2000-01-01", t1 = "2000-01-01", left = bbox$xmin, right =bbox$xmax, top = bbox$ymax, bottom = bbox$ymin), dx = 5000, dy = 5000, dt="P1D", resampling = "mean")
-
-lc_cube <- raster_cube(st, v)
-
-lc_cube |> write_tif(".", prefix = 'lc3', creation_options =list('COMPRESS' = 'DEFLATE'))
-
-r <- rast("lc32000-01-01.tif")
-plot(r)
-
-
-
-###########################
-###########################
-###########################
-
-
-it_obj <- io |>
-  collections("chelsa-clim") |> items() |>
-  get_request() |> items_fetch()
-it_obj
-
-for (i in 1:length(it_obj$features)){
-  it_obj$features[[i]]$assets$data$roles='data'
-}
-
-it_obj$features[[i]]
 it_obj$features[[i]]$properties
 
 st <- stac_image_collection(it_obj$features, asset_names=c('bio1', 'bio2'), property_filter = function(f){f[['model']] %in% c('past')},srs='EPSG:4326')
@@ -906,3 +1129,13 @@ if(FALSE){
   plot(trim(r))
 }
 
+
+
+library(terra)
+r <- rast("mhp2023_8_Tourbière ouverte minérotrophe.tif")
+r <- aggregate(r, 50)
+plot(r)
+
+
+
+}
