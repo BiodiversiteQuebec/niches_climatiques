@@ -1,36 +1,25 @@
 
-
 ### This script gathers predictors for modeling the distribution of emv species for the finance indicators
 
 library(terra)
-library(ranger)
-#library(mapview)
-library(rmapshaper)
-#library(knitr)
-#library(gdalcubes)
-library(rstac)
-library(stars)
-library(FNN)
+library(sf)
 library(data.table)
-library(knitr)
-library(gdalcubes)
-library(vegan)
-library(FNN)
+library(rstac)
 library(geodata)
 library(doParallel)
 library(foreach)
-
+1+1
 
 #library(terra)
 #r <- rast("data/predictors.tif")
 #r <- rast("data/predictors_100m_band1.tif")
 #plot(r)
 
+tmpath <- "/home/frousseu/data2/na"
+epsg <- 6624
+
 options(width = 150)
 terraOptions(tempdir = tmpath, memfrac = 0.8)
-
-tmpath <- "/home/frousseu/data2/tmp"
-epsg <- 6624
 
 get_ids <- function(coll, stac){
   stac |>
@@ -62,8 +51,8 @@ na <- st_transform(na, epsg)
 na <- na[!na$NAME_1 %in% c("Hawaii"), ]
 na <- na[-grep("Aleutians", na$NAME_2), ]
 region <- na
-st_write(region, file.path(tmpath, "NA.gpkg"))
-
+st_write(region, file.path(tmpath, "NA.gpkg"), append = FALSE)
+x <- st_read(file.path(tmpath, "NA.gpkg"))
 
 
 io <- stac("https://io.biodiversite-quebec.ca/stac/")
@@ -171,9 +160,6 @@ ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]
 #collections[["chelsa-clim-proj"]]$name <- ids
 
 
-
-#add <- data.frame(var = variables, url = urls)
-
 variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE))
 
 
@@ -182,28 +168,63 @@ urls <- lapply(seq_along(collections), function(i){
 })
 
 variables$url <- unlist(urls, use.names = FALSE)
+variables$url <- URLencode(variables$url)
+
+#variables <- variables[1:5, ]
 
 
 cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
-foreach(i = 1:nrow(variables[1:10, ])) %dopar% {
-cmd <- sprintf('gdalwarp -overwrite -cutline %s/NA.gpkg -crop_to_cutline -dstnodata -9999.0 -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$var[i])
+foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
+cmd <- sprintf('gdalwarp -overwrite -cutline %s/NA.gpkg -crop_to_cutline -dstnodata -9999.0 -r average -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$name[i])
 system(cmd)
+py_cmd <- sprintf("from osgeo import gdal; ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
+system2("python3", args = c("-c", shQuote(py_cmd)))
 }
 stopCluster(cl)
+
+
+input_dir <- tmpath
+vrt_file <- file.path(tmpath, "stacked.vrt")
+
+
+py_script <- sprintf("
+import os
+from osgeo import gdal
+
+input_dir = r'%s'
+vrt_filename = r'%s'
+
+tif_files = sorted([os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.tif')])
+band_names = [os.path.splitext(os.path.basename(f))[0] for f in tif_files]
+
+gdal.BuildVRT(vrt_filename, tif_files, separate=True)
+
+vrt_ds = gdal.Open(vrt_filename, gdal.GA_Update)
+for i, name in enumerate(band_names):
+    vrt_ds.GetRasterBand(i + 1).SetDescription(name)
+vrt_ds = None
+", input_dir, vrt_file)
+
+system2("python3", args = c("-c", shQuote(py_script)))
+
+
+cmd <- sprintf('
+  #gdalbuildvrt -separate %s/stacked.vrt %s/*.tif
+
+  gdal_translate -of COG -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_NA.tif', tmpath, tmpath, tmpath, tmpath)
+system(cmd)
+
 
 
 
 
 if(FALSE){
 
-cmd <- sprintf('
-  gdalbuildvrt -separate %s/stacked.vrt %s/*.tif
 
-  gdal_translate -of COG -co COMPRESS=DEFLATE -co PREDICTOR=2 -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_NA.tif', tmpath, tmpath, tmpath, tmpath
-)
-system(cmd)
+r <- rast("/home/frousseu/data2/na/sand.tif")
+
 
 r <- rast("/home/frousseu/data2/tmp/vrm.tif")
 global(r, "range", na.rm = TRUE)
@@ -211,6 +232,8 @@ global(r, "range", na.rm = TRUE)
 r <- rast("/home/frousseu/data/sdm_method_explorer/data/predictors_300.tif")
 global(r, "range", na.rm = TRUE)
 
+r <- rast("/home/frousseu/data2/tmp/predictors_100_NA.tif")
+r <- rast("/home/frousseu/data2/tmp/geomflat_perc.tif")
 
 
 get_ids <- function(coll, stac){
@@ -441,7 +464,7 @@ writeRaster(geom, file.path(tmpath, "geom.tif"), gdal = c("COMPRESS=DEFLATE"))
 
 st_write(region, file.path(tmpath, "NA.gpkg"))
 
-gdalwarp -overwrite -cutline NA.gpkg -crop_to_cutline -dstnodata 32767 -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 '/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/io/CHELSA/climatologies/CHELSA_bio9_1981-2010_V.2.1.tif' chelsa.tif
+#gdalwarp -overwrite -cutline NA.gpkg -crop_to_cutline -dstnodata 32767 -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 '/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/io/CHELSA/climatologies/CHELSA_bio9_1981-2010_V.2.1.tif' chelsa.tif
 
 r <- rast(file.path(tmpath, "chelsa.tif"))
 plot(r)
@@ -768,7 +791,7 @@ c_cube |> write_tif('~/',prefix='chelsa-monthly',creation_options=list('COMPRESS
 
 
 
-
+}
 
 
 ##########################################################
@@ -779,7 +802,7 @@ source("scripts/sdm_inputs.R")
 source("scripts/sdm_prelim.R")
 
 
-if(TRUE){
+if(FALSE){
   
   #cec <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/io/CEC_land_cover/NA_NALCMS_landcover_2020_30m.tif")
   
@@ -1135,7 +1158,3 @@ library(terra)
 r <- rast("mhp2023_8_Tourbière ouverte minérotrophe.tif")
 r <- aggregate(r, 50)
 plot(r)
-
-
-
-}
