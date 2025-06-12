@@ -222,9 +222,42 @@ system(cmd)
 
 if(FALSE){
 
+cmd <- 'gdalwarp -overwrite -r average -tr 100 100 -co COMPRESS=DEFLATE -wo NUM_THREADS=ALL_CPUS /home/frousseu/data2/qc/mhc.tif /home/frousseu/data2/qc/mhc_agg.tif'
+system(cmd)
+#system('gdal_edit.py -a_nodata 9999 /home/frousseu/data2/qc/mhc_agg.tif')
+cmd <- 'gdalwarp -overwrite -r average -tr 100 100 -co COMPRESS=DEFLATE -wo NUM_THREADS=ALL_CPUS /home/frousseu/data2/qc/mean_annual_air_temperature.tif /home/frousseu/data2/qc/mean_annual_air_temperature_agg.tif'
+system(cmd)
+#system('gdal_edit.py -a_nodata 9999 /home/frousseu/data2/qc/mean_annual_air_temperature_agg.tif')
 
-r <- rast("/home/frousseu/data2/na/sand.tif")
+cmd <- 'gdal_calc.py -A /home/frousseu/data2/qc/mean_annual_air_temperature_agg.tif --outfile=/home/frousseu/data2/qc/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite'
+system(cmd)
 
+#system('gdal_calc.py -A /home/frousseu/data2/qc/mhc_agg.tif --outfile=/home/frousseu/data2/qc/mhc_agg0.tif --calc="A*(A!=-9999) + 400*(A==-9999)" --NoDataValue=None')
+
+cmd <- 'gdal_fillnodata.py -md 250 -si 3 -co COMPRESS=DEFLATE /home/frousseu/data2/qc/mhc_agg.tif /home/frousseu/data2/qc/mhc_filled.tif'
+system(cmd)
+system('gdal_calc.py -A /home/frousseu/data2/qc/mhc_filled.tif -B /home/frousseu/data2/qc/mask.tif --outfile=/home/frousseu/data2/qc/mhc_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --overwrite')
+#system('gdal_edit.py -a_nodata 9999 /home/frousseu/data2/qc/mhc_filled.tif')
+
+#r <- rast("/home/frousseu/data2/qc/mhc.tif");plot(r)
+#r <- rast("/home/frousseu/data2/qc/mhc_agg.tif");plot(r)
+#r <- rast("/home/frousseu/data2/qc/mask.tif");plot(r)
+#r <- rast("/home/frousseu/data2/qc/sand_filled.tif");plot(r)
+#r <- rast("/home/frousseu/data2/qc/sand_masked.tif");plot(r)
+
+
+
+
+
+
+
+
+r <- rast("/home/frousseu/data2/qc/sand_agg.tif")
+r <- rast("/home/frousseu/data2/qc/mean_annual_air_temperature_agg.tif")
+r <- rast("/home/frousseu/data2/qc/mask.tif")
+r <- rast("/home/frousseu/data2/qc/sand_filled.tif")
+r <- rast("/home/frousseu/data2/na/sand_close.tif")
+r <- aggregate(r, 2, na.rm = TRUE)
 
 r <- rast("/home/frousseu/data2/tmp/vrm.tif")
 global(r, "range", na.rm = TRUE)
@@ -705,6 +738,13 @@ raster_nafill <- function(p){
   gc(); gc()
   pfill
 }
+
+library(terra)
+library(data.table)
+library(FNN)
+r <- rast("/home/frousseu/data2/na/sand.tif")
+r <- aggregate(r, 5, na.rm = TRUE)
+p <- raster_nafill(r)
 
 predictors <- raster_nafill(predictors)
 predictors_proj <- raster_nafill(predictors_proj)

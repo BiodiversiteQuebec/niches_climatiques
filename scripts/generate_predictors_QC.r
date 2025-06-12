@@ -16,7 +16,8 @@ library(foreach)
 #r <- rast("data/predictors_100m_band1.tif")
 #plot(r)
 
-tmpath <- "/home/frousseu/data2/na"
+tmpath <- "/home/frousseu/data2/qc"
+setwd(dirname(tmpath))
 epsg <- 6624
 
 options(width = 150)
@@ -218,6 +219,77 @@ system2("python3", args = c("-c", shQuote(py_cmd)))
 stopCluster(cl)
 
 
+
+### Fill NAs by interpolation ################################
+
+rfill <- variables$name[variables$coll %in% c("soilgrids", "mhc", "twi", "ghmts")]#[9:13]
+
+# make mask
+cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature_agg.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
+system(cmd)
+
+
+cl <- makeCluster(5)
+registerDoParallel(cl)
+getDoParWorkers()
+foreach(i = seq_along(rfill)) %dopar% {
+
+  cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_filled.tif', tmpath, rfill[i], tmpath, rfill[i])
+  system(cmd)
+  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill[i], tmpath, tmpath, rfill[i])
+  system(cmd)
+  cmd <- sprintf('rm %s/%s_filled.tif
+
+  mv %s/%s_masked.tif %s/%s_final.tif
+  ', tmpath, rfill[i], tmpath, rfill[i], tmpath, rfill[i])
+  system(cmd)
+
+}
+stopCluster(cl)
+
+
+cmd <- sprintf('rm %s/mask.tif', tmpath)
+system(cmd)
+
+
+#r <- rast("/home/frousseu/data2/qc/ndvi.tif");plot(r)
+#r <- rast("/home/frousseu/data2/qc/ndvi_final.tif");plot(r)
+
+
+###############################################################
+### Fill NAs with 0s ##########################################
+
+rfill0 <- variables$name[variables$coll %in% c("silvis")][2]
+
+# make mask
+cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature_agg.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
+system(cmd)
+
+
+cl <- makeCluster(5)
+registerDoParallel(cl)
+getDoParWorkers()
+foreach(i = seq_along(rfill0)) %dopar% {
+
+  cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill0[i], tmpath, rfill0[i])
+  system(cmd)
+  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill0[i], tmpath, tmpath, rfill0[i])
+  system(cmd)
+  cmd <- sprintf('rm %s/%s_filled.tif
+
+  mv %s/%s_masked.tif %s/%s_final.tif
+  ', tmpath, rfill0[i], tmpath, rfill0[i], tmpath, rfill0[i])
+  system(cmd)
+
+}
+stopCluster(cl)
+
+
+
+
+
+
+
 input_dir <- tmpath
 vrt_file <- file.path(tmpath, "stacked.vrt")
 
@@ -285,11 +357,36 @@ if(FALSE){
 
     library(terra)
 
-    r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/predictors_100_QC.tif")
+    r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif")
+
+    test <- fast("/home/frousseu/data2/qc/test.tif")
      
     plot(r$till)  
-
+1+1
     r <- rast("/home/frousseu/data2/sigeom/coarse5.tif")
+
+
+    target <- "/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif"
+    target <- "/home/frousseu/data2/qc/predictors_100_QC.tif"
+    out <- "test.tif"
+    path <- "/home/frousseu/data2/qc"
+    cmd <- sprintf('
+        gdal_translate -tr 200 200 -of COG -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s %s/%s', target, path, out)
+    system(cmd)
+
+
+    target <- "/home/frousseu/data2/na/*ion.tif"
+    out <- "test.tif"
+    vrt <- "stacked.vrt"
+    path <- "/home/frousseu/data2/na"
+    cmd <- sprintf('
+        gdalbuildvrt -separate %s/%s %s
+
+        gdal_translate -tr 200 200 -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/%s %s/%s', path, vrt, target, path, vrt, path, out)
+    system(cmd)
+ 
+ 
+    r <- rast("/home/frousseu/data2/na/test.tif")
 
 
 
