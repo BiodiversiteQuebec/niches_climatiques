@@ -268,6 +268,7 @@ cmd <- sprintf('rm %s/mask.tif', tmpath)
 system(cmd)
 
 
+########################################################
 ### Further mask incomplete coverage ###################
 
 # mhc, twi don't have the same covergage, so needs to be specific
@@ -314,12 +315,18 @@ system(sprintf('rm %s/*_original.tif', tmpath))
 #r <- rast(file.path(tmpath, "twi.tif"))
 #plot(r)
 
-#r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif")IGTIFF
+#r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif")
 
+
+#r <- rast("/home/frousseu/data2/qc/predictors_100_QC_band.tif")
+#plot(aggregate(r$alluvion, 10, na.rm = TRUE))
+
+#r <- rast("/home/frousseu/data2/qc/predictors_100_QC.tif")
+#plot(aggregate(r$mean_monthly_precipitation_amount_of_the_wettest_quarter, 10, na.rm = TRUE))
+#plot(r$annual_precipitation_amount)
 
 #r <- rast("/home/frousseu/data2/qc/till.tif")
 #plot(aggregate(r, 10, na.rm = TRUE))
-
 
 #r <- rast("/home/frousseu/data2/qc/till_cog.tif")
 #plot(aggregate(r, 20, na.rm = TRUE))
@@ -339,6 +346,7 @@ input_dir = r'%s'
 vrt_filename = r'%s'
 
 tif_files = sorted([os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.tif')])
+#tif_files = tif_files[31:51]
 band_names = [os.path.splitext(os.path.basename(f))[0] for f in tif_files]
 
 gdal.BuildVRT(vrt_filename, tif_files, separate=True)
@@ -351,14 +359,17 @@ vrt_ds = None
 
 system2("/usr/bin/python3", args = c("-c", shQuote(py_script)))
 
+# run through conda to get latest gdal which supports INTERLEAVE=BAND COG which is much faster for aggregations
+cmd <- sprintf('bash -c "
 
-cmd <- sprintf('
-  #gdalbuildvrt -separate %s/stacked.vrt %s/*.tif
+  source /home/frousseu/miniconda3/etc/profile.d/conda.sh 
 
-  gdal_translate -of COG -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_QC.tif', tmpath, tmpath, tmpath, tmpath)
+  conda activate gdal-env
+  
+  gdalinfo --version
+
+  gdal_translate -of COG -r average -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_QC.tif"', tmpath, tmpath, tmpath, tmpath)
 system(cmd)
-
-
 
 
 if(FALSE){
