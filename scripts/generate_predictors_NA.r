@@ -16,6 +16,7 @@ library(foreach)
 #plot(r)
 
 tmpath <- "/home/frousseu/data2/na"
+setwd(dirname(tmpath))
 epsg <- 6624
 
 options(width = 150)
@@ -179,10 +180,57 @@ getDoParWorkers()
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
 cmd <- sprintf('gdalwarp -overwrite -cutline %s/NA.gpkg -crop_to_cutline -dstnodata -9999.0 -r average -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$name[i])
 system(cmd)
-py_cmd <- sprintf("from osgeo import gdal; ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
-system2("python3", args = c("-c", shQuote(py_cmd)))
+#system(sprintf('cp %s/%s.tif %s/%s_original.tif', tmpath, variables$name[i], tmpath, variables$name[i])) # keep snapshot of original for precise masking
+py_cmd <- sprintf("from osgeo import gdal; gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
+system2("/usr/bin/python3", args = c("-c", shQuote(py_cmd)))
 }
 stopCluster(cl)
+
+
+##############################################################
+### Fill NAs by interpolation ################################
+
+# fill by interpolation
+rfill <- data.frame(var = variables$name[variables$coll %in% c("soilgrids", "ghmts")], fill = "inv_dist")
+# fill with 0
+rfill0 <- data.frame(var = variables$name[variables$coll %in% c("silvis")], fill = 0)
+
+rfill <- rbind(rfill, rfill0)
+
+# make mask
+cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
+system(cmd)
+
+
+cl <- makeCluster(min(c(nrow(rfill), 10)))
+registerDoParallel(cl)
+getDoParWorkers()
+foreach(i = 1:nrow(rfill)) %dopar% {
+
+  if(rfill$fill[i] == "inv_dist"){
+    cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_filled.tif', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    system(cmd)
+  }else{
+    cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    system(cmd)
+  }
+  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill$var[i], tmpath, tmpath, rfill$var[i])
+  system(cmd)
+  cmd <- sprintf('rm %s/%s_filled.tif
+
+  mv %s/%s_masked.tif %s/%s.tif
+  ', tmpath, rfill$var[i], tmpath, rfill$var[i], tmpath, rfill$var[i])
+  system(cmd)
+  py_cmd <- sprintf("from osgeo import gdal;  gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, rfill$var[i], rfill$var[i])
+  system2("/usr/bin/python3", args = c("-c", shQuote(py_cmd)))
+
+}
+stopCluster(cl)
+
+
+cmd <- sprintf('rm %s/mask.tif', tmpath)
+system(cmd)
+
 
 
 input_dir <- tmpath
@@ -197,6 +245,7 @@ input_dir = r'%s'
 vrt_filename = r'%s'
 
 tif_files = sorted([os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.tif')])
+#tif_files = tif_files[:10]
 band_names = [os.path.splitext(os.path.basename(f))[0] for f in tif_files]
 
 gdal.BuildVRT(vrt_filename, tif_files, separate=True)
@@ -207,13 +256,18 @@ for i, name in enumerate(band_names):
 vrt_ds = None
 ", input_dir, vrt_file)
 
-system2("python3", args = c("-c", shQuote(py_script)))
+system2("/usr/bin/python3", args = c("-c", shQuote(py_script)))
 
 
-cmd <- sprintf('
-  #gdalbuildvrt -separate %s/stacked.vrt %s/*.tif
+cmd <- sprintf('bash -c "
 
-  gdal_translate -of COG -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_NA.tif', tmpath, tmpath, tmpath, tmpath)
+  source /home/frousseu/miniconda3/etc/profile.d/conda.sh 
+
+  conda activate gdal-env
+  
+  gdalinfo --version
+
+  gdal_translate -of COG -r average -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_100_NA.tif"', tmpath, tmpath, tmpath, tmpath)
 system(cmd)
 
 
