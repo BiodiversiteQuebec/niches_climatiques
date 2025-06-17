@@ -46,7 +46,7 @@ get_urls <- function(coll, ids, stac){
 }
 
 # Downloads polygons using package geodata
-can <- gadm("CAN", level = 2, path = tmpath) |> st_as_sf()
+can <- gadm("CAN", level = 2, path = "/home/frousseu/data2/na") |> st_as_sf()
 qc <- can[can$NAME_1 %in% c("Québec"), ]
 qc <- st_transform(qc, epsg)
 region <- qc
@@ -202,8 +202,10 @@ variables$url <- unlist(urls, use.names = FALSE)
 variables$url <- URLencode(variables$url)
 
 variables <- variables[-grep("tropical", variables$name), ]
+#variables <- variables[grep("twi|mhc|ndvi|mean_annual_air_temperature", variables$name), ]
+#variables <- variables[grep("twi|mhc", variables$name), ]
+#variables <- variables[grep("ndvi", variables$name), ]
 
-#variables <- variables[grep("alluvion|till", variables$name), ]
 #variables <- variables[grep("depot", variables$name), ]
 #variables <- variables[1:5, ]
 
@@ -213,8 +215,9 @@ getDoParWorkers()
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
 cmd <- sprintf('gdalwarp -overwrite -cutline %s/QC.gpkg -crop_to_cutline -dstnodata -9999.0 -r average -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$name[i])
 system(cmd)
-py_cmd <- sprintf("from osgeo import gdal; ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
-system2("python3", args = c("-c", shQuote(py_cmd)))
+system(sprintf('cp %s/%s.tif %s/%s_original.tif', tmpath, variables$name[i], tmpath, variables$name[i])) # keep snapshot of original for precise masking
+py_cmd <- sprintf("from osgeo import gdal; gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
+system2("/usr/bin/python3", args = c("-c", shQuote(py_cmd)))
 }
 stopCluster(cl)
 
@@ -222,27 +225,40 @@ stopCluster(cl)
 
 ### Fill NAs by interpolation ################################
 
-rfill <- variables$name[variables$coll %in% c("soilgrids", "mhc", "twi", "ghmts")]#[9:13]
+# fill by interpolation
+rfill <- data.frame(var = variables$name[variables$coll %in% c("soilgrids", "mhc", "twi", "ghmts")], fill = "inv_dist")
+# fill with 0
+rfill0 <- data.frame(var = variables$name[variables$coll %in% c("silvis")], fill = 0)
+
+rfill <- rbind(rfill, rfill0)
+#rfill <- rfill[10:12, ]
 
 # make mask
-cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature_agg.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
+cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
 system(cmd)
 
 
-cl <- makeCluster(5)
+cl <- makeCluster(min(c(nrow(rfill), 10)))
 registerDoParallel(cl)
 getDoParWorkers()
-foreach(i = seq_along(rfill)) %dopar% {
+foreach(i = 1:nrow(rfill)) %dopar% {
 
-  cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_filled.tif', tmpath, rfill[i], tmpath, rfill[i])
-  system(cmd)
-  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill[i], tmpath, tmpath, rfill[i])
+  if(rfill$fill[i] == "inv_dist"){
+    cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_filled.tif', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    system(cmd)
+  }else{
+    cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    system(cmd)
+  }
+  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill$var[i], tmpath, tmpath, rfill$var[i])
   system(cmd)
   cmd <- sprintf('rm %s/%s_filled.tif
 
-  mv %s/%s_masked.tif %s/%s_final.tif
-  ', tmpath, rfill[i], tmpath, rfill[i], tmpath, rfill[i])
+  mv %s/%s_masked.tif %s/%s.tif
+  ', tmpath, rfill$var[i], tmpath, rfill$var[i], tmpath, rfill$var[i])
   system(cmd)
+  py_cmd <- sprintf("from osgeo import gdal;  gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, rfill$var[i], rfill$var[i])
+  system2("/usr/bin/python3", args = c("-c", shQuote(py_cmd)))
 
 }
 stopCluster(cl)
@@ -252,42 +268,61 @@ cmd <- sprintf('rm %s/mask.tif', tmpath)
 system(cmd)
 
 
-#r <- rast("/home/frousseu/data2/qc/ndvi.tif");plot(r)
-#r <- rast("/home/frousseu/data2/qc/ndvi_final.tif");plot(r)
+### Further mask incomplete coverage ###################
+
+# mhc, twi don't have the same covergage, so needs to be specific
+
+custom_mask <- function(v){
+  r <- rast(file.path(tmpath, paste0(v,"_original.tif")))
+  r[!is.na(r)] <- 1
+  maskr <- r |> 
+    as.polygons(aggregate = TRUE) |>
+    st_as_sf() |>
+    st_geometry() |>
+    st_cast("POLYGON") |>
+    lapply(function(i){
+      st_multipolygon(list(i[1]))
+    }) |>
+    st_sfc(crs = st_crs(r)) |>
+    st_as_sf() |>
+    st_union()
 
 
-###############################################################
-### Fill NAs with 0s ##########################################
+  st_write(maskr, file.path(tmpath, "maskr.gpkg"), append = FALSE)
 
-rfill0 <- variables$name[variables$coll %in% c("silvis")][2]
-
-# make mask
-cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature_agg.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
-system(cmd)
-
-
-cl <- makeCluster(5)
-registerDoParallel(cl)
-getDoParWorkers()
-foreach(i = seq_along(rfill0)) %dopar% {
-
-  cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill0[i], tmpath, rfill0[i])
+  cmd <- sprintf('gdalwarp -overwrite -cutline %s/maskr.gpkg -co COMPRESS=DEFLATE %s/%s.tif %s/%s_masked.tif', tmpath, tmpath, v, tmpath, v)
   system(cmd)
-  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill0[i], tmpath, tmpath, rfill0[i])
-  system(cmd)
-  cmd <- sprintf('rm %s/%s_filled.tif
 
-  mv %s/%s_masked.tif %s/%s_final.tif
-  ', tmpath, rfill0[i], tmpath, rfill0[i], tmpath, rfill0[i])
+  cmd <- sprintf('rm %s/%s.tif
+
+    mv %s/%s_masked.tif %s/%s.tif', 
+    tmpath, v, tmpath, v, tmpath, v)
   system(cmd)
+
+  py_cmd <- sprintf("from osgeo import gdal;  gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, v, v)
+  system2("/usr/bin/python3", args = c("-c", shQuote(py_cmd)))
 
 }
-stopCluster(cl)
+
+custom_mask("mhc")
+custom_mask("twi")
+
+system(sprintf('rm %s/maskr.gpkg', tmpath))
+system(sprintf('rm %s/*_original.tif', tmpath))
 
 
+#r <- rast(file.path(tmpath, "twi.tif"))
+#plot(r)
+
+#r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif")IGTIFF
 
 
+#r <- rast("/home/frousseu/data2/qc/till.tif")
+#plot(aggregate(r, 10, na.rm = TRUE))
 
+
+#r <- rast("/home/frousseu/data2/qc/till_cog.tif")
+#plot(aggregate(r, 20, na.rm = TRUE))
 
 
 input_dir <- tmpath
@@ -314,7 +349,7 @@ for i, name in enumerate(band_names):
 vrt_ds = None
 ", input_dir, vrt_file)
 
-system2("python3", args = c("-c", shQuote(py_script)))
+system2("/usr/bin/python3", args = c("-c", shQuote(py_script)))
 
 
 cmd <- sprintf('
