@@ -318,8 +318,8 @@ system(sprintf('rm %s/*_original.tif', tmpath))
 #r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif")
 
 
-#r <- rast("/home/frousseu/data2/qc/predictors_100_QC_band.tif")
-#plot(aggregate(r$alluvion, 10, na.rm = TRUE))
+#r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif")
+#plot(aggregate(r$tourbiere_minerotrophe, 10, na.rm = TRUE))
 
 #r <- rast("/home/frousseu/data2/qc/predictors_100_QC.tif")
 #plot(aggregate(r$mean_monthly_precipitation_amount_of_the_wettest_quarter, 10, na.rm = TRUE))

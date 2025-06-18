@@ -8,7 +8,6 @@ library(rstac)
 library(geodata)
 library(doParallel)
 library(foreach)
-1+1
 
 #library(terra)
 #r <- rast("data/predictors.tif")
@@ -51,6 +50,7 @@ na <- rbind(can, usa)
 na <- st_transform(na, epsg)
 na <- na[!na$NAME_1 %in% c("Hawaii"), ]
 na <- na[-grep("Aleutians", na$NAME_2), ]
+na <- st_union(na)
 region <- na
 st_write(region, file.path(tmpath, "NA.gpkg"), append = FALSE)
 x <- st_read(file.path(tmpath, "NA.gpkg"))
@@ -171,7 +171,7 @@ urls <- lapply(seq_along(collections), function(i){
 variables$url <- unlist(urls, use.names = FALSE)
 variables$url <- URLencode(variables$url)
 
-#variables <- variables[1:5, ]
+#variables <- variables[5, ]
 
 
 cl <- makeCluster(10)
@@ -202,19 +202,19 @@ cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature.tif --outfile=%s/
 system(cmd)
 
 
-cl <- makeCluster(min(c(nrow(rfill), 10)))
+cl <- makeCluster(min(c(nrow(rfill), 7)))
 registerDoParallel(cl)
 getDoParWorkers()
 foreach(i = 1:nrow(rfill)) %dopar% {
 
   if(rfill$fill[i] == "inv_dist"){
-    cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_filled.tif', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE -co BIGTIFF=YES -co NUM_THREADS=ALL_CPUS %s/%s.tif %s/%s_filled.tif', tmpath, rfill$var[i], tmpath, rfill$var[i])
     system(cmd)
   }else{
-    cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --co="BIGTIFF=YES" --co="NUM_THREADS=ALL_CPUS" --overwrite', tmpath, rfill$var[i], tmpath, rfill$var[i])
     system(cmd)
   }
-  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --overwrite', tmpath, rfill$var[i], tmpath, tmpath, rfill$var[i])
+  cmd <- sprintf('gdal_calc.py -A %s/%s_filled.tif -B %s/mask.tif --outfile=%s/%s_masked.tif --calc="A*(B!=0) + (-9999)*(B==0)" --NoDataValue=-9999 --co="COMPRESS=DEFLATE" --co="BIGTIFF=YES" --co="NUM_THREADS=ALL_CPUS" --overwrite', tmpath, rfill$var[i], tmpath, tmpath, rfill$var[i])
   system(cmd)
   cmd <- sprintf('rm %s/%s_filled.tif
 
@@ -272,6 +272,10 @@ system(cmd)
 
 
 
+#r <- rast("/home/frousseu/data2/na/silt.tif")
+#plot(aggregate(r, 2, na.rm = TRUE))
+
+# x <- st_read(file.path(tmpath, "invalid.gpkg")); plot(st_geometry(x))
 
 
 if(FALSE){
