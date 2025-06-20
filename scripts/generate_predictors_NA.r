@@ -171,8 +171,17 @@ urls <- lapply(seq_along(collections), function(i){
 variables$url <- unlist(urls, use.names = FALSE)
 variables$url <- URLencode(variables$url)
 
-#variables <- variables[5, ]
+#variables <- variables[1:5, ]
 
+if(FALSE){
+  desc <- variables
+  names(desc) <- c("collection", "var", "variable", "url")
+  desc <- desc[, c("collection", "variable", "url")]
+  desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na", paste0(desc$variable, ".tif"))
+  write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
+  system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
+  x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
+}
 
 cl <- makeCluster(10)
 registerDoParallel(cl)
@@ -208,7 +217,7 @@ getDoParWorkers()
 foreach(i = 1:nrow(rfill)) %dopar% {
 
   if(rfill$fill[i] == "inv_dist"){
-    cmd <- sprintf('gdal_fillnodata.py -md 500 -si 0 -co COMPRESS=DEFLATE -co BIGTIFF=YES -co NUM_THREADS=ALL_CPUS %s/%s.tif %s/%s_filled.tif', tmpath, rfill$var[i], tmpath, rfill$var[i])
+    cmd <- sprintf('gdal_fillnodata.py -md 850 -si 0 -co COMPRESS=DEFLATE -co BIGTIFF=YES -co NUM_THREADS=ALL_CPUS %s/%s.tif %s/%s_filled.tif', tmpath, rfill$var[i], tmpath, rfill$var[i])
     system(cmd)
   }else{
     cmd <- sprintf('gdal_calc.py -A %s/%s.tif --outfile=%s/%s_filled.tif --calc="A*(A!=-9999)" --NoDataValue=none --co="COMPRESS=DEFLATE" --co="BIGTIFF=YES" --co="NUM_THREADS=ALL_CPUS" --overwrite', tmpath, rfill$var[i], tmpath, rfill$var[i])
@@ -227,11 +236,35 @@ foreach(i = 1:nrow(rfill)) %dopar% {
 }
 stopCluster(cl)
 
-
 cmd <- sprintf('rm %s/mask.tif', tmpath)
 system(cmd)
 
 
+##########################################################
+### turn every single tif to a cog #######################
+
+cl <- makeCluster(10)
+registerDoParallel(cl)
+getDoParWorkers()
+foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
+cmd <- sprintf('gdal_translate -of COG -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/%s.tif %s/%s_cog.tif', tmpath, variables$name[i], tmpath, variables$name[i])
+system(cmd)
+cmd <- sprintf('rm %s/%s.tif
+
+mv %s/%s_cog.tif %s/%s.tif
+', tmpath, variables$name[i], tmpath, variables$name[i], tmpath, variables$name[i])
+system(cmd)
+#py_cmd <- sprintf("from osgeo import gdal; gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
+#system2("/usr/bin/python3", args = c("-c", shQuote(py_cmd)))
+}
+stopCluster(cl)
+
+
+
+
+### the stacking of all files does not seem to work or end so putting this on ice for now...
+
+if(FALSE){
 
 input_dir <- tmpath
 vrt_file <- file.path(tmpath, "stacked.vrt")
@@ -272,13 +305,11 @@ system(cmd)
 
 
 
-#r <- rast("/home/frousseu/data2/na/silt.tif")
+#r <- rast("/home/frousseu/data2/na/sand.tif")
 #plot(aggregate(r, 2, na.rm = TRUE))
 
 # x <- st_read(file.path(tmpath, "invalid.gpkg")); plot(st_geometry(x))
 
-
-if(FALSE){
 
 cmd <- 'gdalwarp -overwrite -r average -tr 100 100 -co COMPRESS=DEFLATE -wo NUM_THREADS=ALL_CPUS /home/frousseu/data2/qc/mhc.tif /home/frousseu/data2/qc/mhc_agg.tif'
 system(cmd)

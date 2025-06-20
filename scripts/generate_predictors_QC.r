@@ -209,6 +209,19 @@ variables <- variables[-grep("tropical", variables$name), ]
 #variables <- variables[grep("depot", variables$name), ]
 #variables <- variables[1:5, ]
 
+if(FALSE){
+  desc <- variables
+  names(desc) <- c("collection", "var", "variable", "url")
+  desc <- desc[, c("collection", "variable")]
+  #desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc", paste0(desc$variable, ".tif"))
+  write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
+  system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/qc/", tmpath))
+  x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
+}
+
+
+
+
 cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
