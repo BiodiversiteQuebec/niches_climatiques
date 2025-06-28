@@ -5,7 +5,7 @@ plot_background <- function(){
 
 plot_foreground <- function(observations = FALSE){
   if(observations){
-    plot(st_geometry(obs), col = adjustcolor("orange", 0.5), pch = 16, cex = 0.25, add = TRUE)
+    plot(st_geometry(obs[[echelle]]), col = adjustcolor("orange", 0.5), pch = 16, cex = 0.25, add = TRUE)
   }
   plot(st_geometry(na), lwd = 0.1, border = adjustcolor("black", 0.5), add = TRUE)
   plot(st_geometry(lakes), col = "white", lwd = 0.1, border = adjustcolor("black", 0.5), add = TRUE)
@@ -33,6 +33,7 @@ topng(file_range_proj)
 
 
 plg <- list(size = c(0.5, 1.5), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
+plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
 #sdm_cols <- terrain.colors(200)
 sdm_cols <- colo.scale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen"))[1:175]
 range_cols <- adjustcolor("forestgreen", 0.5)
@@ -40,7 +41,7 @@ range_cols <- adjustcolor("forestgreen", 0.5)
 png(topng(file_sdm), units = "in", height = 6, width = 8, res = 300)
 par(mar = c(0, 0, 0, 8))
 plot_background()
-plot(crop(predictions, st_buffer(obs, 1500000)), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols)
+plot(crop(predictions, st_buffer(obs[[echelle]], 1500000)), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols)
 plot_foreground(observation = TRUE)
 dev.off()
 
@@ -57,7 +58,7 @@ dev.off()
 png(topng(file_sdm_proj), units = "in", height = 6, width = 8, res = 300)
 par(mar = c(0, 0, 0, 8))
 plot_background()
-plot(crop(predictions_proj, st_buffer(obs, 1500000)), axes = FALSE, add = TRUE, plg = plg, col = sdm_cols)
+plot(crop(predictions_proj, st_buffer(obs[[echelle]], 1500000)), axes = FALSE, add = TRUE, plg = plg, col = sdm_cols)
 #plot(st_geometry(polran_proj), col = adjustcolor("black", 0.2), border = NA, add = TRUE)
 plot_foreground(observations = TRUE)
 legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = adjustcolor("black", 0.2), bty = "n", xjust = 1, xpd = TRUE)
@@ -75,7 +76,7 @@ dev.off()
 
 png(topng(gsub("_sdm", "_sdm_diff", file_sdm)), units = "in", height = 6, width = 8, res = 300)
 par(mar = c(0, 0, 0, 8))  
-dif <- crop(predictions, st_buffer(obs, 1500000)) - crop(predictions_proj, st_buffer(obs, 1500000))
+dif <- crop(predictions, st_buffer(obs[[echelle]], 1500000)) - crop(predictions_proj, st_buffer(obs[[echelle]], 1500000))
 se <- unlist(global(dif, range, na.rm = TRUE)[1, ])
 if(all(se == 0)){ # when no diff cause habitat only model
   cols = "white"
@@ -107,11 +108,11 @@ dev.off()
 if(is.character(models[[i]])){
 
   png(file.path("results/graphics", paste(gsub(" ", "_", sp), names(models)[i], "marginal_effects.png", sep = "_")), units = "in", height = 6, width = 8, res = 300)
-  e1 <- extract(p[[vars]], obs)
-  e2 <- extract(p[[vars]], bg)
-  reg <- st_buffer(st_convex_hull(obs),500000)
-  g <- global(crop(p[[vars]], region, mask = TRUE), mean, na.rm = TRUE)
-  gr <- global(crop(p[[vars]], region, mask = TRUE), range, na.rm = TRUE)
+  e1 <- extract(p[[echelle]][[vars]], obs[[echelle]])
+  e2 <- extract(p[[echelle]][[vars]], bg[[echelle]])
+  reg <- st_buffer(st_convex_hull(obs[[echelle]]),500000)
+  g <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), mean, na.rm = TRUE)
+  gr <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), range, na.rm = TRUE)
   par(mfrow = n2mfrow(nrow(g)))
   ran <- invisible(range(unlist(sapply(1:nrow(g), function(i){
       brks <- 500
@@ -151,5 +152,17 @@ if(is.character(models[[i]])){
       lines(h$mids, h$counts, col = adjustcolor("black", 0.25))
   }))
   dev.off()
+
+}
+
+
+if(FALSE){
+
+  lf <- list.files("results/rasters", pattern = "sdm_large|sdm_small", full = TRUE)
+
+  large <- rast(lf[1])
+  small <- rast(lf[2])
+
+  r <- c(project(large, small), small)
 
 }

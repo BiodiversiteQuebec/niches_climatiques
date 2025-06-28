@@ -14,7 +14,9 @@ library(gbifdb)
 
 source("https://raw.githubusercontent.com/frousseu/FRutils/refs/heads/master/R/colo.scale.R")
 
-options(terra.pal=map.pal("water"))
+#options(terra.pal=rev(map.pal("grass")))
+options(terra.pal=rev(terrain.colors(200)))
+terraOptions(tempdir = "/home/frousseu/data2/tmp", memfrac = 0.8)
 
 epsg <- 6624 #32618
 

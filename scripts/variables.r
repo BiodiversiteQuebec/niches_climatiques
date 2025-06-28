@@ -50,15 +50,22 @@ other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_
 #vars <- c(other_vars)
 
 other_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_0-5cm", "clay_0-5cm", "forest", "urban", "water", "wetland", "crop")
-pp <- p[[other_vars]]
+large_vars <- c("geomfootslope_per", "geomflat_perc", "vrm", "elevation", "sand_0-5cm", "clay_0-5cm", "forest", "urban", "water", "wetland", "crop")
+#dput(grep("temperature|precipitation|isothermality", names(psmall), invert = TRUE, value = TRUE))
+small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
+"eau_peu_profonde", "elevation", "eolien", "geomflat", "geomfootslope", 
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "twi", "urban", "water", "wetland")
+pp <- p$large[[other_vars]]
 name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", "sable", "argile", "% forêt", "% urbain", "% eau", "% milieu humide", "% agricole")
 names(pp) <- name_vars
 
 
 models <- list(
   "climat" = climate_vars[c(1)],
-  "habitat" = c(other_vars),
-  "climat + habitat" = c(climate_vars[c(1)], other_vars),
-  "climat (habitat)" = c(1, 2) 
+  "habitat" = c(large_vars),
+  "small" = c(small_vars)[sample(1:length(small_vars), 15)],
+  "climat + habitat" = c(climate_vars[c(1)], large_vars),
+  "climat (habitat)" = c(1, 2), 
+  "climat (small)" = c(1, 3) 
 )
 

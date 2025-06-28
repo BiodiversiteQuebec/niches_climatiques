@@ -1,6 +1,6 @@
 
 # create tif/gpkg files for the first model, else append
-if(i == 1){ 
+if(i %in% c(1, 3)){ 
   overwrite <- TRUE
   gdal <- ""
   append <- FALSE
@@ -14,21 +14,37 @@ if(i == 1){
   delete_layer <- TRUE
 }
 
-file_sdm <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm.tif"))
-file_sdm_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_proj.tif"))
-file_range <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range.tif"))
-file_range_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_proj.tif"))
+
+file_sdm <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_", echelle, ".tif"))
+file_sdm_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_proj_", echelle, ".tif"))
+file_range <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif"))
+file_range_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_proj_", echelle, ".tif"))
 file_pol <- gsub(".tif", ".gpkg", file_range)
 file_pol_proj <- gsub(".tif", ".gpkg", file_range_proj)
 
+
 if(is.character(models[[i]])){
-  predictions <- mask(predict(m, p, args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
-  predictions_proj <- mask(predict(m, p_proj, args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
-} else {
-  preds <- rast(file_sdm)[[names(models)[models[[i]]]]]
-  predictions <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
-  preds <- rast(file_sdm_proj)[[names(models)[models[[i]]]]]
-  predictions_proj <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+  predictions <- mask(predict(m, p[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
+  predictions_proj <- mask(predict(m, p_proj[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
+} else { # this needs adapting for 2-scale model
+  if(echelle == "large"){
+    preds <- rast(file_sdm)[[names(models)[models[[i]]]]]
+    predictions <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+    preds <- rast(file_sdm_proj)[[names(models)[models[[i]]]]]
+    predictions_proj <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+  } else {
+
+    hab <- rast(file_sdm)[[names(models)[models[[i]]][2]]]
+    clim <- rast(gsub("_small", "_large", file_sdm))[["climat"]] |>
+              project(hab) |> 
+              mask(hab)
+    predictions <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
+    hab <- rast(file_sdm_proj)[[names(models)[models[[i]]][2]]]
+    clim <- rast(gsub("_small", "_large", file_sdm_proj))[["climat"]] |>
+              project(hab) |> 
+              mask(hab)
+    predictions_proj <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
+  }
 }
 
 
@@ -41,8 +57,8 @@ writeRaster(predictions_proj, file_sdm_proj, overwrite = overwrite, gdal = gdal)
 
 threshold1 <- 0.99
 threshold2 <- 0.95
-e1 <- extract(predictions, obs[qc, ])
-e2 <- extract(predictions, obs[st_difference(region, qc), ])
+e1 <- extract(predictions, obs[[echelle]][qc, ])
+e2 <- extract(predictions, obs[[echelle]][st_difference(region, qc), ])
 e <- rbind(e1)#, e2)
 e <- e[rev(order(e[,2])), ]
 val <- e[round(threshold1 * nrow(e)), 2]
@@ -83,4 +99,5 @@ st_write(polran_proj, file_pol_proj, layer = names(models[i]), append = append, 
 #writeRaster(ppp_proj, file.path("results/rasters", paste0(gsub(" ", "_", sp), "_test.tif")),  gdal = "APPEND_SUBDATASET=YES")
 
 #r <- rast(file.path("results/rasters", paste0(gsub(" ", "_", sp), "_test.tif")))
+
 

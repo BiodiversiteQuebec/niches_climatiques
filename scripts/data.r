@@ -132,3 +132,12 @@ nbuff <- 100000
 x <- st_difference(region, buff) |> st_sample(size = nbuff)# |> st_as_sf()
 x <- st_as_sf(cbind(st_drop_geometry(bg[rep(1, nbuff), ]), geometry = x), crs = epsg)
 bg <- rbind(bg, x)
+
+th_small <- th
+obs_small <- obs[qc, ]
+obs_small <- obs_small[which(obs_small$coordinate_uncertainty <= th), ]
+bg_small <- bg[qc, ]
+bg_small <- bg_small[which(bg_small$coordinate_uncertainty <= th), ]
+
+obs <- list(large = obs, small = obs_small)
+bg <- list(large = bg, small = bg_small)
