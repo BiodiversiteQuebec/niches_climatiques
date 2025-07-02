@@ -261,7 +261,59 @@ stopCluster(cl)
 
 
 
+##############################################################
+### little add-on to produce low res predictors ############## 
 
+cl <- makeCluster(10)
+registerDoParallel(cl)
+getDoParWorkers()
+foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
+cmd <- sprintf('gdal_translate -of COG -r average -tr 1000 1000 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i])
+system(cmd)
+}
+
+input_dir <- tmpath
+vrt_file <- file.path(tmpath, "stacked.vrt")
+
+
+py_script <- sprintf("
+import os
+from osgeo import gdal
+
+input_dir = r'%s'
+vrt_filename = r'%s'
+
+tif_files = sorted([os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('_lowres.tif')])
+#tif_files = tif_files[:10]
+band_names = [os.path.splitext(os.path.basename(f))[0] for f in tif_files]
+band_names = [f.replace('_lowres', '') for f in band_names]
+
+gdal.BuildVRT(vrt_filename, tif_files, separate=True)
+
+vrt_ds = gdal.Open(vrt_filename, gdal.GA_Update)
+for i, name in enumerate(band_names):
+    vrt_ds.GetRasterBand(i + 1).SetDescription(name)
+vrt_ds = None
+", input_dir, vrt_file)
+
+system2("/usr/bin/python3", args = c("-c", shQuote(py_script)))
+
+
+cmd <- sprintf('bash -c "
+
+  source /home/frousseu/miniconda3/etc/profile.d/conda.sh 
+
+  conda activate gdal-env
+  
+  gdalinfo --version
+
+  gdal_translate -of COG -r average -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_1000_NA.tif"', tmpath, tmpath, tmpath, tmpath)
+system(cmd)
+
+
+
+
+##########################################################################
 ### the stacking of all files does not seem to work or end so putting this on ice for now...
 
 if(FALSE){
