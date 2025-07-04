@@ -24,8 +24,19 @@ file_pol_proj <- gsub(".tif", ".gpkg", file_range_proj)
 
 
 if(is.character(models[[i]])){
-  predictions <- mask(predict(m, p[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
-  predictions_proj <- mask(predict(m, p_proj[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
+  if(models[[i]] != "gam"){}
+    predictions <- mask(predict(m, p[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
+    predictions_proj <- mask(predict(m, p_proj[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
+  } else {
+    preds <- predict(m, as.data.frame(cbind(values(p[[echelle]][[vars]]), eff = 1000)), type = "response")
+    predictions <- p[[echelle]][[1]]
+    predictions[] <- preds
+    predictions <- mask(predictions, vect(region))
+    preds <- predict(m, as.data.frame(cbind(values(p_proj[[echelle]][[vars]]), eff = 1000)), type = "response")
+    predictions_proj <- p[[echelle]][[1]]
+    predictions_proj[] <- preds
+    predictions_proj <- mask(predictions_proj, vect(region))
+ }
 } else { # this needs adapting for 2-scale model
   if(echelle == "large"){
     preds <- rast(file_sdm)[[names(models)[models[[i]]]]]

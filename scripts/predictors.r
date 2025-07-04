@@ -3,11 +3,18 @@
 options(width = 150)
 terraOptions(tempdir = "/home/frousseu/data2/tmp", memfrac = 0.8)
 
-predictors <- rast("data/predictors.tif")
-predictors_proj <- rast("data/predictors_proj.tif")
-
-#predictors <- rast("data/predictors_NA_1000.tif")
+#predictors <- rast("data/predictors.tif")
+#names(predictors)[c(20, 21, 24, 25, 26)] <- c("geomfootslope", "geomflat", "silt", "sand", "clay")
 #predictors_proj <- rast("data/predictors_proj.tif")
+#names(predictors_proj)[c(20, 21, 24, 25, 26)] <- c("geomfootslope", "geomflat", "silt", "sand", "clay")
+
+forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduous", "deciduous", "tourbiere_boisee", "marecage", "temperate_deciduous", "taiga")
+
+predictors <- rast("data/predictors_1000_NA.tif")
+predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
+#predictors_proj <- rast("data/predictors_proj.tif")
+predictors_proj <- predictors
+predictors_proj[["mean_annual_air_temperature"]] <- predictors_proj[["mean_annual_air_temperature"]] +2
 
 plarge <- aggregate(predictors, 2, na.rm = TRUE)
 plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE)
@@ -17,6 +24,7 @@ plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE)
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_QC_500.tif")
+psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 
 p <- list(small = psmall, large = plarge)
 p_proj <- list(small = psmall, large = plarge_proj)
@@ -27,14 +35,14 @@ if(FALSE){
     url <- "/vsicurl/https://object-arbutus.cloud.computecanada.ca"
     bucket <- "bq-io/sdm_predictors/na" 
     r <- sprintf('s5cmd ls --exclude "predictors*" s3://%s/*.tif', bucket) |>
-    system(intern = TRUE) |>
-    strsplit(" ") |>
-    sapply(function(i){i[length(i)]}) |>
-    (\(.) file.path(url, bucket, .))() |>
-    lapply(rast) |>
-    rast()
+        system(intern = TRUE) |>
+        strsplit(" ") |>
+        sapply(function(i){i[length(i)]}) |>
+        (\(.) file.path(url, bucket, .))() |>
+        lapply(rast) |>
+        rast()
 
-    p <- aggregate(r, 20, na.rm = TRUE)
+    p <- aggregate(r, 10, na.rm = TRUE)
 
     writeRaster(p, "data/predictors_NA_2000.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 

@@ -21,7 +21,7 @@ species_vars <- list(`Pseudacris triseriata` = c("wetland"),
 )
 
 
-species_target_groups <- list(`Pseudacris triseriata` = c("retiles"), 
+species_target_groups <- list(`Pseudacris triseriata` = c("reptiles"), 
                             `Hemidactylium scutatum` = c("reptiles"), 
                             `Gyrinophilus porphyriticus` = c("reptiles"), 
                             `Desmognathus ochrophaeus` = c("reptiles"), 

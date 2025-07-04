@@ -4,15 +4,15 @@ source("scripts/predictors.r")
 source("scripts/parameters.r")
 
 
-for(sp in species[c(3)]){#[-c(9,10,11,13)]){
-    #sp <- species[3]
+for(sp in species){#[-c(9,10,11,13)]){
+    #sp <- species[6]
     print(sp)
     source("scripts/data.r")
     #source("scripts/background.r")
 
     source("scripts/variables.r")
     for(i in seq_along(models)){
-      #i <- 6
+      #i <- 4
       print(names(models)[i])
       source("scripts/models.r")
       source("scripts/predictions.r")
