@@ -4,7 +4,7 @@ source("scripts/predictors.r")
 source("scripts/parameters.r")
 
 
-for(sp in species){#[-c(9,10,11,13)]){
+for(sp in species[c(1:5,8:length(species))]){#[-c(9,10,11,13)]){
     #sp <- species[6]
     print(sp)
     source("scripts/data.r")

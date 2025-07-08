@@ -11,6 +11,7 @@ library(duckdb)
 options(java.parameters = "-Xmx100g")
 library(predicts)
 library(gbifdb)
+library(scam)
 
 source("https://raw.githubusercontent.com/frousseu/FRutils/refs/heads/master/R/colo.scale.R")
 

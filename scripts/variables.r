@@ -62,11 +62,14 @@ small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "croplan
 
 models <- list(
   "climat" = climate_vars[c(1)],
+  "gam" = climate_vars[c(1)],
   "habitat" = c(large_vars),
   "small" = c(small_vars)[sample(1:length(small_vars), 10)],
   "climat + habitat" = c(climate_vars[c(1)], large_vars),
-  "climat (habitat)" = c(1, 2), 
-  "climat (small)" = c(1, 3) 
+  "climat (habitat)" = c(1, 3), 
+  "climat (small)" = c(1, 4),
+  "gam (habitat)" = c(2, 3),
+  "gam (small)" = c(2, 4)
 )
 
 

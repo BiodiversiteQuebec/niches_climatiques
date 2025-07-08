@@ -1,6 +1,6 @@
 
 # create tif/gpkg files for the first model, else append
-if(i %in% c(1, 3)){ 
+if(i %in% c(1, 4)){ 
   overwrite <- TRUE
   gdal <- ""
   append <- FALSE
@@ -24,7 +24,7 @@ file_pol_proj <- gsub(".tif", ".gpkg", file_range_proj)
 
 
 if(is.character(models[[i]])){
-  if(models[[i]] != "gam"){}
+  if(!grepl("gam", names(models)[i])){
     predictions <- mask(predict(m, p[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
     predictions_proj <- mask(predict(m, p_proj[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
   } else {

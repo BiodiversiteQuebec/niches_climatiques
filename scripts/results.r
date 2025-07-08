@@ -1,6 +1,16 @@
 
+
+buffd <- 1000000
+
+if(echelle == "large"){
+  bregion <- st_intersection(na, region)
+} else {
+  bregion <- st_intersection(qc, region)
+}
+
+
 plot_background <- function(){
-  plot(st_geometry(na), border = NA, col = "grey90") 
+  plot(st_geometry(bregion), border = NA, col = "grey90") 
 }
 
 plot_foreground <- function(observations = FALSE){
@@ -33,7 +43,7 @@ topng(file_range_proj)
 
 
 plg <- list(size = c(0.5, 1.5), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
-plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
+#plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
 #sdm_cols <- terrain.colors(200)
 sdm_cols <- colo.scale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen"))[1:175]
 range_cols <- adjustcolor("forestgreen", 0.5)
@@ -41,7 +51,7 @@ range_cols <- adjustcolor("forestgreen", 0.5)
 png(topng(file_sdm), units = "in", height = 6, width = 8, res = 300)
 par(mar = c(0, 0, 0, 8))
 plot_background()
-plot(crop(predictions, st_buffer(obs[[echelle]], 1500000)), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols)
+plot(crop(predictions, st_buffer(obs[[echelle]], buffd)), axes = FALSE, add = TRUE, plg = plg, col = sdm_cols)
 plot_foreground(observation = TRUE)
 dev.off()
 
@@ -58,7 +68,7 @@ dev.off()
 png(topng(file_sdm_proj), units = "in", height = 6, width = 8, res = 300)
 par(mar = c(0, 0, 0, 8))
 plot_background()
-plot(crop(predictions_proj, st_buffer(obs[[echelle]], 1500000)), axes = FALSE, add = TRUE, plg = plg, col = sdm_cols)
+plot(crop(predictions_proj, st_buffer(obs[[echelle]], buffd)), axes = FALSE, add = TRUE, plg = plg, col = sdm_cols)
 #plot(st_geometry(polran_proj), col = adjustcolor("black", 0.2), border = NA, add = TRUE)
 plot_foreground(observations = TRUE)
 legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = adjustcolor("black", 0.2), bty = "n", xjust = 1, xpd = TRUE)
@@ -76,15 +86,16 @@ dev.off()
 
 png(topng(gsub("_sdm", "_sdm_diff", file_sdm)), units = "in", height = 6, width = 8, res = 300)
 par(mar = c(0, 0, 0, 8))  
-dif <- crop(predictions, st_buffer(obs[[echelle]], 1500000)) - crop(predictions_proj, st_buffer(obs[[echelle]], 1500000))
+dif <- crop(predictions, st_buffer(obs[[echelle]], buffd)) - crop(predictions_proj, st_buffer(obs[[echelle]], buffd))
 se <- unlist(global(dif, range, na.rm = TRUE)[1, ])
 if(all(se == 0)){ # when no diff cause habitat only model
-  cols = "white"
+  cols <- "white"
+  dif <- setValues(dif, runif(ncell(dif)))# temp fix for plg terra prob when a single value raster
 } else {
   cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
 }
 plot_background()
-plot(dif, axes = FALSE, col = cols, add = TRUE, plg = plg)
+plot(dif, axes = FALSE, add = TRUE, plg = plg, col = cols)
 plot_foreground()
 legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = adjustcolor("black", 0.2), bty = "n", xjust = 1, xpd = TRUE)
 dev.off()
@@ -114,42 +125,54 @@ if(is.character(models[[i]])){
   g <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), mean, na.rm = TRUE)
   gr <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), range, na.rm = TRUE)
   par(mfrow = n2mfrow(nrow(g)))
-  ran <- invisible(range(unlist(sapply(1:nrow(g), function(i){
+  ran <- invisible(range(unlist(sapply(1:nrow(g), function(j){
       brks <- 500
       newdata <- t(g) |> as.data.frame()
       newdata <- newdata[rep(1, brks), , drop = FALSE]
-      v <- seq(gr[i, 1], gr[i, 2], length.out = brks)
-      newdata[ ,i] <- v
-      pred <- predict(m, newdata, args = c("doClamp=FALSE"))
+      v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
+      newdata[ ,j] <- v
+      if(!grepl("gam", names(models)[i])){
+        pred <- predict(m, newdata, args = c("doClamp=FALSE"))
+      } else {
+        pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
+      }
       range(pred, na.rm = TRUE)
   }))))
-  invisible(lapply(1:nrow(g), function(i){
+  invisible(lapply(1:nrow(g), function(j){
       brks <- 500
       newdata <- t(g) |> as.data.frame()
       newdata <- newdata[rep(1, brks), , drop = FALSE]
-      v <- seq(gr[i, 1], gr[i, 2], length.out = brks)
-      newdata[ ,i] <- v
+      v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
+      newdata[ ,j] <- v
       par(mar = c(2, 2, 1, 1))
-      pred <- predict(m, newdata, args = c("doClamp=FALSE"))
-      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ran, na.rm = TRUE)))
+      if(!grepl("gam", names(models)[i])){
+        pred <- predict(m, newdata, args = c("doClamp=FALSE"))
+      } else {
+        pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
+      }
+      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ran, na.rm = TRUE)), lwd = 2)
       axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5)
       axis(2, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2)
       grid()
       box(col = "grey90")
-      mtext(side = 1, line = 1, text = rownames(g)[i], cex = 0.35)
-      mtext(side = 2, line = 1, text = "prediction", cex = 0.5)
-      hbrks <- range(c(e1[ , rownames(g)[i]], e2[ , rownames(g)[i]]), na.rm = TRUE) 
+      mtext(side = 1, line = 1, text = rownames(g)[j], cex = 0.5)
+      mtext(side = 2, line = 1, text = "Relative occurrence rate (ROC)", cex = 0.5)
+      hbrks <- range(c(e1[ , rownames(g)[j]], e2[ , rownames(g)[j]]), na.rm = TRUE) 
       hbrks <- seq(min(hbrks), max(hbrks), length.out = 50)
-      h1 <- hist(e1[ , rownames(g)[i]], breaks = hbrks, plot = FALSE)
-      h2 <- hist(e2[ , rownames(g)[i]], breaks = hbrks, plot = FALSE)
+      h1 <- hist(e1[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
+      h2 <- hist(e2[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
       h <- h1
-      h$counts <- scales::rescale(h1$counts + h2$counts, to = c(0, par("usr")[4] * 0.35))
+      h$counts <- scales::rescale(h1$counts + h2$counts, to = c(0, par("usr")[4] * 0.75))
       h$density <- h1$density / h2$density
-      h$density <- scales::rescale(h$density, to = c(0, par("usr")[4] * 0.35))
+      h$density <- scales::rescale(h$density, to = c(0, par("usr")[4] * 0.75))
       invisible(lapply(seq_along(h$mids), function(j){
-        rect(xleft = h$breaks[j], ybottom = 0, xright = h$breaks[j + 1], ytop = h$density[j], col = adjustcolor("black", 0.15), border = NA)    
+        rect(xleft = h$breaks[j], ybottom = 0, xright = h$breaks[j + 1], ytop = h$density[j], col = adjustcolor("forestgreen", 0.65), border = NA)    
       }))
-      lines(h$mids, h$counts, col = adjustcolor("black", 0.25))
+      #lines(h$mids, h$counts, col = adjustcolor("black", 0.25))
+
+      polygon(c(h$mids, rev(h$mids)), c(h$counts, rep(0, length(h$mids))), col = adjustcolor("black", 0.20), border = NA)
+
+      legend("topleft", inset = c(0.025, 0), legend = c("Predictions", "Observations / (Observations + Background)", "Observations + Background"), cex = 0.75, bty = "n", lwd = c(2, NA, NA), pch = c(NA, 15, 15), col = c("black", adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, 1.5, 1.5))
   }))
   dev.off()
 

@@ -1,12 +1,17 @@
 
-lf <- list.files("results/rasters", pattern = "_sdm_small|_sdm_large", full = TRUE)
+source("scripts/prelim.r")
+
+lf <- list.files("results/rasters", pattern = "_sdm_large", full = TRUE)
 
 lapply(lf, function(i){
-    png(gsub("_sdm.tif", "_sdm_compare.png", gsub("/rasters/", "/graphics/", i)), units = "in", height = 6, width = 18, res = 300)
-    r <- rast(i)
+    png(gsub("_sdm_large.tif", "_sdm_compare.png", gsub("/rasters/", "/graphics/", i)), units = "in", height = 12, width = 10, res = 300)
+    r1 <- rast(i)
+    r2 <- rast(sub("_large", "_small", i))
+    r1 <- project(r1, r2)
+    r <- c(r1, r2)
     #par(mar = c(0, 0, 0, 8))
     #plot_background()
-    plot(crop(r, qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 4, fun = plot_foreground())
+    plot(crop(r, qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = plot_foreground)
     #plot_foreground(observation = FALSE)
     dev.off()
 })

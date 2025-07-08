@@ -8,7 +8,7 @@ if(is.character(models[[i]])){
 
     vars <- models[[i]]
 
-    if(models[[i]] != "gam"){
+    if(!grepl("gam", names(models)[i])){
 
         m <- MaxEnt(p[[echelle]][[vars]], 
                     p = vect(obs[[echelle]]), a = vect(bg[[echelle]]),
@@ -29,7 +29,7 @@ if(is.character(models[[i]])){
 
         dat <- dat[dat$eff > 0, ]
 
-        f <- paste("obs ~", paste("s(", vars, ", k = 9, bs = \"cv\", m = 2) + offset(log(eff))")) |>
+        f <- paste("obs ~", paste("s(", vars, ", k = 12, bs = \"cv\", m = 2) + offset(log(eff))")) |>
           as.formula()
 
         optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
