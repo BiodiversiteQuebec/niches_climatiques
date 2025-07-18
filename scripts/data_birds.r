@@ -6,13 +6,11 @@ background_atlas <- atlas |>
   filter(group_en %in% c("Birds")) |>
   filter(!dataset_name %in% c("Données de localisation des grands mammifères")) |>
   filter(!grepl("GPS locations of Northern Gannets", dataset_name, ignore.case = TRUE)) |>
-  collect() |>
-  head()
+  collect()
 
 background_gbif <- gbif |> 
   filter(class %in% c("Aves")) |>
-  collect() |>
-  head()
+  collect()
 
 background_ebird <- ebird_checklists |> 
   mutate(day = substr(as.character(date), 6, 10)) |>
@@ -32,13 +30,11 @@ obs_atlas <- atlas |>
   filter(genus == !!genus) |> 
   collect() |>
   mutate(species = sapply(strsplit(valid_scientific_name, " "), function(i){paste(i[1:2], collapse = " ")})) |>
-  filter(species == !!sp) |>
-  head()
+  filter(species == !!sp)
 
 obs_gbif <- gbif |>
   filter(species == !!sp) |>
-  collect() |>
-  head()
+  collect()
 
 obs_ebird <- ebird |> 
   mutate(species = case_match(species, "Botaurus exilis" ~ "Ixobrychus exilis", .default = species)) |>
