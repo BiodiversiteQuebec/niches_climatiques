@@ -24,6 +24,7 @@ plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE)
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_QC_500.tif")
+#psmall <- aggregate(psmall, 10, na.rm = TRUE)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 
 p <- list(small = psmall, large = plarge)

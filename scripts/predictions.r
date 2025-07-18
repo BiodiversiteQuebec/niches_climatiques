@@ -66,7 +66,7 @@ names(predictions_proj) <- names(models[i])
 writeRaster(predictions_proj, file_sdm_proj, overwrite = overwrite, gdal = gdal)
 
 
-threshold1 <- 0.99
+threshold1 <- 0.95
 threshold2 <- 0.95
 e1 <- extract(predictions, obs[[echelle]][qc, ])
 e2 <- extract(predictions, obs[[echelle]][st_difference(region, qc), ])

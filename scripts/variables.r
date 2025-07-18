@@ -54,17 +54,21 @@ large_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", 
 #dput(grep("temperature|precipitation|isothermality", names(psmall), invert = TRUE, value = TRUE))
 small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
 "eau_peu_profonde", "elevation", "eolien", "geomflat", "geomfootslope", 
-"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "twi", "urban", "water", "wetland")
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "urban", "water", "wetland")
 #pp <- p$large[[other_vars]]
 #name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", "sable", "argile", "% forêt", "% urbain", "% eau", "% milieu humide", "% agricole")
 #names(pp) <- name_vars
+#use_small <- unique(c(c("urban", "geomflat"), sample(small_vars)))
+#use_small <- use_small[1:min(c(length(use_small), 2))]
+use_small <- unique(c(c("urban", "cropland", "alluvion", "clay", "till", "ph", "elevation", "geomflat", "water", "eau_peu_profonde","organique", "ruggedness"), sample(small_vars)))
+use_small <- use_small[1:min(c(length(use_small), 20))]
 
 
 models <- list(
   "climat" = climate_vars[c(1)],
   "gam" = climate_vars[c(1)],
   "habitat" = c(large_vars),
-  "small" = c(small_vars)[sample(1:length(small_vars), 10)],
+  "small" = use_small,
   "climat + habitat" = c(climate_vars[c(1)], large_vars),
   "climat (habitat)" = c(1, 3), 
   "climat (small)" = c(1, 4),
@@ -85,8 +89,13 @@ if(FALSE){
   pca <- rda(values(rr), scale = TRUE)
   barplot(cumsum(eigenvals(pca)/sum(eigenvals(pca))))
   
+  r <- p$small
+  rr <- aggregate(r, 10, na.rm = TRUE)
   chosen <- climate
   chosen <- c("mean_annual_air_temperature", "annual_precipitation_amount", "annual_range_of_air_temperature")
+  chosen <- names(rr)
+  chosen <- use_small
+  chosen <- setdiff(use_small, c("lacustre", "human_modification", "organique"))
   v <- values(rr) |> as.data.frame()
   cor(v[, chosen], use = "complete.obs")
 

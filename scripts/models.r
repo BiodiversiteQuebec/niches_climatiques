@@ -29,7 +29,7 @@ if(is.character(models[[i]])){
 
         dat <- dat[dat$eff > 0, ]
 
-        f <- paste("obs ~", paste("s(", vars, ", k = 12, bs = \"cv\", m = 2) + offset(log(eff))")) |>
+        f <- paste("obs ~", paste("s(", vars, ", k = 20, bs = \"cv\", m = 2) + offset(log(eff))")) |>
           as.formula()
 
         optimizer <- c("bfgs", "newton")#c("efs", "bfgs")

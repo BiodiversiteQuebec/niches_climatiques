@@ -4,20 +4,21 @@ source("scripts/predictors.r")
 source("scripts/parameters.r")
 
 
-for(sp in species[c(1:5,8:length(species))]){#[-c(9,10,11,13)]){
-    #sp <- species[6]
+for(sp in species){#[-c(9,10,11,13)]){
+    #sp <- species[9]
     print(sp)
     source("scripts/data.r")
     #source("scripts/background.r")
 
     source("scripts/variables.r")
     for(i in seq_along(models)){
-      #i <- 4
+      #i <- 2
       print(names(models)[i])
       source("scripts/models.r")
       source("scripts/predictions.r")
       source("scripts/results.r")
     }
+    source("scripts/graphics.r")
 }
 
 

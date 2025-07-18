@@ -88,7 +88,7 @@ if(species_target_groups[[sp]] == "birds"){
 obs <- obs[region, ]
 background <- background[region, ]
 
-th <- 30000 # minimal precision
+th <- 20000 # minimal precision
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_locations.png")), width = 8, height = 8, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
@@ -96,10 +96,13 @@ plot(st_geometry(st_crop(na, obs)))
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
-plot(st_geometry(obs[is.na(obs$coordinate_uncertainty), ]), pch = 16, col = "red", add = TRUE)
-plot(st_geometry(obs[which(obs$coordinate_uncertainty >= th), ]), pch = 16, col = "blue", add = TRUE)
-plot(st_geometry(obs[which(obs$coordinate_uncertainty < th), ]), pch = 16, col = "forestgreen", add = TRUE)
-legend("bottomright", inset = c(0.025, 0.025), pch = 16, col = c("forestgreen", "blue", "red"), legend = c(paste("<", th), paste(">=", th), "NA"), cex = 1.5, bty = "n", title = "Précision (en m)")
+obsna <- st_geometry(obs[is.na(obs$coordinate_uncertainty), ])
+obsoverth <- st_geometry(obs[which(obs$coordinate_uncertainty >= th), ])
+obsunderth <- st_geometry(obs[which(obs$coordinate_uncertainty < th), ])
+plot(obsna, pch = 16, col = "red", add = TRUE)
+plot(obsoverth, pch = 16, col = "blue", add = TRUE)
+plot(obsunderth, pch = 16, col = "forestgreen", add = TRUE)
+legend("bottomright", pch = 16, col = c("forestgreen", "blue", "red"), legend = c(paste("<", th, "/ n =", length(obsunderth)), paste("\u2265", th, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna))), cex = 1.25, bty = "n", title = "Précision (en m)")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
@@ -119,8 +122,8 @@ dev.off()
 
 
 
-obs <- obs[which(obs$coordinate_uncertainty <= th), ]
-background <- background[which(background$coordinate_uncertainty <= th), ]
+obs <- obs[which(obs$coordinate_uncertainty <= th | is.na(obs$coordinate_uncertainty)), ]
+background <- background[which(background$coordinate_uncertainty <= th | is.na(obs$coordinate_uncertainty)), ]
 
 bg <- background[sample(1:nrow(background), 100000), ]
 
@@ -135,9 +138,9 @@ bg <- rbind(bg, x)
 
 th_small <- th
 obs_small <- obs[qc, ]
-obs_small <- obs_small[which(obs_small$coordinate_uncertainty <= th), ]
+obs_small <- obs_small[which(obs_small$coordinate_uncertainty <= th_small | is.na(obs_small$coordinate_uncertainty)), ]
 bg_small <- bg[qc, ]
-bg_small <- bg_small[which(bg_small$coordinate_uncertainty <= th), ]
+bg_small <- bg_small[which(bg_small$coordinate_uncertainty <= th_small | is.na(bg_small$coordinate_uncertainty)), ]
 
 obs <- list(large = obs, small = obs_small)
 bg <- list(large = bg, small = bg_small)

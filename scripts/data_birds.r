@@ -1,15 +1,34 @@
 
 
+#atlas |> 
+#  filter(group_en %in% c("Birds")) |>
+#  count(dataset_name) |>
+#  arrange(-n)
+
+#ebird_checklists |> 
+#  #head() |>
+#  count(state) |>
+#  arrange(-n)
+
+#gbif |>
+#  #head() |>
+#  count(institutioncode) |>
+#  arrange(-n)
+    
+
+
 ### Background #################################################
 
 background_atlas <- atlas |> 
   filter(group_en %in% c("Birds")) |>
-  filter(!dataset_name %in% c("Données de localisation des grands mammifères")) |>
+  filter(!dataset_name %in% c("Données de localisation des grands mammifères", "EOD – eBird Observation Dataset")) |>
   filter(!grepl("GPS locations of Northern Gannets", dataset_name, ignore.case = TRUE)) |>
+  head() |>
   collect()
 
 background_gbif <- gbif |> 
   filter(class %in% c("Aves")) |>
+  head() |>
   collect()
 
 background_ebird <- ebird_checklists |> 
@@ -27,14 +46,18 @@ background_ebird <- ebird_checklists |>
 ### Observations ###############################################  
 
 obs_atlas <- atlas |> 
+  filter(!dataset_name %in% c("Données de localisation des grands mammifères", "EOD – eBird Observation Dataset")) |>
+  filter(!grepl("GPS locations of Northern Gannets", dataset_name, ignore.case = TRUE)) |>
   filter(genus == !!genus) |> 
   collect() |>
   mutate(species = sapply(strsplit(valid_scientific_name, " "), function(i){paste(i[1:2], collapse = " ")})) |>
-  filter(species == !!sp)
+  filter(species == !!sp) |>
+  head()
 
 obs_gbif <- gbif |>
   filter(species == !!sp) |>
-  collect()
+  collect() |>
+  head()
 
 obs_ebird <- ebird |> 
   mutate(species = case_match(species, "Botaurus exilis" ~ "Ixobrychus exilis", .default = species)) |>
