@@ -5,6 +5,11 @@ library(magick)
 
 #Sys.setlocale("LC_ALL","English")
 
+descQC <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
+descNA <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
+
+desc <- merge(descNA[, c("collection", "variable")], descQC, all = TRUE)
+
 if(FALSE){
   lf <- list.files("/home/frousseu/Downloads/niches_climatiques/results/graphics", full = TRUE)#, pattern = "compare")
   lf <- lf[-grep("_pic.png", lf)]
@@ -27,8 +32,16 @@ species <- sapply(strsplit(basename(lf) ,"_|\\."),function(i){
 }) |> trimws() |> table() 
 species<- sort(names(species)[species >= 6])
 
-ordre <- c("climat", "gam", "habitat", "climat + habitat", "climat (habitat)", "small", "gam (habitat)", "gam (small)", "climat (small)")
+ordre <- c("climat", "gam", "habitat", "climat + habitat", "climat (habitat)", "small", "gam (habitat)", "climat (small)", "gam (small)")
 size <- c("large", "large", "large", "large", "large", "small", "large", "small", "small")
+nom <- c("climat", "climatGAM", "habitatNA", "climat + habitatNA", "habitatNA (climat)", "habitatQC", "habitatNA (climatGAM)", "habitatQC (climat)", "habitatQC (climatGAM)")
+
+o <- c(1, 2, 3, 6, 4, 5, 7, 8, 9)
+ordre <- ordre[o]
+size <- size[o]
+nom <- nom[o]
+
+
 
 ref <- species
 sp <- sapply(strsplit(species, "_"), function(i){paste(i[1:2], collapse = " ")})
@@ -38,28 +51,32 @@ vars <- "variables"
 
 toc <- data.frame(ref, species = sp, model, vars, div = species)
 toc$scale <- size[match(toc$model, ordre)]
+toc$nom <- nom[match(toc$model, ordre)]
 toc <- toc[order(toc$species, toc$model), ]
 
 toc <- lapply(split(toc, toc$species), function(i){
    a <- i[1, ] |>
       lapply(function(i){gsub("climat", "data", i)}) |>
       as.data.frame()
-   b <- i[1, ] |>
+   b1 <- i[1, ] |>
      lapply(function(i){gsub("climat", "compare", i)}) |>
      as.data.frame()
+   b2 <- i[1, ] |>
+     lapply(function(i){gsub("climat", "compare_localized", i)}) |>
+     as.data.frame()
    
-   x <- rbind(a, i, b)
+   x <- rbind(a, i, b1, b2)
   
   
    x <- x[c(1, 1:nrow(x)), ] 
-   x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$species, "</b>"), paste("&nbsp", x$model))
+   x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$species, "</b>"), paste("&nbsp", x$nom))
    x
 }) |> do.call("rbind", args = _)
 
 
 
 
-#src<-"https://object-arbutus.cloud.computecanada.ca/mapSpecies"
+#src<-"https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures"
 src<-"/home/frousseu/Downloads/niches_climatiques/results/graphics"
 
 #species<-function(sp,url,copyright,ebirdurl,common,period,n){
@@ -73,18 +90,19 @@ set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebi
   paste0("
 
 <hr class=\"vspace\"> 
-<h2 id=\"",sp,"\" class=\"h2\">", common,"</h2> 
-<section class=\"section\">
+<section id=\"",sp,"\" class=\"section\">
+<h2 class=\"h2\">", common,"</h2> 
+
   <div class=\"header\">
     <button class=\"showmore\" onclick=\"showmorefirst('",sp,"','panel1","')\">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
     <button class=\"showmore\" onclick=\"showmorefirst('",sp,"','panel2","')\">SDM projeté &#8628</button>
   </div>
   <div class=\"row\" id=\"",sp,"panelfirst\">
     <div class=\"col1\" id=\"",sp,"panel1\">
-      <img style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_sdm", modelscale, ".png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_sdm", modelscale, ".png\" alt=\"\">
     </div>
     <div class=\"col2\" id=\"",sp,"panel2\">
-      <img style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_sdm_proj", modelscale, ".png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_sdm_proj", modelscale, ".png\" alt=\"\">
     </div>
   </div>
 </section>
@@ -97,10 +115,10 @@ set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebi
   </div>
   <div class=\"row\" id=\"",sp,"panelsecond\">
     <div class=\"col1\" id=\"",sp,"panel3\">
-      <img style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_range", modelscale, ".png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_range", modelscale, ".png\" alt=\"\">
     </div>
     <div class=\"col2\" id=\"",sp,"panel4\">
-      <img style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_range_proj", modelscale, ".png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_range_proj", modelscale, ".png\" alt=\"\">
     </div>
   </div>
 </section>
@@ -113,10 +131,10 @@ set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebi
   </div>
   <div class=\"row\" id=\"",sp,"panelthird\">
     <div class=\"col1\" id=\"",sp,"panel5\">
-      <img style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_sdm_diff", modelscale, ".png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_sdm_diff", modelscale, ".png\" alt=\"\">
     </div>
     <div class=\"col2\" id=\"",sp,"panel6\">
-      <img style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_range_diff", modelscale, ".png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 30vw; padding: 0px;\" src=\"",file.path(src, sp),"_range_diff", modelscale, ".png\" alt=\"\">
     </div>
   </div>
 </section>
@@ -129,7 +147,7 @@ set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebi
   </div><!--</header>-->
   <div class=\"row\" id=\"",sp,"panelfourth\">
     <div class=\"col1\" id=\"",sp,"panel7\">
-      <img style=\"height: 50vw; padding: 0px;\" src=\"",file.path(src, sp),"_marginal_effects.png\" alt=\"\">
+      <img loading=\"lazy\" style=\"width: 200%; padding: 0px;\" src=\"",file.path(src, sp),"_marginal_effects.png\" alt=\"\">
     </div>
     <div class=\"col2\" id=\"",sp,"panel8\">
     </div>
@@ -146,12 +164,11 @@ set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
   paste0("
 
 <hr class=\"vspace\"> 
-<h2 id=\"",sp,"\" class=\"h2\">", common,"</h2>  
+<section id=\"",sp,"\" class=\"section\">
+<h2 class=\"h2\">", common,"</h2>  
 <!-- <section class=\"section\"></section> -->
 <div class=\"subheader\"></div>
 
-
-<section class=\"section\">
   <div class=\"header\">
     <div class=\"top-left\" style=\"max-width: 24vw;\">Photo</div>
     <div class=\"top-left\">Observations</div>
@@ -166,7 +183,7 @@ set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
         <a class=\"aim\" target=\"_blank\" href=\"", url,"\">
           <div class=\"infotop\">", model,"<br>scénario = ", "RPC XY.Z", "</div>
           <!-- <a class=\"aim\" target=\"_blank\" href=\"",url,"\"> -->
-          <img style=\"height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;\" src=\"", file.path(src, spname), "_pic.png\" alt=\"\">
+          <img loading=\"lazy\" style=\"height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;\" src=\"", file.path(src, spname), "_pic.png\" alt=\"\">
         <div class=\"middle\" style=\"border: 0px solid red;\">
           <div class=\"text\" style=\"border: 0px solid green;\">", copyright,"</div>
         </div>
@@ -176,10 +193,10 @@ set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
       </div>
     </div>
     <div class=\"col4\">
-      <img style=\"height: 25vw; padding: 1vh;\" src=\"", file.path(src, spname),"_locations.png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 25vw; padding: 1vh;\" src=\"", file.path(src, spname),"_na.png\" alt=\"\">
     </div>
     <div class=\"col3\">
-      <img style=\"height: 25vw; padding: 1vh;\" src=\"", file.path(src, spname),"_data.png\" alt=\"\">
+      <img loading=\"lazy\" style=\"height: 25vw; padding: 1vh;\" src=\"", file.path(src, spname),"_quebec.png\" alt=\"\">
     </div>
   </div>
 </section>
@@ -195,14 +212,14 @@ set_compare <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
   paste0("
 
 <hr class=\"vspace\"> 
-<h2 id=\"",sp,"\" class=\"h2\">", common,"</h2> 
-<section class=\"section\">
+<section id=\"",sp,"\" class=\"section\">
+<h2 class=\"h2\">", common,"</h2> 
   <div class=\"header\">
     <button class=\"showmore\" onclick=\"showmorezero('",sp,"','panel0","')\">Comparaison entre les différentes méthodes SDM&#8628</button>
   </div>
   <div class=\"row\" id=\"",sp,"panelzero\">
     <div class=\"col1\" id=\"",sp,"panel0\">
-      <img style=\"width: 100%; padding: 0px;\" src=\"",file.path(src, spname),"_sdm_compare.png\" alt=\"\">
+      <img loading=\"lazy\" style=\"width: 100%; padding: 0px;\" src=\"",file.path(src, gsub("compare", "sdm_compare", sp)), ".png\" alt=\"\">
     </div>
   </div>
 </section>
@@ -226,9 +243,9 @@ html {
   background-color: white;
 }
 
-img {
+/* img {
   loading: lazy;
-}
+} */
 
 body {
   background-color: white;
@@ -594,14 +611,24 @@ h1 {
 
 <p>Modèles et résultats</p>
 
-<h4>Climat</h4>
+<h4>climat</h4>
 <p>Modèle avec uniquement des variables de climat</p>
-<h4>Habitat</h4>
-<p>Modèle avec des variables d'habitat (stables) uniquement</p>
-<h4>Climat + habitat</h4>
-<p>Modèle avec les variables de climat et d'habitat dans le même modèle</p>
-<h4>Climat (habitat)</h4>
+<h4>climatGAM</h4>
+<p>Modèle de climat plus flexible, mais forcé concave</p>
+<h4>habitatNA</h4>
+<p>Modèle avec des variables d'habitat stables uniquement (Amérique du Nord)</p>
+<h4>habitatQC</h4>
+<p>Modèle avec des variables d'habitat stables uniquement (Québec)</p>
+<h4>climat + habitatNA</h4>
+<p>Modèle avec les variables de climat et d'habitat (Amérique du Nord) dans le même modèle</p>
+<h4>habitatNA (climat)</h4>
 <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat</p>
+<h4>habitatNA (climatGAM)</h4>
+<p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat GAM</p>
+<h4>habitatQC (climat)</h4>
+<p>Modèle des variables d'habitat locales clippées avec le modèle de climat</p>
+<h4>habitatQC (climatGAM)</h4>
+<p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p>
 
 
 <hr class=\"vspace\"> 
@@ -756,22 +783,26 @@ script<-function(){cat(paste0("
 
 "))}
 
-con <- file("/home/frousseu/Downloads/website.html", open = "w+b")#, encoding = "UTF-8")
+con <- file("/home/frousseu/Downloads/index.html", open = "w+b")#, encoding = "UTF-8")
 sink(con)
 
 css()  
 
+dashit <- function(x){sub("^(([^ ]* )[^\ ]*) ", "\\1 \u2014\u2014 ", x)}
+
 invisible(lapply(1:nrow(toc), function(i){
   if(toc$model[i] == "data" & !grepl("<b>", toc$display[i])){
-    ans <- set_species(toc$div[i], common = gsub("_", " ", toc$div[i]))
+    pic <- paste0(gsub(" ", "_", toc$species[i]), "_pic.png")
+    copyright <- exif_read(file.path("/home/frousseu/Downloads/niches_climatiques/results/graphics", pic), tags = "Copyright")$Copyright
+    ans <- set_species(toc$div[i], common = dashit(gsub("_", " ", toc$div[i])), copyright = copyright)
     stri_write_lines(ans, con = con)
   }
-  if(toc$model[i] == "compare"){
-    ans <- set_compare(toc$div[i], common = gsub("_", " ", toc$div[i]))
+  if(toc$model[i] %in% c("compare", "compare_localized")){
+    ans <- set_compare(toc$div[i], common = dashit(gsub("_", " ", toc$div[i])))
     stri_write_lines(ans, con = con)
   }
-  if(!toc$model[i] %in% c("compare", "data")){
-    ans <- set_models(toc$div[i], common = gsub("_", " ", toc$div[i]))
+  if(!toc$model[i] %in% c("compare", "compare_localized","data")){
+    ans <- set_models(toc$div[i], common = dashit(paste(toc$species[i], toc$nom[i])))
     stri_write_lines(ans, con = con)
   }
 }))

@@ -146,13 +146,14 @@ if(is.character(models[[i]])){
       newdata <- newdata[rep(1, brks), , drop = FALSE]
       v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
       newdata[ ,j] <- v
-      par(mar = c(1.5, 1, 0.5, 0.5))
+      par(mar = c(2, 2, 0.5, 2))
       if(!grepl("gam", names(models)[i])){
         pred <- predict(m, newdata, args = c("doClamp=FALSE"))
       } else {
         pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
       }
-      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ran, na.rm = TRUE)), lwd = 2, bty = "n")
+      ylim <- ran # pred
+      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 3, bty = "n")
       axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
       axis(2, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0)
       grid(lwd = 0.5)
@@ -160,7 +161,7 @@ if(is.character(models[[i]])){
       mtext(side = 1, line = 0.5, outer = FALSE, text = rownames(g)[j], cex = 0.5)
       mtext(side = 2, line = 0.75, outer = TRUE, text = "Relative occurrence rate (ROC)", cex = 0.5)
       hbrks <- range(c(e1[ , rownames(g)[j]], e2[ , rownames(g)[j]]), na.rm = TRUE) 
-      hbrks <- seq(min(hbrks), max(hbrks), length.out = 50)
+      hbrks <- seq(min(hbrks), max(hbrks), length.out = 30)
       h1 <- hist(e1[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
       h2 <- hist(e2[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
       h <- h1
@@ -173,9 +174,16 @@ if(is.character(models[[i]])){
       #lines(h$mids, h$counts, col = adjustcolor("black", 0.25))
 
       polygon(c(h$mids, rev(h$mids)), c(h$counts, rep(0, length(h$mids))), col = adjustcolor("black", 0.20), border = NA)
+      
+      par(new = TRUE)
+      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(pred, na.rm = TRUE)), lwd = 1, bty = "n", col = adjustcolor("black", 0.3))
+      #axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
+      axis(4, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0, col.axis = adjustcolor("black", 0.5))
+
       if(j == 1){
-        legend("topleft", inset = c(0.025, 0), legend = c("Predictions", "Observations / (Observations + Background)", "Observations + Background"), cex = 0.75, bty = "n", lwd = c(2, NA, NA), pch = c(NA, 15, 15), col = c("black", adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, 1.5, 1.5))
+        legend("topleft", inset = c(0.025, 0), legend = c("Predictions", "Observations / (Observations + Background)", "Observations + Background"), cex = 0.75, bty = "n", lwd = c(3, NA, NA), pch = c(NA, 15, 15), col = c("black", adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, 1.5, 1.5))
       }
+
   }))
   dev.off()
 

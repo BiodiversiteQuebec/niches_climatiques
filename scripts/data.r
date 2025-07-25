@@ -5,7 +5,7 @@ source("https://object-arbutus.cloud.computecanada.ca/bq-io/atlas/parquet/bq-atl
 #atlas <- atlas_remote(parquet_date = tail(atlas_dates, 1))
 #atlas <- atlas_local(parquet_date = tail(atlas_dates, 1), getwd())
 #atlas <- duckdbfs::open_dataset("atlas_2024-11-07.parquet", tblname = "atlas")
-atlas <- duckdbfs::open_dataset("data/atlas_2024-11-07.parquet", tblname = "atlas")
+atlas <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas")
 gbif <- duckdbfs::open_dataset("data/gbif_2025-03-01.parquet")
 ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025_niches.parquet")
 ebird_checklists <- duckdbfs::open_dataset("data/ebd_sampling_relJan-2025.parquet")
@@ -31,15 +31,10 @@ obs_atlas <- obs_atlas |>
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(epsg)
 
-counts <- obs_atlas |> 
-  st_drop_geometry() |>
-  count(dataset_name)
-
-
 obs_gbif <- obs_gbif |>
   filter(!is.na(decimallatitude) & !is.na(decimallatitude)) |>
   mutate(coordinate_uncertainty = as.numeric(coordinateuncertaintyinmeters)) |>
-  filter(coordinate_uncertainty <= 50000 | is.na(coordinate_uncertainty)) |>
+  #filter(coordinate_uncertainty <= 50000 | is.na(coordinate_uncertainty)) |>
   mutate(recordedby = sapply(recordedby, paste, collapse = "; ")) |>
   mutate(source = "gbif") |>
   mutate(dataset_name = institutioncode) |>
@@ -76,8 +71,12 @@ background_gbif <- background_gbif[!lengths(st_intersects(background_gbif, qc)),
 
 
 if(species_target_groups[[sp]] == "birds"){
-  background <- background_ebird
-  obs <- obs_ebird
+  #background <- background_ebird
+  #obs <- obs_ebird
+  n <- intersect(intersect(names(background_atlas), names(background_gbif)), names(background_ebird))
+  background <- rbind(background_atlas[, n], background_gbif[, n], background_ebird[, n])
+  n <- intersect(intersect(names(obs_atlas), names(obs_gbif)), names(obs_ebird))
+  obs <- rbind(obs_atlas[, n], obs_gbif[, n], obs_ebird[, n])
 } else {
   n <- intersect(names(background_atlas), names(background_gbif))
   background <- rbind(background_atlas[, n], background_gbif[, n])
@@ -85,45 +84,67 @@ if(species_target_groups[[sp]] == "birds"){
   obs <- rbind(obs_atlas[, n], obs_gbif[, n])
 }
 
-obs <- obs[region, ]
-background <- background[region, ]
+# remove what is obviously out
+
+nab <- st_buffer(na, 100000)
+obs <- obs[nab, ]
+background <- background[nab, ]
+
 
 th <- 20000 # minimal precision
 
-png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_locations.png")), width = 8, height = 8, units = "in", res = 300)
+cols <- adjustcolor(c("forestgreen", "gold2", "tomato2"), 0.85)
+ring <- adjustcolor("black", 0.5)
+
+png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_na.png")), width = 8, height = 8, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
-plot(st_geometry(st_crop(na, obs)))
+plot(st_geometry(na))
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 obsna <- st_geometry(obs[is.na(obs$coordinate_uncertainty), ])
 obsoverth <- st_geometry(obs[which(obs$coordinate_uncertainty >= th), ])
 obsunderth <- st_geometry(obs[which(obs$coordinate_uncertainty < th), ])
-plot(obsna, pch = 16, col = "red", add = TRUE)
-plot(obsoverth, pch = 16, col = "blue", add = TRUE)
-plot(obsunderth, pch = 16, col = "forestgreen", add = TRUE)
-legend("bottomright", pch = 16, col = c("forestgreen", "blue", "red"), legend = c(paste("<", th, "/ n =", length(obsunderth)), paste("\u2265", th, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna))), cex = 1.25, bty = "n", title = "Précision (en m)")
+points(obsunderth, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
+points(obsna, pch = 21, lwd = 0.25, col = ring,, bg = cols[2])
+points(obsoverth, pch = 21, lwd = 0.25, col = ring, bg = cols[3])
+legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 3, 2)], col = ring, legend = c(paste("<", th, "/ n =", length(obsunderth)), paste("\u2265", th, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna))), cex = 1.25, bty = "n", title = "Précision (en m)")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
 obs_qc <- obs[qc, ]
 
-png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_data.png")), width = 8, height = 8, units = "in", res = 300)
+counts <- obs_qc |> 
+  st_drop_geometry() |>
+  count(dataset_name) |>
+  arrange(-n)
+
+obs_qc$dataset_name <- factor(obs_qc$dataset_name, levels = counts$dataset_name)
+
+png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_quebec.png")), width = 8, height = 8, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
 plot(st_geometry(st_crop(na, obs_qc)))
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
-plot(st_geometry(obs_qc), col = factor(obs_qc$dataset_name), add = TRUE, pch = 16)
-legend("bottomright", inset = c(0.025, 0.025), pch = 16, col = factor(levels(factor(obs_qc$dataset_name))), legend = paste0(levels(factor(obs_qc$dataset_name)), " (n = ", counts$n[match(levels(factor(obs_qc$dataset_name)), counts$dataset_name)], ")"), cex = 1, bty = "n", title = "Dataset")
+plot(st_geometry(obs_qc), col = obs_qc$dataset_name, add = TRUE, pch = 16)
+legend("topright", inset = c(0.025, 0.025), pch = 16, col = 1:nrow(counts), legend = paste0(counts$dataset_name, " (n = ", counts$n, ")"), cex = 0.75, bty = "n", title = "Dataset")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
 
+obs_all <- obs
 
+obs <- obs[region, ]
+background <- background[region, ]
 
 obs <- obs[which(obs$coordinate_uncertainty <= th | is.na(obs$coordinate_uncertainty)), ]
-background <- background[which(background$coordinate_uncertainty <= th | is.na(obs$coordinate_uncertainty)), ]
+background <- background[which(background$coordinate_uncertainty <= th | is.na(background$coordinate_uncertainty)), ]
+
+if(species_target_groups[[sp]] == "birds"){
+  obs <- obs[obs$source %in% "ebird", ]
+  background <- background[background$source %in% "ebird", ]
+}
 
 bg <- background[sample(1:nrow(background), 100000), ]
 
@@ -144,3 +165,53 @@ bg_small <- bg_small[which(bg_small$coordinate_uncertainty <= th_small | is.na(b
 
 obs <- list(large = obs, small = obs_small)
 bg <- list(large = bg, small = bg_small)
+
+
+
+png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_na_used.png")), width = 8, height = 8, units = "in", res = 300)
+par(mar = c(0.5, 0.5, 0.5, 0.5))
+plot(st_geometry(na))
+plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
+text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
+plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
+points(obs_all, pch = 21, lwd = 0.25, col = ring, bg = cols[3])
+points(obs$large, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
+legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all), ")"), paste0("used ", "(n = ", nrow(obs$large), ")")), cex = 1.25, bty = "n", title = "Occurrences utilisées ?")
+#mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
+dev.off()
+
+
+png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_quebec_used.png")), width = 5, height = 5, units = "in", res = 300)
+par(mar = c(0.5, 0.5, 0.5, 0.5))
+plot(st_geometry(st_crop(na, obs_all[qc, ])))
+plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
+text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
+plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
+points(obs_all[qc, ], pch = 21, lwd = 0.25, col = ring, bg = cols[3])
+points(obs$small, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
+legend("topright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all[qc, ]), ")"), paste0("used ", "(n = ", nrow(obs$small), ")")), cex = 0.75, bty = "n", title = "Occurrences utilisées ?")
+#mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
+dev.off()
+
+
+uncertainty_plot <- function(x){
+  h <- hist(x, breaks = 10, plot = FALSE)
+  nas <- sum((is.na(x)))
+  barplot(c(nas, h$counts), space = 0, col = "forestgreen", border = "white", lwd = 0.1)
+  axis(1, at = c(0, seq_along(h$breaks)), labels = c("NA", h$breaks), las = 2, cex.axis = 0.75, col = "grey70", mgp = c(0.5, 0.25, 0), tcl = -0.2)
+  grid()
+}
+
+
+png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_uncertainty.png")), width = 8, height = 4, units = "in", res = 300)
+par(mfrow = c(1, 2), oma = c(1, 1, 0, 0), mar = c(2.5, 2.5, 0.5, 0.5))
+uncertainty_plot(obs$large$coordinate_uncertainty)
+mtext("Amérique du Nord", side = 3, line = -2)
+uncertainty_plot(obs$small$coordinate_uncertainty)
+mtext("Québec", side = 3, line = -2)
+mtext("Incertitude des coordonnées (m)", outer = TRUE, side = 1, font = 2)
+mtext("Nb d'observations", outer = TRUE, side = 2, font = 2)
+dev.off()
+
+
+

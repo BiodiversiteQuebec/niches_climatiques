@@ -8,7 +8,9 @@ terraOptions(tempdir = "/home/frousseu/data2/tmp", memfrac = 0.8)
 #predictors_proj <- rast("data/predictors_proj.tif")
 #names(predictors_proj)[c(20, 21, 24, 25, 26)] <- c("geomfootslope", "geomflat", "silt", "sand", "clay")
 
-forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduous", "deciduous", "tourbiere_boisee", "marecage", "temperate_deciduous", "taiga")
+forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduous", "deciduous", "temperate_deciduous", "taiga")
+
+bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe")
 
 predictors <- rast("data/predictors_1000_NA.tif")
 predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
@@ -26,6 +28,7 @@ plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE)
 psmall <-rast("data/predictors_QC_500.tif")
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
+psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 
 p <- list(small = psmall, large = plarge)
 p_proj <- list(small = psmall, large = plarge_proj)

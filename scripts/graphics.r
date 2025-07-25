@@ -23,7 +23,7 @@ lapply(lf, function(xx){
     #for(k in 1:nlyr(r)){
       #plot(r, axes = FALSE, col = sdm_cols, legend = FALSE)
     #}
-    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")})
+    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
     #rm(r)
@@ -40,7 +40,7 @@ lapply(lf, function(i){
     r <- c(r1, r2)
     #par(mar = c(0, 0, 0, 8))
     #plot_background()
-    plot(crop(crop(r, st_buffer(obs$small, 100000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")})
+    plot(crop(crop(r, st_buffer(obs$small, 100000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
     #graphics.off()
@@ -48,7 +48,7 @@ lapply(lf, function(i){
 })
 
 #dev.list()
-#graphics.off()
+graphics.off()
 #par(mfrow = c(1, 1), oma = c(0, 0, 0, 0), mar = c(5.1, 4.1, 4.1,2.1))
 
 

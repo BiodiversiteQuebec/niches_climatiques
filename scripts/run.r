@@ -9,7 +9,7 @@ for(sp in species){#[-c(9,10,11,13)]){
     print(sp)
     source("scripts/data.r")
     #source("scripts/background.r")
-
+    
     source("scripts/variables.r")
     for(i in seq_along(models)){
       #i <- 2

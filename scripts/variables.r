@@ -53,15 +53,15 @@ other_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", 
 large_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland")
 #dput(grep("temperature|precipitation|isothermality", names(psmall), invert = TRUE, value = TRUE))
 small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
-"eau_peu_profonde", "elevation", "eolien", "geomflat", "geomfootslope", 
-"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "urban", "water", "wetland")
+"eau_peu_profonde", "elevation", "eolien", "forest", "geomflat", "geomfootslope", 
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "twi", "urban", "water", "wetland")
 #pp <- p$large[[other_vars]]
 #name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", "sable", "argile", "% forêt", "% urbain", "% eau", "% milieu humide", "% agricole")
 #names(pp) <- name_vars
 #use_small <- unique(c(c("urban", "geomflat"), sample(small_vars)))
 #use_small <- use_small[1:min(c(length(use_small), 2))]
 use_small <- unique(c(c("urban", "cropland", "alluvion", "clay", "till", "ph", "elevation", "geomflat", "water", "eau_peu_profonde","organique", "ruggedness"), sample(small_vars)))
-use_small <- use_small[1:min(c(length(use_small), 20))]
+use_small <- use_small[1:min(c(length(use_small), 100))]
 
 
 models <- list(
@@ -71,11 +71,22 @@ models <- list(
   "small" = use_small,
   "climat + habitat" = c(climate_vars[c(1)], large_vars),
   "climat (habitat)" = c(1, 3), 
-  "climat (small)" = c(1, 4),
   "gam (habitat)" = c(2, 3),
+  "climat (small)" = c(1, 4),
   "gam (small)" = c(2, 4)
 )
 
+model_names <- list(
+  "climat" = "climat",
+  "gam" = "climatGAM",
+  "habitat" = "habitatNA",
+  "small" = "habitatQC",
+  "climat + habitat" = "climat + habitatNA",
+  "climat (habitat)" = "habitatNA (climat)", 
+  "gam (habitat)" = "habitatNA (climatGAM)",
+  "climat (small)" = "habitatQC (climat)",
+  "gam (small)" = "habitatQC (climatGAM)"
+)
 
 
 

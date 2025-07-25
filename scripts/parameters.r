@@ -4,21 +4,24 @@
 species <- c("Pseudacris triseriata", "Hemidactylium scutatum", "Gyrinophilus porphyriticus", "Desmognathus ochrophaeus", "Emydoidea blandingii", "Glyptemys insculpta", "Nerodia sipedon", "Lampropeltis triangulum", "Aquila chrysaetos", "Catharus bicknelli", "Setophaga cerulea", "Coturnicops noveboracensis", "Ixobrychus exilis", "Glaucomys volans")
 
 
-species_vars <- list(`Pseudacris triseriata` = c("wetland"), 
-                            `Hemidactylium scutatum` = c("bog"), 
-                            `Gyrinophilus porphyriticus` = c("flat", "forest"), 
-                            `Desmognathus ochrophaeus` = c("flat", "forest"), 
-                            `Emydoidea blandingii` = c("water"), 
-                            `Glyptemys insculpta` = c("water"), 
-                            `Nerodia sipedon` = c("water"), 
-                            `Lampropeltis triangulum` = c(""), 
-                            `Aquila chrysaetos` = c("truggedness", "flat"), 
-                            `Catharus bicknelli` = c("elevation"), 
-                            `Setophaga cerulea` = c("forest"), 
-                            `Coturnicops noveboracensis` = c("flat"), 
-                            `Ixobrychus exilis` = c("flat", "wetland"), 
-                            `Glaucomys volans` = c("forest")
+species_vars <- list(
+`Pseudacris triseriata` = c("wetland", "marais", "marecage", "geomflat"), 
+`Hemidactylium scutatum` = c("tourbiere", "marais", "organique"), 
+`Gyrinophilus porphyriticus` = c("elevation", "ruggedness", "forest", "geomflat", "twi"), 
+`Desmognathus ochrophaeus` = c("elevation", "ruggedness", "forest", "geomflat", "twi"), 
+`Emydoidea blandingii` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"),
+`Glyptemys insculpta` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "sand"),
+`Nerodia sipedon` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"),
+`Lampropeltis triangulum` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"), 
+`Aquila chrysaetos` = c("elevation", "ruggedness"), 
+`Catharus bicknelli` = c("elevation", "ruggedness"), 
+`Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
+`Coturnicops noveboracensis` = c("flat", "marais", "wetland", "prairie_humide"), 
+`Ixobrychus exilis` = c("geomflat", "wetland", "marais", "eau_peu_profonde"), 
+`Glaucomys volans` = c("forest")
 )
+
+species_vars <- lapply(species_vars, function(i){c(i, "urban", "cropland")})
 
 
 species_target_groups <- list(`Pseudacris triseriata` = c("reptiles"), 

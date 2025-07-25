@@ -7,6 +7,12 @@ echelle <- c("large", "small")[as.integer(grepl("small", names(models)[i])) + 1]
 if(is.character(models[[i]])){
 
     vars <- models[[i]]
+    vars <- intersect(vars, species_vars[[sp]])
+    vars <- intersect(names(p[[echelle]]), vars)
+    if(grepl("climat|gam", names(models)[i])){
+        vars <- c(vars, models[["climat"]])
+    }
+
 
     if(!grepl("gam", names(models)[i])){
 
@@ -19,7 +25,7 @@ if(is.character(models[[i]])){
 
     } else {
 
-        ppp <- aggregate(p[[echelle]][[vars]], 20)
+        ppp <- aggregate(p[[echelle]][[vars]], 2)
         eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0) |> values()
         eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0) |> values()
         ep <- values(ppp[[vars]])
