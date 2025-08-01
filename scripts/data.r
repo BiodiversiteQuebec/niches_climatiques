@@ -33,6 +33,7 @@ obs_atlas <- obs_atlas |>
 
 obs_gbif <- obs_gbif |>
   filter(!is.na(decimallatitude) & !is.na(decimallatitude)) |>
+  mutate(date = as.character(as.Date(eventdate, format = "%Y-%m-%d"))) |>
   mutate(coordinate_uncertainty = as.numeric(coordinateuncertaintyinmeters)) |>
   #filter(coordinate_uncertainty <= 50000 | is.na(coordinate_uncertainty)) |>
   mutate(recordedby = sapply(recordedby, paste, collapse = "; ")) |>
@@ -59,6 +60,7 @@ background_atlas <- background_atlas |>
 
 background_gbif <- background_gbif |> 
   filter(!is.na(decimallongitude) &  !is.na(decimallatitude)) |>
+  mutate(date = as.character(as.Date(eventdate, format = "%Y-%m-%d"))) |>
   mutate(coordinate_uncertainty = as.numeric(coordinateuncertaintyinmeters)) |>
   mutate(source = "gbif") |>
   mutate(dataset_name = institutioncode) |>
@@ -215,3 +217,12 @@ dev.off()
 
 
 
+obs_file <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_observations.gpkg"))
+
+st_write(obs_all, obs_file, layer = "NA", delete_dsn = TRUE)
+
+st_write(obs_all[qc, ], obs_file, layer = "QC", append = TRUE)#, delete_dsn = delete_dsn, delete_layer = delete_layer)
+
+st_write(obs$large, obs_file, layer = "NAused", append = TRUE)#, delete_dsn = delete_dsn, delete_layer = delete_layer)
+
+st_write(obs$small, obs_file, layer = "QCused", append = TRUE)#, delete_dsn = delete_dsn, delete_layer = delete_layer)

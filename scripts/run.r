@@ -5,14 +5,14 @@ source("scripts/parameters.r")
 
 
 for(sp in species){#[-c(9,10,11,13)]){
-    #sp <- species[9]
+    #sp <- species[7]
     print(sp)
     source("scripts/data.r")
     #source("scripts/background.r")
     
     source("scripts/variables.r")
     for(i in seq_along(models)){
-      #i <- 2
+      #i <- 7
       print(names(models)[i])
       source("scripts/models.r")
       source("scripts/predictions.r")

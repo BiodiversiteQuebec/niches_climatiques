@@ -189,7 +189,6 @@ if(is.character(models[[i]])){
 
 }
 
-
 if(FALSE){
 
   lf <- list.files("results/rasters", pattern = "sdm_large|sdm_small", full = TRUE)
@@ -231,6 +230,95 @@ library(magick)
 image_read("misc/erosion.png") |>
   image_scale("x500") |>
   image_write("misc/erosion.png")
+
+
+
+
+sdm <- list.files("results/rasters", pattern = "_sdm_large", full = TRUE)[-9]
+#sdm_proj <- list.files("results/rasters", pattern = "_sdm_proj_large", full = TRUE)[-9]
+
+l <- lapply(sdm, function(i){
+  r <- rast(gsub("sdm", "sdm_proj", i))[["climat (habitat)"]] / rast(i)[["climat (habitat)"]]
+  #dif <- rast(i)[["climat (habitat)"]] - rast(gsub("sdm", "sdm_proj", i))[["climat (habitat)"]]
+  r <- crop(r, qc, mask = TRUE)
+  #se <- unlist(global(dif, range, na.rm = TRUE)[1, ])
+  #if(all(se == 0)){ # when no diff cause habitat only model
+  #  cols <- "white"
+  #  dif <- setValues(dif, runif(ncell(dif)))# temp fix for plg terra prob when a single value raster
+  #} else {
+  #cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
+  #}
+  #log(r)
+}) 
+
+
+
+
+
+
+
+r <- log(l[[1]])
+r <- sum(rast(l))
+ra <- global(r, range, na.rm = TRUE)
+cols <- adjustcolor(colo.scale(seq(min(ra), max(ra), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+plot(r, col = cols)
+
+
+zlim <- range(global(rast(l), range, na.rm = TRUE))
+cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+#plot(r, col = cols)
+plot(rast(l), range = zlim, col = cols)
+zlim <- range(global(mean(rast(l)), range, na.rm = TRUE))
+cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+plot(mean(rast(l)), col = cols)
+
+
+
+
+
+
+l <- lapply(sdm, function(i){
+  model <- "gam (habitat)"
+  r2 <- rast(gsub("sdm", "sdm_proj", i))[[model]]
+  r1 <- rast(i)[[model]]  
+  ma <- global(r1, max, na.rm = TRUE)[1, 1]
+  r1 <- r1 / ma
+  r2 <- r2 / ma
+  r <- (r2 - r1) * 100
+  r
+}) 
+r <- mean(rast(l))
+r <- crop(mean(rast(l)), qc, mask = TRUE)
+
+zlim <- range(global(r, range, na.rm = TRUE))
+cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+plot(r, col = cols)
+
+zlim <- range(global(r, range, na.rm = TRUE))
+cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+plot(r, col = cols)
+
+
+
+
+#par(mar = c(0, 0, 0, 8))  
+dif <- crop(predictions, bregion) - crop(predictions_proj, bregion)
+#ma <-
+#se <- unlist(global(dif, range, na.rm = TRUE)[1, ])
+if(all(se == 0)){ # when no diff cause habitat only model
+  cols <- "white"
+  dif <- setValues(dif, runif(ncell(dif)))# temp fix for plg terra prob when a single value raster
+} else {
+  cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
+}
+#plot_background()
+plot(dif, axes = FALSE, add = FALSE, plg = plg, col = cols, mar = c(0, 0, 0, 0))
+plot_foreground(echelle = echelle)
+#legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = adjustcolor("black", 0.2), bty = "n", xjust = 1, xpd = TRUE)
+dev.off()
+
+
+
 
 
 

@@ -1,26 +1,4 @@
 
-species_common_predictors <- c("")
-
-#sp_extra_predictors <- vector(mode = "list", length = length(sp))
-#names(sp_extra_predictors) <- sp
-#dput(sp_extra_predictors)
-
-species_predictors <- list(`Pseudacris triseriata` = c("wetland"), 
-     `Hemidactylium scutatum` = c("bog"), 
-     `Gyrinophilus porphyriticus` = c("flat", "forest"), 
-     `Desmognathus ochrophaeus` = c("flat", "forest"), 
-     `Emydoidea blandingii` = c("water"), 
-     `Glyptemys insculpta` = c("water"), 
-     `Nerodia sipedon` = c("water"), 
-     `Lampropeltis triangulum` = c(""), 
-     `Aquila chrysaetos` = c("truggedness", "flat"), 
-     `Catharus bicknelli` = c("elevation"), 
-     `Setophaga cerulea` = c("forest"), 
-     `Coturnicops noveboracensis` = c("flat"), 
-     `Ixobrychus exilis` = c("flat", "wetland"), 
-     `Glaucomys volans` = c("forest")
-)
-
 
 #climate_vars <- names(p)[1:19]
 #climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
@@ -81,12 +59,24 @@ model_names <- list(
   "gam" = "climatGAM",
   "habitat" = "habitatNA",
   "small" = "habitatQC",
-  "climat + habitat" = "climat + habitatNA",
+  "climat + habitat" = "habitatNA + climat",
   "climat (habitat)" = "habitatNA (climat)", 
   "gam (habitat)" = "habitatNA (climatGAM)",
   "climat (small)" = "habitatQC (climat)",
   "gam (small)" = "habitatQC (climatGAM)"
 )
+
+
+#plot(p$large[[large_vars]], mar = c(0, 0, 1, 0), axes = FALSE, plg = list(inset = c(0.5, 0.5)))
+
+
+st_bbox(p$small)
+png(file.path("results/graphics/predictors.png"), width = 12, height = 18, units = "in", res = 300)
+plot(p$small[[small_vars]], mar = c(0, 0, 2, 1), axes = FALSE, plg = list(x = st_bbox(p$small)$xmax - 2e05, y = st_bbox(p$small)$ymax - 2e05, xjust = 1, yjust = 1, size = c(0.25, 0.75)), maxnl = 1)
+dev.off()
+
+
+
 
 
 

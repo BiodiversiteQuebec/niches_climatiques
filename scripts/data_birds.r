@@ -40,6 +40,7 @@ background_gbif <- gbif |> # ebird was removed from this gbif
 
 background_ebird <- ebird_checklists |> 
   mutate(day = substr(as.character(date), 6, 10)) |>
+  mutate(date = as.character(date)) |>
   filter(day >= !!breeding_periods[[sp]][1] & day <= !!breeding_periods[[sp]][2]) |>
   collect() |>  
   filter(!is.na(longitude) &  !is.na(latitude)) |>
@@ -78,6 +79,7 @@ obs_ebird <- ebird |>
   filter(species == !!sp) |>
   mutate(day = substr(as.character(date), 6, 10)) |>
   filter(day >= !!breeding_periods[[sp]][1] & day <= !!breeding_periods[[sp]][2]) |>
+  mutate(date = as.character(date)) |>
   collect() |>  
   filter(!is.na(longitude) &  !is.na(latitude)) |>
   mutate(coordinate_uncertainty = 1000 * as.numeric(distance)) |>

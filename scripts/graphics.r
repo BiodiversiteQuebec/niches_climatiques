@@ -10,7 +10,7 @@ lapply(lf, function(xx){
     fn <- gsub("_sdm_large.tif", "_sdm_compare.png", gsub("/rasters/", "/graphics/", xx))
     #print(paste("fn", fn))
     png(fn, units = "in", height = 12, width = 10, res = 300)
-    r1 <- rast(xx)
+    r1 <- rast(xx)#[[1:6]]
     r2 <- rast(gsub("_large", "_small", xx))
     r3 <- project(r1, r2)
     r4 <- c(r3, r2)
@@ -23,6 +23,7 @@ lapply(lf, function(xx){
     #for(k in 1:nlyr(r)){
       #plot(r, axes = FALSE, col = sdm_cols, legend = FALSE)
     #}
+    r5 <- r5[[names(model_names)]]
     plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
@@ -40,6 +41,7 @@ lapply(lf, function(i){
     r <- c(r1, r2)
     #par(mar = c(0, 0, 0, 8))
     #plot_background()
+    r <- r[[names(model_names)]]
     plot(crop(crop(r, st_buffer(obs$small, 100000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
