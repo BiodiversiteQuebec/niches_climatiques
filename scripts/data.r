@@ -7,7 +7,8 @@ source("https://object-arbutus.cloud.computecanada.ca/bq-io/atlas/parquet/bq-atl
 #atlas <- duckdbfs::open_dataset("atlas_2024-11-07.parquet", tblname = "atlas")
 atlas <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas")
 gbif <- duckdbfs::open_dataset("data/gbif_2025-03-01.parquet")
-ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025_niches.parquet")
+#ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025_niches.parquet")
+ebird <- duckdbfs::open_dataset("/home/frousseu/data2/ebd_relJan-2025.parquet")
 ebird_checklists <- duckdbfs::open_dataset("data/ebd_sampling_relJan-2025.parquet")
 
 
@@ -18,7 +19,6 @@ switch(species_target_groups[[sp]],
   mammals = source("scripts/data_mammals.r"),
   birds = source("scripts/data_birds.r")
 )
-
 
 ### Observations #####################################################
 
@@ -197,7 +197,13 @@ dev.off()
 
 
 uncertainty_plot <- function(x){
-  h <- hist(x, breaks = 10, plot = FALSE)
+  brks <- 10
+  if(all(is.na(x))){
+   h <- list(counts = rep(0, brks), breaks = seq(0, 20000, length.out = brks + 1))
+  } else {
+   h <- hist(x, breaks = brks, plot = FALSE)
+  }
+
   nas <- sum((is.na(x)))
   barplot(c(nas, h$counts), space = 0, col = "forestgreen", border = "white", lwd = 0.1)
   axis(1, at = c(0, seq_along(h$breaks)), labels = c("NA", h$breaks), las = 2, cex.axis = 0.75, col = "grey70", mgp = c(0.5, 0.25, 0), tcl = -0.2)
@@ -219,10 +225,10 @@ dev.off()
 
 obs_file <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_observations.gpkg"))
 
-st_write(obs_all, obs_file, layer = "NA", delete_dsn = TRUE)
+#st_write(obs_all, obs_file, layer = "NA", delete_dsn = TRUE)
 
-st_write(obs_all[qc, ], obs_file, layer = "QC", append = TRUE)#, delete_dsn = delete_dsn, delete_layer = delete_layer)
+#st_write(obs_all[qc, ], obs_file, layer = "QC", append = TRUE)
 
-st_write(obs$large, obs_file, layer = "NAused", append = TRUE)#, delete_dsn = delete_dsn, delete_layer = delete_layer)
+#st_write(obs$large, obs_file, layer = "NAused", append = TRUE)
 
-st_write(obs$small, obs_file, layer = "QCused", append = TRUE)#, delete_dsn = delete_dsn, delete_layer = delete_layer)
+#st_write(obs$small, obs_file, layer = "QCused", append = TRUE)

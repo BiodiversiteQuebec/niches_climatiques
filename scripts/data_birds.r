@@ -75,7 +75,18 @@ obs_gbif <- gbif |>
   collect()
 
 obs_ebird <- ebird |> 
-  mutate(species = case_match(species, "Botaurus exilis" ~ "Ixobrychus exilis", .default = species)) |>
+  mutate(species = case_match(species, 
+  "Botaurus exilis" ~ "Ixobrychus exilis", 
+  "Acanthis flammea" ~ "Acanthis hornemanni",
+  "Astur atricapillus" ~ "Accipiter atricapillus",
+  "Astur cooperii" ~ "Accipiter cooperii",
+  "Ardea ibis" ~ "Bubulcus ibis",
+  "Botaurus exilis" ~ "Ixobrychus exilis",
+  "Larus smithsonianus" ~ "Larus argentatus",
+  "Nannopterum auritum" ~ "Phalacrocorax auritus",
+  "Corthylio calendula" ~ "Regulus calendula",
+  "Troglodytes aedon/musculus" ~ "Troglodytes aedon",
+  .default = species)) |>
   filter(species == !!sp) |>
   mutate(day = substr(as.character(date), 6, 10)) |>
   filter(day >= !!breeding_periods[[sp]][1] & day <= !!breeding_periods[[sp]][2]) |>

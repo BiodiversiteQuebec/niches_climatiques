@@ -66,6 +66,9 @@ model_names <- list(
   "gam (small)" = "habitatQC (climatGAM)"
 )
 
+models <- models[1]
+model_names <- model_names[1]
+
 
 #plot(p$large[[large_vars]], mar = c(0, 0, 1, 0), axes = FALSE, plg = list(inset = c(0.5, 0.5)))
 

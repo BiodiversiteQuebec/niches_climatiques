@@ -275,10 +275,11 @@ plot(mean(rast(l)), col = cols)
 
 
 
-
+sdm <- list.files("results/rasters", pattern = "_sdm_large", full = TRUE)
 
 l <- lapply(sdm, function(i){
-  model <- "gam (habitat)"
+  print(i)
+  model <- "climat"
   r2 <- rast(gsub("sdm", "sdm_proj", i))[[model]]
   r1 <- rast(i)[[model]]  
   ma <- global(r1, max, na.rm = TRUE)[1, 1]
@@ -294,9 +295,9 @@ zlim <- range(global(r, range, na.rm = TRUE))
 cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
 plot(r, col = cols)
 
-zlim <- range(global(r, range, na.rm = TRUE))
+zlim <- range(global(rast(l), range, na.rm = TRUE))
 cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
-plot(r, col = cols)
+plot(rast(l), col = cols)
 
 
 
