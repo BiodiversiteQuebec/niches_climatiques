@@ -42,18 +42,22 @@ background_ebird <- ebird_checklists |>
   mutate(day = substr(as.character(date), 6, 10)) |>
   mutate(date = as.character(date)) |>
   filter(day >= !!breeding_periods[[sp]][1] & day <= !!breeding_periods[[sp]][2]) |>
+  mutate(coordinate_uncertainty = 1000 * as.numeric(distance)) |>
+  select(checklist, date, day, coordinate_uncertainty, longitude, latitude) |>
   collect() |>  
   filter(!is.na(longitude) &  !is.na(latitude)) |>
-  mutate(coordinate_uncertainty = 1000 * as.numeric(distance)) |>
   mutate(source = "ebird") |>
   mutate(dataset_name = "ebird") |>
   as.data.frame() |>
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(epsg)
 
-### Observations ###############################################  
 
- 
+# downsample 5 000 000 to not bust memory and computation time...
+background_ebird <- background_ebird[sample(1:nrow(background_ebird), min(c(nrow(background_ebird),5000000))), ] 
+
+
+### Observations ###############################################  
 
 obs_atlas <- atlas |> 
   filter(!dataset_name %in% c("Données de localisation des grands mammifères", "EOD – eBird Observation Dataset")) |>

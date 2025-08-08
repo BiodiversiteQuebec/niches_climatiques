@@ -109,9 +109,9 @@ species_info$vars <- lapply(species_info$vars, function(i){
 
 
 species <- c("Pseudacris triseriata", "Hemidactylium scutatum", "Gyrinophilus porphyriticus", "Desmognathus ochrophaeus", "Emydoidea blandingii", "Glyptemys insculpta", "Nerodia sipedon", "Lampropeltis triangulum", "Aquila chrysaetos", "Catharus bicknelli", "Setophaga cerulea", "Coturnicops noveboracensis", "Ixobrychus exilis", "Glaucomys volans")
-species <- sample(species_info$species[species_info$group %in% "birds"], 5)
+species <- sample(species_info$species[species_info$group %in% "birds"], 50)
 #species <- sample(species_info$species[species_info$group %in% "trees"], 2)
-#species <- c("Larus argentatus", "Troglodytes aedon")
+#species <- c("Bonasa umbellus", "Turdus migratorius")
 print(species)
 species_info <- species_info[species_info$species %in% species, ]
 
