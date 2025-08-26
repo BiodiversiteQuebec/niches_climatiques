@@ -12,8 +12,9 @@ options(java.parameters = "-Xmx100g")
 library(predicts)
 library(gbifdb)
 library(scam)
+library(FRutils)
 
-source("https://raw.githubusercontent.com/frousseu/FRutils/refs/heads/master/R/colo.scale.R")
+#source("https://raw.githubusercontent.com/frousseu/FRutils/refs/heads/master/R/colo.scale.R")
 
 #options(terra.pal=rev(map.pal("grass")))
 options(terra.pal=rev(terrain.colors(200)))
