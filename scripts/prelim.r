@@ -12,19 +12,21 @@ options(java.parameters = "-Xmx100g")
 library(predicts)
 library(gbifdb)
 library(scam)
-library(FRutils)
+library(sdmtools)
 
 #source("https://raw.githubusercontent.com/frousseu/FRutils/refs/heads/master/R/colo.scale.R")
 
 #options(terra.pal=rev(map.pal("grass")))
 options(terra.pal=rev(terrain.colors(200)))
-terraOptions(tempdir = "/home/frousseu/data2/tmp", memfrac = 0.8)
+#terraOptions(tempdir = "/home/frousseu/data2/tmp", memfrac = 0.8)
 
 epsg <- 6624 #32618
 
 # Downloads polygons using package geodata
-can <- gadm("CAN", level = 1, path = "data") |> st_as_sf()
-usa <- gadm("USA", level = 1, path = "data") |> st_as_sf()
+#can <- gadm("CAN", level = 1, path = "data") |> st_as_sf()
+#usa <- gadm("USA", level = 1, path = "data") |> st_as_sf()
+can <- readRDS("data/gadm/gadm41_CAN_1_pk.rds") |> st_as_sf()
+usa <- readRDS("data/gadm/gadm41_USA_1_pk.rds") |> st_as_sf()
 na <- rbind(can,usa)
 na <- st_transform(na, epsg)
 na <- na[!na$NAME_1 %in% c("Hawaii", "Alaska"), ]
@@ -53,5 +55,6 @@ region<-ms_simplify(region,0.005)
 region<-st_union(region) |> st_as_sf()
 
 # lakes
-lakes<-ne_download(scale="medium",type="lakes",destdir="data",category="physical",returnclass="sf") |> st_transform(epsg)
+#lakes<-ne_download(scale="medium",type="lakes",destdir="data",category="physical",returnclass="sf") |> st_transform(epsg)
+lakes<-st_read("data/ne_50m_lakes.shp") |> st_transform(epsg)
 lakes<-st_filter(lakes,region)

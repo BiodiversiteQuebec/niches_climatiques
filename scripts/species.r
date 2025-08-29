@@ -6,14 +6,16 @@ library(ebirdst)
 
 "https://data.canadensys.net/vascan/checklist?lang=en&habit=all&taxon=0&combination=anyof&province=BC&province=AB&province=SK&province=MB&province=ON&province=QC&province=NB&province=PE&province=NS&province=NL_N&province=NL_L&province=YT&province=NT&province=NU&status=native&status=introduced&status=ephemeral&status=doubtful&status=extirpated&status=excluded&rank=class&rank=order&rank=family&rank=genus&rank=species&nolimit=false&sort=taxonomically&criteria_panel=selection"
 
-vascan <- read.csv("http://data.canadensys.net/downloads/vascan/TXT-b23b0de1-4c83-4136-88c3-7e1ce0918d5c.txt", sep = "\t")
+#vascan <- read.csv("http://data.canadensys.net/downloads/vascan/TXT-b23b0de1-4c83-4136-88c3-7e1ce0918d5c.txt", sep = "\t")
+vascan <- read.csv("data/vascan.txt", sep = "\t")
 vascan <- vascan[vascan$Rank == "Species", ]
 trees <- vascan$Scientific.name[grepl("Tree", vascan$Habit)]
 plants <- vascan$Scientific.name[!grepl("Tree", vascan$Habit)]
 
 atlas <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas")
 gbif <- duckdbfs::open_dataset("data/gbif_2025-03-01.parquet")
-ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025_niches.parquet")
+#ebird <- duckdbfs::open_dataset("/home/frousseu/data2/ebd_relJan-2025.parquet")
+ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025.parquet")
 
 species_info <- atlas |>
   #head() |> collect()
@@ -57,7 +59,7 @@ eb <- ebirdst_runs |>
 
 species_info <- merge(species_info, eb, all.x = TRUE)
 species_info <- species_info[-which(species_info$group == "birds" & species_info$n <= 500), ]
-
+species_info <- species_info[rev(order(species_info$n)), ]
 
 # species_info[species_info$group == "birds", ]
 #species_info[grepl("villosus", species_info$species), ]
@@ -107,11 +109,13 @@ species_info$vars <- lapply(species_info$vars, function(i){
 
 
 
-
+set.seed(1234)
 species <- c("Pseudacris triseriata", "Hemidactylium scutatum", "Gyrinophilus porphyriticus", "Desmognathus ochrophaeus", "Emydoidea blandingii", "Glyptemys insculpta", "Nerodia sipedon", "Lampropeltis triangulum", "Aquila chrysaetos", "Catharus bicknelli", "Setophaga cerulea", "Coturnicops noveboracensis", "Ixobrychus exilis", "Glaucomys volans")
-species <- sample(species_info$species[species_info$group %in% "birds"], 50)
+#species <- sample(species_info$species[species_info$group %in% "birds"], 10)
 #species <- sample(species_info$species[species_info$group %in% "trees"], 2)
-#species <- c("Bonasa umbellus", "Turdus migratorius")
+#species <- c("Catharus guttatus", "Ammospiza leconteii")
+species <- c("Poecile atricapillus", "Dryobates pubescens")
+species <- c("Ammospiza leconteii")
 print(species)
 species_info <- species_info[species_info$species %in% species, ]
 

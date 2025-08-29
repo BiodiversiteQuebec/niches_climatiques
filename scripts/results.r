@@ -45,7 +45,7 @@ topng <- function(x){
 plg <- list(size = c(0.33, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
 #plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
 #sdm_cols <- terrain.colors(200)
-sdm_cols <- colo.scale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen","black"))[1:170]
+sdm_cols <- coloScale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen","black"))[1:170]
 range_cols <- adjustcolor("forestgreen", 0.75)
 
 
@@ -95,7 +95,7 @@ if(all(se == 0)){ # when no diff cause habitat only model
   cols <- "white"
   dif <- setValues(dif, runif(ncell(dif)))# temp fix for plg terra prob when a single value raster
 } else {
-  cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
+  cols <- adjustcolor(coloScale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
 }
 #plot_background()
 plot(dif, axes = FALSE, add = FALSE, plg = plg, col = cols, mar = c(0, 0, 0, 0))
@@ -117,6 +117,7 @@ plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
 plot_foreground(echelle = echelle)
 legend("topright", inset = c(0.1, 0.1), legend = c("Perte", "Gain", "Stable")[c(2, 3, 1)], pch = 15, pt.cex = 2, col = cols[c(2, 3, 1)], bty = "n", xjust = 1, xpd = TRUE)
 dev.off()
+
 
 
 if(is.character(models[[i]])){
@@ -165,7 +166,8 @@ if(is.character(models[[i]])){
       h1 <- hist(e1[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
       h2 <- hist(e2[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
       h <- h1
-      h$counts <- scales::rescale(h1$counts + h2$counts, to = c(0, par("usr")[4] * 0.75))
+      #h$counts <- scales::rescale(h1$counts + h2$counts, to = c(0, par("usr")[4] * 0.75)) # not sure why I was adding h1
+      h$counts <- scales::rescale(h2$counts, to = c(0, par("usr")[4] * 0.75))
       h$density <- h1$density / h2$density
       h$density <- scales::rescale(h$density, to = c(0, par("usr")[4] * 0.75))
       invisible(lapply(seq_along(h$mids), function(j){
@@ -188,6 +190,11 @@ if(is.character(models[[i]])){
   dev.off()
 
 }
+
+
+
+
+
 
 if(FALSE){
 
@@ -214,7 +221,7 @@ r2 <- r2 / ma
 dif <- (r2 - r1) * 100
 
 se <- unlist(global(dif, range, na.rm = TRUE)[1, ])
-cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "darkblue")), center = TRUE), 0.5)
+cols <- adjustcolor(coloScale(seq(min(se), max(se), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "darkblue")), center = TRUE), 0.5)
 
 #plot_background()
 plot(dif, axes = FALSE, add = FALSE, col = cols, mar = c(0, 0, 0, 0))
@@ -246,7 +253,7 @@ l <- lapply(sdm, function(i){
   #  cols <- "white"
   #  dif <- setValues(dif, runif(ncell(dif)))# temp fix for plg terra prob when a single value raster
   #} else {
-  #cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
+  #cols <- adjustcolor(coloScale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
   #}
   #log(r)
 }) 
@@ -260,16 +267,16 @@ l <- lapply(sdm, function(i){
 r <- log(l[[1]])
 r <- sum(rast(l))
 ra <- global(r, range, na.rm = TRUE)
-cols <- adjustcolor(colo.scale(seq(min(ra), max(ra), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+cols <- adjustcolor(coloScale(seq(min(ra), max(ra), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
 plot(r, col = cols)
 
 
 zlim <- range(global(rast(l), range, na.rm = TRUE))
-cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+cols <- adjustcolor(coloScale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
 #plot(r, col = cols)
 plot(rast(l), range = zlim, col = cols)
 zlim <- range(global(mean(rast(l)), range, na.rm = TRUE))
-cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+cols <- adjustcolor(coloScale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
 plot(mean(rast(l)), col = cols)
 
 
@@ -292,11 +299,11 @@ r <- mean(rast(l))
 r <- crop(mean(rast(l)), qc, mask = TRUE)
 
 zlim <- range(global(r, range, na.rm = TRUE))
-cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+cols <- adjustcolor(coloScale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
 plot(r, col = cols)
 
 zlim <- range(global(rast(l), range, na.rm = TRUE))
-cols <- adjustcolor(colo.scale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
+cols <- adjustcolor(coloScale(seq(min(zlim), max(zlim), length.out = 500), rev(c("darkred", "tomato", "white", "blue", "navyblue")), center = TRUE), 0.5)
 plot(rast(l), col = cols)
 
 
@@ -310,7 +317,7 @@ if(all(se == 0)){ # when no diff cause habitat only model
   cols <- "white"
   dif <- setValues(dif, runif(ncell(dif)))# temp fix for plg terra prob when a single value raster
 } else {
-  cols <- adjustcolor(colo.scale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
+  cols <- adjustcolor(coloScale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
 }
 #plot_background()
 plot(dif, axes = FALSE, add = FALSE, plg = plg, col = cols, mar = c(0, 0, 0, 0))

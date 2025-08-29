@@ -1,26 +1,31 @@
 
+array_id <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
+
 source("scripts/prelim.r")
 source("scripts/predictors.r")
 #source("scripts/parameters.r")
 source("scripts/species.r")
 
+#if(TRUE){
 
-for(sp in species){#[-c(9,10,11,13)]){
-    #sp <- species[7]
+#for(sp in species){#[-c(9,10,11,13)]){
+    #sp <- species[1]    
+    #sp <- species[array_id]
+    sp <- species
     print(sp)
     source("scripts/data.r")
-    #source("scripts/background.r")
-    
     source("scripts/variables.r")
     for(i in seq_along(models)){
-      #i <- 7
+      #i <- 1
       print(names(models)[i])
       source("scripts/models.r")
       source("scripts/predictions.r")
-      #source("scripts/results.r")
+      source("scripts/results.r")
     }
     #source("scripts/graphics.r")
-}
+#}
+
+#}
 
 
 #sdm3 <- preds

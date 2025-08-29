@@ -1,14 +1,21 @@
 
 
+abortif0 <- function(){
+  if(nrow(obs) == 0){
+    stop(sprintf("0 obs for %s", sp))
+    quit("no")
+  }
+}
 
-source("https://object-arbutus.cloud.computecanada.ca/bq-io/atlas/parquet/bq-atlas-parquet.R")
+
+#source("https://object-arbutus.cloud.computecanada.ca/bq-io/atlas/parquet/bq-atlas-parquet.R")
 #atlas <- atlas_remote(parquet_date = tail(atlas_dates, 1))
 #atlas <- atlas_local(parquet_date = tail(atlas_dates, 1), getwd())
 #atlas <- duckdbfs::open_dataset("atlas_2024-11-07.parquet", tblname = "atlas")
 atlas <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas")
 gbif <- duckdbfs::open_dataset("data/gbif_2025-03-01.parquet")
-#ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025_niches.parquet")
-ebird <- duckdbfs::open_dataset("/home/frousseu/data2/ebd_relJan-2025.parquet")
+ebird <- duckdbfs::open_dataset("data/ebd_relJan-2025.parquet")
+#ebird <- duckdbfs::open_dataset("/home/frousseu/data2/ebd_relJan-2025.parquet")
 ebird_checklists <- duckdbfs::open_dataset("data/ebd_sampling_relJan-2025.parquet")
 
 
@@ -56,6 +63,7 @@ background_atlas <- background_atlas |>
   st_transform(epsg) |>
   mutate(species = valid_scientific_name) |>
   mutate(source = "atlas") |>
+  mutate(coordinate_uncertainty = as.numeric(coordinate_uncertainty)) |>
   mutate(date = paste(year_obs, formatC(month_obs, width = 2, flag = 0), formatC(day_obs, width = 2, flag = 0), sep = "-"))
 
 background_gbif <- background_gbif |> 
@@ -125,7 +133,11 @@ obs_qc$dataset_name <- factor(obs_qc$dataset_name, levels = counts$dataset_name)
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_quebec.png")), width = 8, height = 8, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
-plot(st_geometry(st_crop(na, obs_qc)))
+if(nrow(obs_qc) == 0){
+  plot(st_geometry(st_crop(na, qc)))
+} else {
+  plot(st_geometry(st_crop(na, obs_qc)))
+}
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
@@ -148,7 +160,15 @@ if(species_target_groups[[sp]] == "birds"){
   background <- background[background$source %in% "ebird", ]
 }
 
-bg <- background[sample(1:nrow(background), 100000), ]
+abortif0()
+
+
+### Subsample observations and background
+
+bg <- background[sample(1:nrow(background), min(c(nrow(background), 100000))), ]
+obs <- obs[sample(1:nrow(obs), min(c(nrow(obs), 10000))), ]
+
+###
 
 n <- intersect(names(obs), names(bg))
 bg <- rbind(obs[, n], bg[, n])
@@ -164,6 +184,9 @@ obs_small <- obs[qc, ]
 obs_small <- obs_small[which(obs_small$coordinate_uncertainty <= th_small | is.na(obs_small$coordinate_uncertainty)), ]
 bg_small <- bg[qc, ]
 bg_small <- bg_small[which(bg_small$coordinate_uncertainty <= th_small | is.na(bg_small$coordinate_uncertainty)), ]
+
+print(sprintf("Large: %s observations, %s background", nrow(obs), nrow(bg)))
+print(sprintf("Small: %s observations, %s background", nrow(obs_small), nrow(bg_small)))
 
 obs <- list(large = obs, small = obs_small)
 bg <- list(large = bg, small = bg_small)
