@@ -58,3 +58,5 @@ region<-st_union(region) |> st_as_sf()
 #lakes<-ne_download(scale="medium",type="lakes",destdir="data",category="physical",returnclass="sf") |> st_transform(epsg)
 lakes<-st_read("data/ne_50m_lakes.shp") |> st_transform(epsg)
 lakes<-st_filter(lakes,region)
+
+aires <- st_read("data/vertébrés.gpkg") 

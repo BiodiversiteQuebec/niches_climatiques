@@ -54,7 +54,7 @@ background_ebird <- ebird_checklists |>
 
 
 # downsample 5 000 000 to not bust memory and computation time...
-background_ebird <- background_ebird[sample(1:nrow(background_ebird), min(c(nrow(background_ebird),5000000))), ] 
+#background_ebird <- background_ebird[sample(1:nrow(background_ebird), min(c(nrow(background_ebird),5000000))), ] 
 
 
 ### Observations ###############################################  

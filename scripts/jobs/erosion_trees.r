@@ -1,14 +1,11 @@
 
 library(ebirdst)
 
-#source("scripts/prelim.r")
-
 "https://data.canadensys.net/vascan/checklist?lang=en&habit=all&taxon=0&combination=anyof&province=BC&province=AB&province=SK&province=MB&province=ON&province=QC&province=NB&province=PE&province=NS&province=NL_N&province=NL_L&province=YT&province=NT&province=NU&status=native&status=introduced&status=ephemeral&status=doubtful&status=extirpated&status=excluded&rank=class&rank=order&rank=family&rank=genus&rank=species&nolimit=false&sort=taxonomically&criteria_panel=selection"
 
 #vascan <- read.csv("http://data.canadensys.net/downloads/vascan/TXT-b23b0de1-4c83-4136-88c3-7e1ce0918d5c.txt", sep = "\t")
 vascan <- read.csv("data/vascan.txt", sep = "\t")
 vascan <- vascan[vascan$Rank == "Species", ]
-trees <- vascan$Scientific.name[grepl("Tree", vascan$Habit)]
 plants <- vascan$Scientific.name[!grepl("Tree", vascan$Habit)]
 
 atlas <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas")

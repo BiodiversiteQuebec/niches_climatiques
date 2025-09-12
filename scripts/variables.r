@@ -2,7 +2,8 @@
 
 #climate_vars <- names(p)[1:19]
 #climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
-climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
+#climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount")
+climate_vars <- c("mean_annual_air_temperature")
 #climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount", "mean_diurnal_air_temperature_range")
 #climate_vars <- c("mean_annual_air_temperature", "mean_diurnal_air_temperature_range")
 #other_vars <- names(predictors)[20:nlyr(predictors)]
@@ -43,11 +44,11 @@ use_small <- use_small[1:min(c(length(use_small), 100))]
 
 
 models <- list(
-  "climat" = climate_vars[c(1)],
-  "gam" = climate_vars[c(1)],
+  "climat" = climate_vars,
+  "gam" = climate_vars,
   "habitat" = c(large_vars),
   "small" = use_small,
-  "climat + habitat" = c(climate_vars[c(1)], large_vars),
+  "climat + habitat" = c(climate_vars, large_vars),
   "climat (habitat)" = c(1, 3), 
   "gam (habitat)" = c(2, 3),
   "climat (small)" = c(1, 4),
@@ -66,9 +67,8 @@ model_names <- list(
   "gam (small)" = "habitatQC (climatGAM)"
 )
 
-models <- models[1]
-model_names <- model_names[1]
-
+models <- models[run_model]
+model_names <- model_names[run_model]
 
 #plot(p$large[[large_vars]], mar = c(0, 0, 1, 0), axes = FALSE, plg = list(inset = c(0.5, 0.5)))
 

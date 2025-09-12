@@ -4,5 +4,6 @@
 !*.md
 !*.Rmd
 !*scripts
+!*scripts/jobs
 !*web
 !.gitignore

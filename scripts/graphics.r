@@ -3,6 +3,12 @@
 
 rm(predictions, predictions_proj)
 
+add_range2 <- function(){
+  if(!is.null(ran)){
+    plot(st_geometry(ran), border = adjustcolor("black", 0.25), lwd = 2, add = TRUE)
+  }
+}
+
 #lf <- list.files("results/rasters", pattern = "_sdm_large", full = TRUE)
 lf <- gsub("_sdm_small.tif", "_sdm_large.tif", file_sdm)
 
@@ -42,7 +48,7 @@ lapply(lf, function(i){
     #par(mar = c(0, 0, 0, 8))
     #plot_background()
     r <- r[[names(model_names)]]
-    plot(crop(crop(r, st_buffer(obs$small, 100000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = unlist(model_names))
+    plot(crop(crop(r, st_buffer(obs$small, 100000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small");add_range2()}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
     #graphics.off()

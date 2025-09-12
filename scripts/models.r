@@ -10,7 +10,7 @@ if(is.character(models[[i]])){
     vars <- intersect(vars, species_vars[[sp]])
     vars <- intersect(names(p[[echelle]]), vars)
     if(grepl("climat|gam", names(models)[i])){
-        vars <- c(vars, models[["climat"]])
+        vars <- c(vars, climate_vars)
     }
 
 
@@ -20,7 +20,7 @@ if(is.character(models[[i]])){
                     p = vect(obs[[echelle]]), a = vect(bg[[echelle]]),
                     removeDuplicates = FALSE,
                     silent = FALSE,
-                    args = c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4")
+                    args = c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4", "betaMultiplier=0")
         )
 
     } else {
@@ -39,6 +39,7 @@ if(is.character(models[[i]])){
           as.formula()
 
         optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
+        #optimizer <- c("efs", "bfgs")
         m <- scam(f, optimizer = optimizer, data = dat, family = poisson)
         
 

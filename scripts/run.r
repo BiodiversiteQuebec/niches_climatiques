@@ -1,17 +1,25 @@
 
+library(dplyr)
+library(duckdb)
+library(duckdbfs)
+
 array_id <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
+
+args <- commandArgs(trailingOnly=TRUE)
+
+source(file.path("scripts/jobs", args))
 
 source("scripts/prelim.r")
 source("scripts/predictors.r")
 #source("scripts/parameters.r")
-source("scripts/species.r")
+#source("scripts/species.r")
 
 #if(TRUE){
 
 #for(sp in species){#[-c(9,10,11,13)]){
     #sp <- species[1]    
-    #sp <- species[array_id]
-    sp <- species
+    sp <- species[array_id]
+    #sp <- species
     print(sp)
     source("scripts/data.r")
     source("scripts/variables.r")
@@ -22,7 +30,7 @@ source("scripts/species.r")
       source("scripts/predictions.r")
       source("scripts/results.r")
     }
-    #source("scripts/graphics.r")
+    source("scripts/graphics.r")
 #}
 
 #}
@@ -68,3 +76,7 @@ source("scripts/species.r")
 #  items_fetch() |>
 #  _$features |>
 #  sapply(X = _, function(i){i$id})
+
+
+
+

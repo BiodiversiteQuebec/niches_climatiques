@@ -106,6 +106,19 @@ th <- 20000 # minimal precision
 cols <- adjustcolor(c("forestgreen", "gold2", "tomato2"), 0.85)
 ring <- adjustcolor("black", 0.5)
 
+if(sp %in% aires$species){
+  ran <- aires[aires$species == sp, ]# |>
+    #st_transform(epsg)
+} else {
+  ran <- NULL
+}
+
+add_range <- function(){
+  if(!is.null(ran)){
+    plot(st_geometry(ran), border = NA, col = adjustcolor("black", 0.10), add = TRUE)
+  }
+}
+
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_na.png")), width = 8, height = 8, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
 plot(st_geometry(na))
@@ -139,6 +152,7 @@ if(nrow(obs_qc) == 0){
   plot(st_geometry(st_crop(na, obs_qc)))
 }
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
+add_range()
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 plot(st_geometry(obs_qc), col = obs_qc$dataset_name, add = TRUE, pch = 16)
@@ -165,8 +179,8 @@ abortif0()
 
 ### Subsample observations and background
 
-bg <- background[sample(1:nrow(background), min(c(nrow(background), 100000))), ]
-obs <- obs[sample(1:nrow(obs), min(c(nrow(obs), 10000))), ]
+bg <- background[sample(1:nrow(background), min(c(nrow(background), 100000000))), ]
+obs <- obs[sample(1:nrow(obs), min(c(nrow(obs), 100000000))), ]
 
 ###
 
@@ -174,7 +188,8 @@ n <- intersect(names(obs), names(bg))
 bg <- rbind(obs[, n], bg[, n])
 
 buff <- st_buffer(obs, 250000) |> st_union()
-nbuff <- 100000
+#buff <- concaveman(obs) 
+nbuff <- 1000000
 x <- st_difference(region, buff) |> st_sample(size = nbuff)# |> st_as_sf()
 x <- st_as_sf(cbind(st_drop_geometry(bg[rep(1, nbuff), ]), geometry = x), crs = epsg)
 bg <- rbind(bg, x)
@@ -190,7 +205,6 @@ print(sprintf("Small: %s observations, %s background", nrow(obs_small), nrow(bg_
 
 obs <- list(large = obs, small = obs_small)
 bg <- list(large = bg, small = bg_small)
-
 
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_na_used.png")), width = 8, height = 8, units = "in", res = 300)
@@ -210,6 +224,7 @@ png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_quebec_used.png")
 par(mar = c(0.5, 0.5, 0.5, 0.5))
 plot(st_geometry(st_crop(na, obs_all[qc, ])))
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
+add_range()
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 points(obs_all[qc, ], pch = 21, lwd = 0.25, col = ring, bg = cols[3])
@@ -243,6 +258,7 @@ mtext("Québec", side = 3, line = -2)
 mtext("Incertitude des coordonnées (m)", outer = TRUE, side = 1, font = 2)
 mtext("Nb d'observations", outer = TRUE, side = 2, font = 2)
 dev.off()
+
 
 
 
