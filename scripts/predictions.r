@@ -66,13 +66,16 @@ names(predictions_proj) <- names(models[i])
 writeRaster(predictions_proj, file_sdm_proj, overwrite = overwrite, gdal = gdal)
 
 
-threshold1 <- 0.95
-threshold2 <- 0.95
+threshold1 <- 0.98
+threshold2 <- 0.98
 e1 <- extract(predictions, obs[[echelle]][qc, ])
 e2 <- extract(predictions, obs[[echelle]][st_difference(region, qc), ])
-e <- rbind(e1)#, e2)
-e <- e[rev(order(e[,2])), ]
-val <- e[round(threshold1 * nrow(e)), 2]
+#e <- rbind(e1)#, e2)
+e1 <- e1[rev(order(e1[,2])), ]
+val1 <- e1[round(threshold1 * nrow(e1)), 2] # this needs to be retoughted...
+e2 <- e2[rev(order(e2[,2])), ]
+val2 <- e2[round(threshold2 * nrow(e2)), 2]
+val <- min(c(val1, val2))
 
 ran <- ifel(predictions > val, 1, 0)
 names(ran) <- names(models[i])

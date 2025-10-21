@@ -100,22 +100,25 @@ nab <- st_buffer(na, 100000)
 obs <- obs[nab, ]
 background <- background[nab, ]
 
+if(sp %in% aires$species){
+  aire <- aires[aires$species == sp, ]# |>
+    #st_transform(epsg)
+} else {
+  aire <- NULL
+}
 
-th <- 20000 # minimal precision
+# filter out wrong observations per species
+source("scripts/filter.r")
+
+th <- 1000 # minimal precision # 20000
 
 cols <- adjustcolor(c("forestgreen", "gold2", "tomato2"), 0.85)
 ring <- adjustcolor("black", 0.5)
 
-if(sp %in% aires$species){
-  ran <- aires[aires$species == sp, ]# |>
-    #st_transform(epsg)
-} else {
-  ran <- NULL
-}
 
 add_range <- function(){
-  if(!is.null(ran)){
-    plot(st_geometry(ran), border = NA, col = adjustcolor("black", 0.10), add = TRUE)
+  if(!is.null(aire)){
+    plot(st_geometry(aire), border = NA, col = adjustcolor("black", 0.10), add = TRUE)
   }
 }
 
@@ -271,3 +274,11 @@ obs_file <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_observatio
 #st_write(obs$large, obs_file, layer = "NAused", append = TRUE)
 
 #st_write(obs$small, obs_file, layer = "QCused", append = TRUE)
+
+
+
+
+
+
+
+

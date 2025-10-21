@@ -6,6 +6,7 @@ library(duckdbfs)
 array_id <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
 
 args <- commandArgs(trailingOnly=TRUE)
+#args <- "niches_climatiques.r"
 
 source(file.path("scripts/jobs", args))
 

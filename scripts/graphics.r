@@ -4,8 +4,8 @@
 rm(predictions, predictions_proj)
 
 add_range2 <- function(){
-  if(!is.null(ran)){
-    plot(st_geometry(ran), border = adjustcolor("black", 0.25), lwd = 2, add = TRUE)
+  if(!is.null(aire)){
+    plot(st_geometry(aire), border = adjustcolor("black", 0.25), lwd = 2, add = TRUE)
   }
 }
 
@@ -60,9 +60,6 @@ graphics.off()
 #par(mfrow = c(1, 1), oma = c(0, 0, 0, 0), mar = c(5.1, 4.1, 4.1,2.1))
 
 
-
-
-
 if(FALSE){
 
   sp <- gsub(" ", "_", species[6])
@@ -88,4 +85,9 @@ if(FALSE){
 }
 
 
+
+#library(magick)
+#im <- image_read("results/graphics/niches/Gyrinophilus_porphyriticus_sdm_compare_localized.png") |>  
+#  image_quantize(10) |>
+#  image_write("quantize.png")
 

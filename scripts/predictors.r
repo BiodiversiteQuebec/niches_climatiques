@@ -18,8 +18,8 @@ predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]]
 predictors_proj <- predictors
 predictors_proj[["mean_annual_air_temperature"]] <- predictors_proj[["mean_annual_air_temperature"]] +2
 
-plarge <- aggregate(predictors, 2, na.rm = TRUE)
-plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE)
+plarge <- predictors # aggregate(predictors, 2, na.rm = TRUE)
+plarge_proj <- predictors_proj # aggregate(predictors_proj, 2, na.rm = TRUE)
 
 #psmall <-rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif") |>
 #  aggregate(5, na.rm = TRUE)

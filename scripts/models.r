@@ -16,16 +16,23 @@ if(is.character(models[[i]])){
 
     if(!grepl("gam", names(models)[i])){
 
+        if(names(models)[i] == "climat"){
+            arg <- c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4", "betaMultiplier=0")
+        } else {
+            arg <- c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4")
+        }
+
+
         m <- MaxEnt(p[[echelle]][[vars]], 
                     p = vect(obs[[echelle]]), a = vect(bg[[echelle]]),
-                    removeDuplicates = FALSE,
+                    removeDuplicates = TRUE,
                     silent = FALSE,
-                    args = c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4", "betaMultiplier=0")
+                    args = arg
         )
 
     } else {
 
-        ppp <- aggregate(p[[echelle]][[vars]], 2)
+        ppp <- p[[echelle]][[vars]] #aggregate(p[[echelle]][[vars]], 2)
         eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0) |> values()
         eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0) |> values()
         ep <- values(ppp[[vars]])
@@ -35,7 +42,7 @@ if(is.character(models[[i]])){
 
         dat <- dat[dat$eff > 0, ]
 
-        f <- paste("obs ~", paste("s(", vars, ", k = 20, bs = \"cv\", m = 2) + offset(log(eff))")) |>
+        f <- paste("obs ~", paste("s(", vars, ", k = 30, bs = \"cv\", m = 2) + offset(log(eff))")) |>
           as.formula()
 
         optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
