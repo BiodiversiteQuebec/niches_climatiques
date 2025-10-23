@@ -149,16 +149,23 @@ invisible(lapply(2:4, function(i){
   dput(unique(sapply(strsplit(ids, "_"), "[", i)))
 }))
 
-timeperiod <- c("2071-2100", "2041-2070", "2011-2040")[2]
-model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")[4]
-ssp <- c("ssp585", "ssp370", "ssp126")[3]
+timeperiod <- c("2071-2100", "2041-2070", "2011-2040")[1:3]
+model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")[5]
+ssp <- c("ssp585", "ssp370", "ssp126")[2]
 
 variables <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
       apply(1, function(i){paste(i, collapse = "_")})
 ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]      
 
-#collections[["chelsa-clim-proj"]]$var <- ids
-#collections[["chelsa-clim-proj"]]$name <- ids
+#chelsavars <- variables[variables$coll == "chelsa-clim", ]
+idsname <- ids
+for(i in seq_along(collections[["chelsa-clim"]]$var)){
+  idsname <- gsub(collections[["chelsa-clim"]]$var[i], collections[["chelsa-clim"]]$name[i], idsname)
+} 
+
+collections[["chelsa-clim-proj"]]$var <- ids
+collections[["chelsa-clim-proj"]]$name <- idsname
+
 
 
 variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE))
@@ -171,16 +178,16 @@ urls <- lapply(seq_along(collections), function(i){
 variables$url <- unlist(urls, use.names = FALSE)
 variables$url <- URLencode(variables$url)
 
-#variables <- variables[1:5, ]
+#variables <- variables[c(1, 5, 14, 17, 55), ]
 
-if(FALSE){
+if(TRUE){
   desc <- variables
   names(desc) <- c("collection", "var", "variable", "url")
   desc <- desc[, c("collection", "variable", "url")]
   desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na", paste0(desc$variable, ".tif"))
   write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
-  system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
-  x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
+  #system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
+  #x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
 }
 
 cl <- makeCluster(10)
@@ -259,6 +266,7 @@ system(cmd)
 }
 stopCluster(cl)
 
+quit(save = "no")
 
 
 ##############################################################
