@@ -25,6 +25,7 @@ if(FALSE){
 }
 
 lf <- list.files("/home/frousseu/Downloads/niches_climatiques/results/graphics", full = TRUE)
+info <- read.csv("/home/frousseu/Downloads/niches_climatiques/results/niches_climatiques_info.csv")
 #lf <- lf[-grep(" ", lf)]
 
 species <- sapply(strsplit(basename(lf) ,"_|\\."),function(i){
@@ -52,25 +53,31 @@ vars <- "variables"
 toc <- data.frame(ref, species = sp, model, vars, div = species)
 toc$scale <- size[match(toc$model, ordre)]
 toc$nom <- nom[match(toc$model, ordre)]
+toc$vernaculaire <- info$nom[match(toc$species, info$species)]
+toc$period <- info$period[match(toc$species, info$species)]
+toc$period <- ifelse(is.na(toc$period), "", paste("Nidification", toc$period))
 toc <- toc[order(toc$species, toc$model), ]
 
 toc <- lapply(split(toc, toc$species), function(i){
-   a <- i[1, ] |>
-      lapply(function(i){gsub("climat", "data", i)}) |>
-      as.data.frame()
-   b1 <- i[1, ] |>
-     lapply(function(i){gsub("climat", "compare", i)}) |>
-     as.data.frame()
-   b2 <- i[1, ] |>
-     lapply(function(i){gsub("climat", "compare_localized", i)}) |>
-     as.data.frame()
-   
-   x <- rbind(a, i, b1, b2)
+  a <- i[1, ] |>
+    lapply(function(i){gsub("climat", "data", i)}) |>
+    as.data.frame()
+  b1 <- i[1, ] |>
+    lapply(function(i){gsub("climat", "compare", i)}) |>
+    as.data.frame()
+  b2 <- i[1, ] |>
+    lapply(function(i){gsub("climat", "compare_localized", i)}) |>
+    as.data.frame()
   
+  x <- rbind(a, i, b1, b2)
   
-   x <- x[c(1, 1:nrow(x)), ] 
-   x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$species, "</b>"), paste("&nbsp", x$nom))
-   x
+  x$nom <- gsub("data", "données", x$nom)
+  x$nom <- gsub("compare", "comparaison", x$nom)
+  x$nom <- gsub("_localized", " localisée", x$nom)
+  
+  x <- x[c(1, 1:nrow(x)), ] 
+  x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$vernaculaire, "</b>"), paste("&nbsp", x$nom))
+  x
 }) |> do.call("rbind", args = _)
 
 
@@ -82,7 +89,7 @@ src<-"/home/frousseu/Downloads/niches_climatiques/results/graphics"
 #species<-function(sp,url,copyright,ebirdurl,common,period,n){
 
 
-set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", model = "model 1", n = "23"){
+set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", n = "23"){
   
   spname <- sapply(strsplit(sp, "_"), "[", 1:2) |> paste(collapse = "_")
   modelscale <- paste0("_", size[match(sapply(strsplit(sp, "_"), "[", 3), ordre)])
@@ -157,7 +164,7 @@ set_models <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebi
   ")
 }
 
-set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", model = "model 1", n = "23"){
+set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", period = "model 1", n = "23"){
   
   spname <- sapply(strsplit(sp, "_"), "[", 1:2) |> paste(collapse = "_")
   
@@ -170,7 +177,7 @@ set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
 <div class=\"subheader\"></div>
 
   <div class=\"header\">
-    <div class=\"top-left\" style=\"max-width: 24vw;\">Photo</div>
+    <div class=\"top-left\" style=\"max-width: 24vw;\"></div>
     <div class=\"top-left\">Observations</div>
     <div class=\"top-left\">
       <a target=\"_blank\" href=\"", ebirdurl,"\">Québec</a>
@@ -181,7 +188,7 @@ set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
       <!-- <a target=\"_blank\" href=\"",url,"\"> -->
       <div class=\"container\" style=\"border: 0px solid red;\">
         <a class=\"aim\" target=\"_blank\" href=\"", url,"\">
-          <div class=\"infotop\">", model,"<br>scénario = ", "RPC XY.Z", "</div>
+          <div class=\"infotop\">", period, "<br>scénario = ", "RPC XY.Z", "</div>
           <!-- <a class=\"aim\" target=\"_blank\" href=\"",url,"\"> -->
           <img loading=\"lazy\" style=\"height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;\" src=\"", file.path(src, spname), "_pic.png\" alt=\"\">
         <div class=\"middle\" style=\"border: 0px solid red;\">
@@ -199,13 +206,29 @@ set_species <- function(sp, url = "url", copyright = "copyright", ebirdurl = "eb
       <img loading=\"lazy\" style=\"height: 25vw; padding: 1vh;\" src=\"", file.path(src, spname),"_quebec.png\" alt=\"\">
     </div>
   </div>
+  <div class=\"header\">
+    <div class=\"top-left\" style=\"max-width: 25vw;\">Précision</div>
+    <div class=\"top-left\">Observations utilisées</div>
+    <div class=\"top-left\">Observations utilisées</div>
+  </div>
+  <div class=\"rowshow\">
+    <div class=\"col4\">
+      <img loading=\"lazy\" style=\"height: 15vw; padding: 1vh;\" src=\"", file.path(src, spname),"_uncertainty.png\" alt=\"\">
+    </div>
+    <div class=\"col4\">
+      <img loading=\"lazy\" style=\"height: 20vw; padding: 1vh;\" src=\"", file.path(src, spname),"_na_used.png\" alt=\"\">
+    </div>
+    <div class=\"col3\">
+      <img loading=\"lazy\" style=\"height: 25vw; padding: 1vh;\" src=\"", file.path(src, spname),"_quebec_used.png\" alt=\"\">
+    </div>
+  </div>
 </section>
 
 ")
-    
-}
   
-set_compare <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", model = "model 1", n = "23"){
+}
+
+set_compare <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", n = "23"){
   
   spname <- sapply(strsplit(sp, "_"), "[", 1:2) |> paste(collapse = "_")
   
@@ -783,26 +806,29 @@ script<-function(){cat(paste0("
 
 "))}
 
-con <- file("/home/frousseu/Downloads/index.html", open = "w+b")#, encoding = "UTF-8")
+con <- file("/home/frousseu/Documents/github/niches_climatiques/results.html", open = "w+b")#, encoding = "UTF-8")
 sink(con)
 
 css()  
 
 dashit <- function(x){sub("^(([^ ]* )[^\ ]*) ", "\\1 \u2014\u2014 ", x)}
+#dashit(gsub("_", " ", toc$div[i]))
+#dashit(paste(toc$species[i], toc$nom[i]))
+
 
 invisible(lapply(1:nrow(toc), function(i){
   if(toc$model[i] == "data" & !grepl("<b>", toc$display[i])){
     pic <- paste0(gsub(" ", "_", toc$species[i]), "_pic.png")
     copyright <- exif_read(file.path("/home/frousseu/Downloads/niches_climatiques/results/graphics", pic), tags = "Copyright")$Copyright
-    ans <- set_species(toc$div[i], common = dashit(gsub("_", " ", toc$div[i])), copyright = copyright)
+    ans <- set_species(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "), period = toc$period[i], copyright = copyright)
     stri_write_lines(ans, con = con)
   }
   if(toc$model[i] %in% c("compare", "compare_localized")){
-    ans <- set_compare(toc$div[i], common = dashit(gsub("_", " ", toc$div[i])))
+    ans <- set_compare(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "))
     stri_write_lines(ans, con = con)
   }
-  if(!toc$model[i] %in% c("compare", "compare_localized","data")){
-    ans <- set_models(toc$div[i], common = dashit(paste(toc$species[i], toc$nom[i])))
+  if(!toc$model[i] %in% c("compare", "compare_localized", "data")){
+    ans <- set_models(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "))
     stri_write_lines(ans, con = con)
   }
 }))
@@ -942,15 +968,15 @@ if(FALSE){
   #stri_write_lines(ans,con=con)
   #script()
   #cat(paste0("
-#</div>
-#</div>
-#</body>
-#</html>
-#"))
+  #</div>
+  #</div>
+  #</body>
+  #</html>
+  #"))
   
-#  close(con)
+  #  close(con)
   
-#  file.show("C:/Users/God/Downloads/test.html")
+  #  file.show("C:/Users/God/Downloads/test.html")
   
   
   

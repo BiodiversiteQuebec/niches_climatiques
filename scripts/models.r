@@ -31,28 +31,50 @@ if(is.character(models[[i]])){
         )
 
     } else {
-
-        ppp <- p[[echelle]][[vars]] #aggregate(p[[echelle]][[vars]], 2)
-        eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0) |> values()
-        eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0) |> values()
-        ep <- values(ppp[[vars]])
-
-        dat <- data.frame(eo, eb, ep)
-        names(dat)[1:2] <- c("obs", "eff")
-
-        dat <- dat[dat$eff > 0, ]
-
-        f <- paste("obs ~", paste("s(", vars, ", k = 30, bs = \"cv\", m = 2) + offset(log(eff))")) |>
-          as.formula()
-
-        optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
-        #optimizer <- c("efs", "bfgs")
-        m <- scam(f, optimizer = optimizer, data = dat, family = poisson)
         
+        gamfamily <- c("poisson", "binomial")[2]
+        
+        if(gamfamily == "poisson"){
+            ppp <- aggregate(p[[echelle]][[vars]], 2)
+            eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0) |> values()
+            eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0) |> values()
+            ep <- values(ppp[[vars]])
 
+            dat <- data.frame(eo, eb, ep)
+            names(dat)[1:2] <- c("obs", "eff")
 
+            dat <- dat[dat$eff > 0, ]
 
+            f <- paste("obs ~", paste("s(", vars, ", k = 22, bs = \"cv\", m = 2) + offset(log(eff))")) |>
+            as.formula()
 
+            #optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
+            #optimizer <- c("efs", "bfgs")
+            #m <- scam(f, optimizer = optimizer, data = dat, family = poisson)
+            m <- scam(f, data = dat, family = poisson)
+        } else {
+            ppp <- aggregate(p[[echelle]][[vars]], 2)
+            eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0)
+            eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0)
+            eo <- ifel(eo > 0, 1, 0) |> values()
+            eb <- ifel(eb > 0, 1, 0) |> values()
+            ep <- values(ppp[[vars]])
+
+            dat <- data.frame(eo, eb, ep)
+            names(dat)[1:2] <- c("obs", "eb")
+
+            dat <- dat[dat$eb > 0, ]
+
+            f <- paste("obs ~", paste("s(", vars, ", k = 30, bs = \"cv\", m = 2)")) |>
+            as.formula()
+
+            #optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
+            #optimizer <- c("efs", "bfgs")
+            #m <- scam(f, optimizer = optimizer, data = dat, family = poisson)
+            m <- scam(f, data = dat, family = binomial)
+
+        }
+        
     }
     
 
@@ -110,3 +132,9 @@ if(FALSE){
     plot(st_geometry(obs$large), cex = 0.25, add = TRUE)
 
 }
+
+
+#png("raw.png", width = 9, height = 9, units = "in", res = 300)
+#plot(trim(aggregate(eo, 20, fun = "sum")/aggregate(eb, 20, fun = "sum")))
+#plot(st_geometry(na), add = TRUE)
+#dev.off()

@@ -48,3 +48,20 @@ breeding_periods <- list(
 )
 
 run_model <- 1:9 
+
+
+
+info <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas") |>
+  filter(valid_scientific_name %in% species) |>
+  rename(species = valid_scientific_name) |>
+  rename(nom = vernacular_fr) |>
+  distinct(species, nom) |> #, .keep_all = TRUE)
+  #head() |>
+  collect() |>
+  as.data.frame()
+
+
+info$period <- sapply(breeding_periods[match(info$species, names(breeding_periods))], paste, collapse = " / ")
+info$period <- ifelse(info$period == "", NA, info$period)
+
+write.csv(info, file.path("results", gsub(".r", "_info.csv", args)), row.names = FALSE)

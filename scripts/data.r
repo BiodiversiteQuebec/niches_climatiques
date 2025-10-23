@@ -110,7 +110,7 @@ if(sp %in% aires$species){
 # filter out wrong observations per species
 source("scripts/filter.r")
 
-th <- 1000 # minimal precision # 20000
+th_large <- res(p$large)[1] # 1000 # minimal precision # 20000
 
 cols <- adjustcolor(c("forestgreen", "gold2", "tomato2"), 0.85)
 ring <- adjustcolor("black", 0.5)
@@ -129,12 +129,12 @@ plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 obsna <- st_geometry(obs[is.na(obs$coordinate_uncertainty), ])
-obsoverth <- st_geometry(obs[which(obs$coordinate_uncertainty >= th), ])
-obsunderth <- st_geometry(obs[which(obs$coordinate_uncertainty < th), ])
-points(obsunderth, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
-points(obsna, pch = 21, lwd = 0.25, col = ring,, bg = cols[2])
+obsoverth <- st_geometry(obs[which(obs$coordinate_uncertainty >= th_large), ])
+obsunderth <- st_geometry(obs[which(obs$coordinate_uncertainty < th_large), ])
 points(obsoverth, pch = 21, lwd = 0.25, col = ring, bg = cols[3])
-legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 3, 2)], col = ring, legend = c(paste("<", th, "/ n =", length(obsunderth)), paste("\u2265", th, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna))), cex = 1.25, bty = "n", title = "Précision (en m)")
+points(obsna, pch = 21, lwd = 0.25, col = ring,, bg = cols[2])
+points(obsunderth, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
+legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 3, 2)], col = ring, legend = c(paste("<", th_large, "/ n =", length(obsunderth)), paste("\u2265", th_large, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna))), cex = 1.25, bty = "n", title = "Précision (en m)")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
@@ -169,8 +169,8 @@ obs_all <- obs
 obs <- obs[region, ]
 background <- background[region, ]
 
-obs <- obs[which(obs$coordinate_uncertainty <= th | is.na(obs$coordinate_uncertainty)), ]
-background <- background[which(background$coordinate_uncertainty <= th | is.na(background$coordinate_uncertainty)), ]
+obs <- obs[which(obs$coordinate_uncertainty <= th_large | is.na(obs$coordinate_uncertainty)), ]
+background <- background[which(background$coordinate_uncertainty <= th_large | is.na(background$coordinate_uncertainty)), ]
 
 if(species_target_groups[[sp]] == "birds"){
   obs <- obs[obs$source %in% "ebird", ]
@@ -197,7 +197,7 @@ x <- st_difference(region, buff) |> st_sample(size = nbuff)# |> st_as_sf()
 x <- st_as_sf(cbind(st_drop_geometry(bg[rep(1, nbuff), ]), geometry = x), crs = epsg)
 bg <- rbind(bg, x)
 
-th_small <- th
+th_small <- res(p$small)[1] # th_large
 obs_small <- obs[qc, ]
 obs_small <- obs_small[which(obs_small$coordinate_uncertainty <= th_small | is.na(obs_small$coordinate_uncertainty)), ]
 bg_small <- bg[qc, ]

@@ -18,15 +18,15 @@ predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]]
 predictors_proj <- predictors
 predictors_proj[["mean_annual_air_temperature"]] <- predictors_proj[["mean_annual_air_temperature"]] +2
 
-plarge <- predictors # aggregate(predictors, 2, na.rm = TRUE)
-plarge_proj <- predictors_proj # aggregate(predictors_proj, 2, na.rm = TRUE)
+plarge <- aggregate(predictors, 2, na.rm = TRUE) # 2
+plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE) # 2
 
 #psmall <-rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif") |>
 #  aggregate(5, na.rm = TRUE)
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_QC_500.tif")
-#psmall <- aggregate(psmall, 10, na.rm = TRUE)
+psmall <- aggregate(psmall, 2, na.rm = TRUE)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 
@@ -125,3 +125,13 @@ if(FALSE){
 
 
 }
+
+
+
+#pp <- rast("data/predictors_1000_NA.tif")$mean_annual_air_temperature
+#pp[pp >= -32] <- NA
+#pp <- aggregate(pp, 50, fun = "max", na.rm = TRUE)
+#png("mat.png", width = 9, height = 9, units = "in", res = 300)
+#plot(pp)
+#plot(st_geometry(na), add = TRUE)
+#dev.off()

@@ -3,6 +3,7 @@
 !*.R
 !*.md
 !*.Rmd
+!*.html
 !*scripts
 !*scripts/jobs
 !*web
