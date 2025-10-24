@@ -436,6 +436,10 @@ cmd <- sprintf('bash -c "
 system(cmd)
 
 
+cmd <- sprintf('rm %s/*_lowres.tif', tmpath)
+system(cmd)
+
+#quit(save = "no")
 
 
 

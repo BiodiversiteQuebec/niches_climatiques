@@ -160,7 +160,7 @@ ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]
 #chelsavars <- variables[variables$coll == "chelsa-clim", ]
 idsname <- ids
 for(i in seq_along(collections[["chelsa-clim"]]$var)){
-  idsname <- gsub(collections[["chelsa-clim"]]$var[i], collections[["chelsa-clim"]]$name[i], idsname)
+  idsname <- gsub(paste0(collections[["chelsa-clim"]]$var[i], "_"), paste0(collections[["chelsa-clim"]]$name[i], "_"), idsname)
 } 
 
 collections[["chelsa-clim-proj"]]$var <- ids
@@ -266,9 +266,6 @@ system(cmd)
 }
 stopCluster(cl)
 
-quit(save = "no")
-
-
 ##############################################################
 ### little add-on to produce low res predictors ############## 
 
@@ -319,7 +316,12 @@ cmd <- sprintf('bash -c "
 system(cmd)
 
 
+cmd <- sprintf('rm %s/*_lowres.tif', tmpath)
+system(cmd)
 
+quit(save = "no")
+
+system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.tif' s3://bq-io/sdm_predictors/na/", tmpath))
 
 ##########################################################################
 ### the stacking of all files does not seem to work or end so putting this on ice for now...
