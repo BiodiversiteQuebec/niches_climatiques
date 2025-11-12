@@ -1,0 +1,568 @@
+---
+title: "Niches climatiques méthodologie"
+format: 
+  revealjs:
+    css: cfq.css
+    fig-align: center
+date: ""
+---
+
+```{=html}
+<style>
+h1, h2, h3, h4 {
+  color: seagreen;
+  margin-bottom: 10vh;
+}
+
+/* p {
+  font-size: 16px;
+} */
+
+/* .main-container {
+  max-width: 80% !important;
+  margin: auto;
+} */
+
+</style>
+```
+
+
+```{r include = FALSE, echo = FALSE, message = FALSE, warning = FALSE, fig.height = 3, out.width = "100%"}
+
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+
+library(tidyr)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(scam)
+
+library(terra) 
+library(sf)
+library(geodata)
+library(rmapshaper)
+library(dplyr)
+library(rnaturalearth)
+library(sdmtools)
+
+#r1 <- rast("https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/rasters/Setophaga_cerulea_sdm_large.tif")$climat
+#r2 <- rast("https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/rasters/Setophaga_cerulea_sdm_small.tif")$habitat
+
+epsg <- 6624 #32618
+
+# Downloads polygons using package geodata
+can <- gadm("CAN", level = 2, path = "data") |> st_as_sf()
+usa <- gadm("USA", level = 2, path = "data") |> st_as_sf()
+#can <- readRDS("data/gadm/gadm41_CAN_2_pk.rds") |> st_as_sf()
+#usa <- readRDS("data/gadm/gadm41_USA_2_pk.rds") |> st_as_sf()
+na <- rbind(can, usa)
+na <- st_transform(na, epsg)
+na <- na[!na$NAME_1 %in% c("Hawaii"), ]
+na <- na[!na$NAME_2 %in% c("Aleutians West", "Aleutians East"), ]
+na <- na |>
+  group_by(NAME_1) |>
+  summarise(geometry = st_union(geometry)) |>
+  as.data.frame() |>
+  st_as_sf(sf_column_name = "geometry")
+
+# keep Québec and bordering provinces/states as a buffer
+#region <- na[na$NAME_1 %in% c("Québec", "New Brunswick", "Maine", "Vermont", "New Hampshire", "New York", "Ontario", "Nova Scotia", "Prince Edward Island", "Massachusetts", "Connecticut", "Rhode Island"),]
+#region <- na[!na$NAME_1 %in% c("Yukon", "British Columbia", "Washington", "Oregon", "California", "Arizona", "Nevada", "Idaho", "Utah"), ]
+
+region <- na
+
+#region <- na[na$NAME_1 %in% c("Québec"), ]
+
+# split NF into different polygons
+labrador <- ms_explode(na[na$NAME_1 %in% c("Newfoundland and Labrador"), ]) 
+labrador <- labrador[which.max(st_area(labrador)), ] # keep Labarador
+#region <- rbind(region, labrador)
+qc <- na[na$NAME_1 %in% c("Québec"),] |>
+        #rbind(labrador) |>
+        ms_simplify(0.01)
+
+na <- ms_simplify(na, 0.01) |> st_make_valid()
+
+# Add it to the study region
+#region <- rbind(region, labrador) 
+
+# Simplify polygons to make things faster
+region <- ms_simplify(region, 0.01) |> st_make_valid()
+region <- st_union(region) |> st_as_sf()
+
+# lakes
+#lakes<-ne_download(scale="medium",type="lakes",destdir="data",category="physical",returnclass="sf") |> st_transform(epsg)
+lakes <- st_read("data/ne_50m_lakes.shp", quiet = TRUE) |> st_transform(epsg)
+lakes <- st_filter(lakes, region)
+
+add_background <- function(){
+  plot(st_geometry(lakes), add = TRUE, col = "white", border = "grey90", lwd = 0.1)
+}
+
+sdm_cols <- coloScale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen","black"))[1:190]
+#options(terra.pal = rev(terrain.colors(200)))
+options(terra.pal = sdm_cols)
+
+range_cols <- adjustcolor("black", 0.15)
+
+```
+
+
+## Données
+
+À l'échelle de l'Amérique du Nord
+
+- Québec: Atlas (Biodiversité Québec), CDPNQ, BORAQ, , réseau de suivi, Atlas des oiseaux nicheurs, ...
+- AmNord: GBIF, eBird
+
+## Filtre
+
+Éliminer les observations en dehors des aires de répartition
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+
+library(sf)
+library(mapview)
+library(duckdb)
+library(duckdbfs)
+library(dplyr)
+
+atlas <- duckdbfs::open_dataset("/home/frousseu/Downloads/atlas_2025-09-11.parquet", tblname = "atlas")
+
+sp <- "Glyptemys insculpta"
+genus <- strsplit(sp, " ")[[1]][1]
+
+x <- atlas |>
+  filter(genus == !!genus) |>
+  filter(!dataset_name %in% c("Pl@ntNet automatically identified occurrences")) |>
+  collect() |>
+  mutate(species = sapply(strsplit(valid_scientific_name, " "), function(i){paste(i[1:2], collapse = " ")})) |>
+  filter(species == !!sp) |>
+  (\(x) x[!grepl("Placettes-échantillons", x$dataset_name), ])() |>
+  filter(observation_value != "0") |>
+  mutate(date = as.character(as.Date(paste(year_obs, month_obs, day_obs, sep="-"), format = "%Y-%m-%d"))) |>
+  mutate(source = "atlas") |>
+  mutate(coordinate_uncertainty = as.numeric(coordinate_uncertainty)) |>
+  mutate(unc = as.character(as.numeric(coordinate_uncertainty))) |>
+  mutate(unc = ifelse(is.na(unc), "none", unc)) |>
+  as.data.frame() |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
+  select(species, record_by, coordinate_uncertainty, unc, date, dataset_name, geometry) |>
+  st_transform(epsg)
+
+
+aires <- st_read("/home/frousseu/Downloads/vertébrés.gpkg", quiet = TRUE) |>
+  filter(species == sp) |>
+  st_transform(6624)
+
+par(mar = c(0,0,1,0))
+plot(st_crop(st_geometry(qc), st_buffer(x, 100000)), col = "grey90", border = NA)
+plot(st_geometry(aires), col = range_cols, border = NA, add = TRUE)
+plot(st_geometry(lakes), col = "white", border = "grey70", lwd = 0.1, add = TRUE)
+plot(st_geometry(x), cex = 1, pch = 21, bg = adjustcolor("darkorange1", 0.9), col = "black", lwd = 0.5, add = TRUE)
+plot(st_geometry(x[!as.logical(lengths(st_intersects(x, aires))), ]), cex = 1, pch = 21, bg = adjustcolor("black", 0.9), col = "black", lwd = 0.5, add = TRUE)
+legend("top", inset = c(0, -0.05), legend = c("Répartition", "Range", "Hors Range"), pch = c(22, 21, 21), pt.bg = c(range_cols, c(adjustcolor("darkorange1", 0.9), "black")), col = range_cols, bty = "n", pt.cex = c(2, 1, 1), pt.lwd = c(0, 1, 1), ncol = 3, xpd = TRUE)
+
+```
+
+## Filtre
+
+- Précision des coordonnées QC
+
+- Précision des coordonées AN
+
+## Période de nidification
+
+- Restreint à la période de nidification pour les oiseaux
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+
+bp <- list(
+    `Aquila chrysaetos` = c("06-07", "08-23"), 
+    `Catharus bicknelli` = c("06-07", "07-12"), 
+    `Setophaga cerulea` = c("05-24", "07-12"), 
+    `Coturnicops noveboracensis` = c("06-07", "08-24"), 
+    `Ixobrychus exilis` = c("06-07", "07-19")
+)
+
+x <- data.frame(Espèces = names(bp), Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
+rownames(x) <- 1:nrow(x)
+kable(x, format = "html", table.attr = "class='table'") |>
+  kable_styling(full_width = FALSE) |>
+  row_spec(1:nrow(x), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
+
+
+
+```
+
+## Variables
+
+- Climat (niches climatiques)
+
+- Habitat (ajouté du réalisme aux distributions)
+
+## Climat
+
+- CHELSA, température moyenne annuelle
+
+## Habitat
+
+- Stables par rapport aux changements climatiques
+- Stables à l'échelle de la distribution des espèces
+
+## Variables disponibles
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "30%"}
+que <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv") |>
+  select(collection, variable) |>
+  mutate(scale = "Québec")
+nam <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv") |>
+  select(collection, variable) |>
+  mutate(scale = "Amérique du Nord")
+
+df <- bind_rows(que, nam)
+
+v <- df %>%
+  mutate(val = "+") %>%
+  pivot_wider(
+    id_cols = c(collection, variable),
+    names_from = scale,
+    values_from = val
+  ) |>
+  mutate(across(everything(), ~replace_na(., ""))) |>
+  as.data.frame()
+
+type <- ifelse(v$collection == "chelsa-clim", "climat", "habitat")
+v <- cbind(type, v) |>
+  arrange(type, collection, variable)
+
+
+
+large_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland")
+small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
+"eau_peu_profonde", "elevation", "eolien", "forest", "geomflat", "geomfootslope", 
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "twi", "urban", "water", "wetland")
+use_small <- unique(c(c("urban", "cropland", "alluvion", "clay", "till", "ph", "elevation", "geomflat", "water", "eau_peu_profonde","organique", "ruggedness"), sample(small_vars)))
+
+used <- unique(c(large_vars, small_vars, use_small))
+
+v$used <- ifelse((v$variable %in% used) | (v$collection == "chelsa-clim"), 1, 0)
+
+
+kable(v[, 1:5], format = "html", table.attr = "class='table'") |>
+  kable_styling(full_width = FALSE) |>
+  row_spec(1:nrow(v), extra_css = "line-height: 0.5; padding-top:2px; padding-bottom:2px; font-size: 6px;") |>
+  row_spec(
+    which(v$used != 1),
+    extra_css = "text-decoration: line-through;"
+  )
+
+
+
+```
+
+
+## Variables par espèce
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+
+species_vars <- list(
+`Pseudacris triseriata` = c("wetland", "marais", "marecage", "geomflat"), 
+`Hemidactylium scutatum` = c("tourbiere", "marais", "organique"), 
+`Gyrinophilus porphyriticus` = c("elevation", "ruggedness", "forest", "geomflat", "twi"), 
+`Desmognathus ochrophaeus` = c("elevation", "ruggedness", "forest", "geomflat", "twi"), 
+`Emydoidea blandingii` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"),
+`Glyptemys insculpta` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "sand"),
+`Nerodia sipedon` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"),
+`Lampropeltis triangulum` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"), 
+`Aquila chrysaetos` = c("elevation", "ruggedness"), 
+`Catharus bicknelli` = c("elevation", "ruggedness"), 
+`Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
+`Coturnicops noveboracensis` = c("flat", "marais", "wetland", "prairie_humide"), 
+`Ixobrychus exilis` = c("geomflat", "wetland", "marais", "eau_peu_profonde"), 
+`Glaucomys volans` = c("forest")
+)
+
+sv <- data.frame(Espèces = names(species_vars), Variables = sapply(species_vars, paste, collapse = ", "))
+rownames(sv) <- 1:nrow(sv)
+kable(sv, format = "html", table.attr = "class='table'") |>
+  kable_styling(full_width = FALSE) |>
+  row_spec(1:nrow(sv), extra_css = "line-height: 1.25; padding-top:3px; padding-bottom:3px; font-size: 16px;")
+
+
+
+```
+
+
+## Modélisation
+
+## Modèle de climat
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "70%", fig.height = 3, fig.width = 6}
+
+# Define x range
+x <- seq(-25, 25, length.out = 1000)
+
+# Define parameters
+a <- 0.05   # controls width
+b <- 1     # peak height at x = 10
+
+# Inverse logit function
+inv.logit <- function(x) {
+  1 / (1 + exp(-x))
+}
+
+logit <- function(p) {
+  log(p / (1 - p))
+}
+
+# Inverse quadratic function
+yy <- -a * (x - 6)^2 + b
+
+y <- inv.logit(yy)
+
+# Plot
+par(mfrow = c(1, 2), mar = c(2, 2, 0, 0), oma = c(2, 2, 0, 0))
+plot(x, y, type = "l", lwd = 4, col = "seagreen", tcl = -0.2, mgp = c(1, 0.25, 0), xlab = "", ylab = "")
+
+
+
+y <- yy 
+y[x <= -3] <- -5
+y[x >= 12] <- -5
+y[x > -3 & x < 12] <- max(y)
+y <- y + rnorm(length(y), 0, 0.15)
+yyy <- inv.logit(y)
+
+p <- inv.logit(predict(scam(y ~ s(x, k = 12, bs = "cv")), data.frame(x = x)))
+#p <- inv.logit(predict(gam(y ~ s(x, k = 9)), data.frame(x = x)))
+#p <- predict(gam(yyy ~ s(x, k = 9), family = binomial, weights = rep(1000, length(y))), data.frame(x = x), type = "response")
+p <- predict(scam(yyy ~ s(x, k = 29, bs = "cv"), family = binomial, weights = rep(1000, length(y))), data.frame(x = x), type = "response")
+
+plot(x, p, type = "l", lwd = 4, col = "seagreen", tcl = -0.2, mgp = c(1, 0.25, 0), xlab = "", ylab = "")
+#points(x, inv.logit(y))
+
+mtext(side = 1, line = 1, outer = TRUE, text = "Température moyenne annuelle")
+mtext(side = 2, line = 1, outer = TRUE, text = "Probabilité de présence")
+
+
+```
+
+
+## Modèle d'habitat
+
+Deux modèles on été effectués, un modèle à l'échelle nord américaine et un modèle à l'échelle du Québec. Ces modèles ne sont pas d'intérêt en soir, mais ils sont plutôt destinés à être couplés avec les modèles climatiques. Le modèle à l'écehelle du Québec comporte 2 avantages: 
+
+  - il permet de prendre en compte certaines variables d'habitat qui ne sont disponibles qu'en territoire québécois
+  - il permet d'obtenir un modèle d'habitat basé uniquement sur la réalité locale propre au Québec
+
+## Modèle de climat et d'habitat
+
+Approche standard combinant différents types de variables
+
+## Modèles combinés
+
+- Grande échelle: climat
+- Petite échelle: habitat et couverture du sol
+
+Avantages:
+
+  - permet de coupler des modèles effectués à différentes échelles (_e.g._ un modèle climatique à grande échelle couplé à un modèle d'habitat à plus petit échelle)
+  
+  - permet d'isoler l'effet des variables climatiques de celui des variables d'habitats dans un contexte où les deux types de variables sont potentiellement spatialement corrélées et attribuer les variations en probabilité de présence ou d'abondance à grande échelle aux variables climatiques 
+
+
+## Modèles combinés
+
+Modèle de climat à grande échelle rapporté au Québec
+
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, fig.height = 5, out.width = "100%"}
+
+fplg <- function(s, x = 0.85, at = NULL){
+  plg <- list(x = st_bbox(s)[1] + x * diff(st_bbox(s)[c(1, 3)]), y = st_bbox(s)[2] + 0.9 * diff(st_bbox(s)[c(2, 4)]), size = c(0.33, 0.75), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
+  if(is.null(at)){
+    plg    
+  } else {
+    c(plg, list(at = at))
+  }
+}
+
+r1 <- rast("/home/frousseu/Downloads/Setophaga_cerulea_sdm_large.tif")$climat
+r1 <- r1 / global(r1, "max", na.rm = TRUE)[1, 1]
+r2 <- crop(r1, qc, mask = TRUE)
+r3 <- r2 / global(r2, "max", na.rm = TRUE)[1, 1]
+r4 <- crop(rast("/home/frousseu/Downloads/Setophaga_cerulea_sdm_large.tif")$habitat, qc, mask = TRUE)
+r4 <- r4 / global(r4, "max", na.rm = TRUE)[1, 1]  
+
+
+m <- matrix(c(1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5), nrow = 1)
+layout(m)
+par(oma = c(0, 2, 0, 2))
+plot(r1, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r1, x = 0.9, at = 0:1), main = "Climat global"); plot(st_geometry(qc), lwd = 1, border = "darkorange1", add = TRUE); plot(st_geometry(na), lwd = 0.1, border = "grey70", add = TRUE);add_background()
+par(mar = c(0, 0, 0, 0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "\U1F846", font = 2, cex = 2.5, col = "grey30")
+plot(r2, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = c(0, round(global(r2, "max", na.rm = TRUE)[1, 1], 3))), main = "Climat local", range = 0:1); plot(st_geometry(qc), lwd = 0.5, border = "darkorange1", add = TRUE);add_background()
+par(mar = c(0, 0, 0, 0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "\U1F846", font = 2, cex = 2.5, col = "grey30")
+plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = 0:1), main = expression(bolditalic("Rescaled")));add_background()
+
+```
+
+
+
+## Modèles combinés
+
+Modèle de climat à grande échelle combiné à un modèle d'habitat
+```{r echo = FALSE, message = FALSE, warning = FALSE, fig.height = 4.5, out.width = "100%"}
+
+m <- matrix(c(1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5), nrow = 1)
+layout(m)
+par(oma = c(0, 2, 0, 2))
+plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r3, at = 0:1), main = "Climat");add_background()
+par(mar = c(0,0,0,0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "X", font = 2, cex = 2.75, col = "grey30")
+plot(r4, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r3, at = 0:1), main = "Habitat");add_background()
+par(mar = c(0,0,0,0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "=", font = 2, cex = 5, col = "grey30")
+plot(r3 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), axes = FALSE, main = "Combiné");add_background()
+
+```
+
+
+## Résumé des modèles
+
+```{=html}
+
+<br>
+
+<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 1em; text-align:center;">
+
+  <div>
+    <h5>Climat</h5>
+    <ul>
+      <li>Climat</li>
+      <li>ClimatGAM</li>
+    </ul>
+  </div>
+
+  <div>
+    <h5>Habitat</h5>
+    <ul>
+      <li>HabitatQC</li>
+      <li>HabitatAN</li>
+    </ul>
+  </div>
+
+  <div>
+    <h5>Standard</h5>
+    <ul>
+      <li>Climat + HabitatAN</li>
+    </ul>
+  </div>
+
+</div>
+
+<br>
+
+<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 1em; text-align:center;">
+
+
+  <div>
+    <h5>Combinés AN</h5>
+    <ul>
+      <li>Climat(HabitatAN)</li>
+      <li>ClimatGAM(HabitatAN)</li>
+    </ul>
+  </div>
+
+  <div>
+    <h5>Combinés QC</h5>
+    <ul>
+      <li>Climat(HabitatQC)</li>
+      <li>ClimatGAM(HabitatQC)</li>
+    </ul>
+  </div>
+
+</div>
+
+```
+
+## Paramétrisation des modèles
+
+## Effort
+
+- Pseudos-absences formées de l'ensemble des occurrences du groupe cible (_target group_) (amphibiens/reptiles, oiseaux, mammifères)
+
+- Amphibiens/reptiles, oiseaux, mammifères (excluant les données de chasse de la grande faune)
+
+- Pour les oiseaux, les localisations de feuillets eBird ont été utilisées
+
+## Zone tampon
+
+- Ajout de pseudo-absences dans une zone tampon à l'extérieur des aires de répartition
+
+- Zones de 250 km autour des observations
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, out.width = "100%"}
+
+library(sf)
+library(mapview)
+library(duckdb)
+library(duckdbfs)
+library(dplyr)
+
+atlas <- duckdbfs::open_dataset("/home/frousseu/Downloads/atlas_2025-09-11.parquet", tblname = "atlas")
+
+sp <- "Setophaga cerulea"
+genus <- strsplit(sp, " ")[[1]][1]
+
+x <- atlas |>
+  filter(genus == !!genus) |>
+  filter(!dataset_name %in% c("Pl@ntNet automatically identified occurrences")) |>
+  collect() |>
+  mutate(species = sapply(strsplit(valid_scientific_name, " "), function(i){paste(i[1:2], collapse = " ")})) |>
+  filter(species == !!sp) |>
+  (\(x) x[!grepl("Placettes-échantillons", x$dataset_name), ])() |>
+  filter(observation_value != "0") |>
+  mutate(date = as.character(as.Date(paste(year_obs, month_obs, day_obs, sep="-"), format = "%Y-%m-%d"))) |>
+  mutate(source = "atlas") |>
+  mutate(coordinate_uncertainty = as.numeric(coordinate_uncertainty)) |>
+  mutate(unc = as.character(as.numeric(coordinate_uncertainty))) |>
+  mutate(unc = ifelse(is.na(unc), "none", unc)) |>
+  as.data.frame() |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
+  select(species, record_by, coordinate_uncertainty, unc, date, dataset_name, geometry) |>
+  st_transform(epsg)
+
+b <- st_buffer(x, 250000) |>
+  st_union() |>
+  st_intersection(qc)
+
+set.seed(1234)
+
+ob <- st_difference(qc, b) |>
+  st_sample(size = 200, type = "random")
+
+par(mar = c(0,0,0,0))
+plot(st_geometry(qc), col = "grey90", border = NA)
+plot(st_geometry(lakes), col = "white", border = "grey70", lwd = 0.1, add = TRUE)
+plot(st_geometry(x), cex = 1, pch = 21, bg = adjustcolor("darkorange1", 0.9), col = "black", lwd = 0.5, add = TRUE)
+plot(st_geometry(b), lwd = 0.1, add = TRUE)
+plot(st_geometry(ob), cex = 1, pch = 21, bg = "#ffffff00", col = "black", lwd = 0.5, add = TRUE)
+legend("topright", inset = c(0.15, 0.1), legend = c("Occurrences", "Pseudo-absences"), pch = 21, pt.bg = c(adjustcolor("darkorange1", 0.9), "#ffffff00"), col = "black", bty = "n")
+
+
+```
+
+## Dispersion
+
+Tenir compte des capacités de dispersion? ([Shipley et al. 2021](https://doi.org/10.1111/ecog.05450))
+```{=html}
+<img src="https://nsojournals.onlinelibrary.wiley.com/cms/asset/a49d5edc-7609-4ce0-a3bf-ba9c7322e1a8/ecog12807-fig-0003-m.jpg" style="max-width:50%; height:auto;">
+```
+
+## Effets des variables
+
+## Scénarios climatiques
+
+CHELSA vs. Ouranos
+
+## Résultats
+
+
