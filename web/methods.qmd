@@ -1,17 +1,17 @@
 ---
-title: "Niches climatiques méthodologie"
+title: "Méthodologie\nniches climatiques "
 format: 
   revealjs:
     css: cfq.css
     fig-align: center
-date: ""
+date: "14 novembre 2025"
 ---
 
 ```{=html}
 <style>
 h1, h2, h3, h4 {
   color: seagreen;
-  margin-bottom: 10vh;
+  padding-bottom: 2vh;
 }
 
 /* p {
@@ -27,9 +27,26 @@ h1, h2, h3, h4 {
 ```
 
 
-```{r include = FALSE, echo = FALSE, message = FALSE, warning = FALSE, fig.height = 3, out.width = "100%"}
+```{r include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+
+```
+
+
+## Données
+
+À l'échelle de l'Amérique du Nord
+
+![](goicolea2024.png){width="25%"}
+<a href="https://doi.org/10.1111/ecog.07328" style="font-size:0.4em;">Goicolea et al. 2024</a>
+
+- Québec
+  - Atlas (Biodiversité Québec) ce qui inclut CDPNQ, BORAQ, réseau de suivi, Atlas des oiseaux nicheurs, ...
+- Am. du Nord
+  - GBIF, eBird
+
+```{r message = FALSE, warning = FALSE, fig.height = 3, out.width = "100%"}
 
 library(tidyr)
 library(dplyr)
@@ -108,13 +125,6 @@ range_cols <- adjustcolor("black", 0.15)
 ```
 
 
-## Données
-
-À l'échelle de l'Amérique du Nord
-
-- Québec: Atlas (Biodiversité Québec), CDPNQ, BORAQ, , réseau de suivi, Atlas des oiseaux nicheurs, ...
-- AmNord: GBIF, eBird
-
 ## Filtre
 
 Éliminer les observations en dehors des aires de répartition
@@ -167,9 +177,13 @@ legend("top", inset = c(0, -0.05), legend = c("Répartition", "Range", "Hors Ran
 
 ## Filtre
 
-- Précision des coordonnées QC
+- Précision des coordonées généralement ajustées à la précision des modèles (1000 et 500 m)
 
-- Précision des coordonées AN
+- Plusieurs observations sans précision
+
+- Localisation eBird souvent imprécises
+
+- Certaines espèces hors-Québec obscurcies par iNat dans certains états
 
 ## Période de nidification
 
@@ -198,20 +212,29 @@ kable(x, format = "html", table.attr = "class='table'") |>
 
 - Climat (niches climatiques)
 
-- Habitat (ajouté du réalisme aux distributions)
+- Habitat (ajoutr du réalisme aux distributions)
 
 ## Climat
 
 - CHELSA, température moyenne annuelle
+- Ouranos ?
 
 ## Habitat
 
-- Stables par rapport aux changements climatiques
-- Stables à l'échelle de la distribution des espèces
+- ~~Types de forêts, composition en espèces, âge, hauteur, etc.~~
+
+Stables:
+
+- par rapport aux changements climatiques (_e.g._ topographie, utilisation du territoire, caractéristiques du sol)<span style="color:green; font-size:1.25em;">&#x2714;</span>
+- ou non dans le temps (_e.g._ milieux humides, forêt, milieux agricoles ou anthropiques)<span style="color: gold; font-weight: 900; font-size:1.25em;">?</span>
+- à l'échelle de la distribution des espèces ? (_e.g._ forêt)<span style="color: gold; font-weight: 900; font-size:1.25em;">?</span>
+
+
 
 ## Variables disponibles
 
-```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "30%"}
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+
 que <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv") |>
   select(collection, variable) |>
   mutate(scale = "Québec")
@@ -235,8 +258,6 @@ type <- ifelse(v$collection == "chelsa-clim", "climat", "habitat")
 v <- cbind(type, v) |>
   arrange(type, collection, variable)
 
-
-
 large_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland")
 small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
 "eau_peu_profonde", "elevation", "eolien", "forest", "geomflat", "geomfootslope", 
@@ -246,17 +267,54 @@ use_small <- unique(c(c("urban", "cropland", "alluvion", "clay", "till", "ph", "
 used <- unique(c(large_vars, small_vars, use_small))
 
 v$used <- ifelse((v$variable %in% used) | (v$collection == "chelsa-clim"), 1, 0)
+v <- v[!grepl("_ssp", v$variable), ]
+#v <- v[-which(v$collection == "cec_land_cover_percentage" & v$Québec != "+"), ]
+names(v)[1:5] <- c("Type", "Collection", "Variable", "Québec", "Am. du Nord") 
 
 
-kable(v[, 1:5], format = "html", table.attr = "class='table'") |>
-  kable_styling(full_width = FALSE) |>
-  row_spec(1:nrow(v), extra_css = "line-height: 0.5; padding-top:2px; padding-bottom:2px; font-size: 6px;") |>
+vs <- unique(v[, -c(3, 6)])
+vs <- vs[-which(vs$Collection == "cec_land_cover_percentage" & (vs$Québec != "+" | vs$`Am. du Nord` != "+")), ]
+vs$Thème <- c("Climat", "Couverture du sol", "Routes", "Topographie", "Relief", "Anthropisation", "Hauteur de canopée", "Milieux humides", "Sédimentologie", "NDVI/LAI", "Sols", "Humidité topographique")
+vs <- vs[, c(1, 5, 2, 3, 4)]
+kable(vs, format = "html", table.attr = "class='table'", row.names = FALSE, align = c("l", "l", "l", "c", "c")) |>
+  kable_styling(full_width = FALSE, bootstrap_options = "condensed") |>
+  row_spec(1:nrow(vs), extra_css = "line-height: 1.25; padding-top:5px; padding-bottom:5px; font-size: 20px; border-bottom: 0px solid #ccc;") |>
+  row_spec(0, extra_css = "line-height: 1.5; padding-top:5px; padding-bottom:5px; font-size: 23px; border-bottom: 1px solid #ccc;") 
+
+```
+
+
+## Variables disponibles
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "60%"}
+
+v1 <- v[1:40, 1:5]
+v2 <- v[41:nrow(v), 1:5]
+
+kable(v1, format = "html", table.attr = "class='table'", row.names = FALSE, align = c("l", "l", "l", "c", "c")) |>
+  kable_styling(full_width = FALSE, bootstrap_options = "condensed") |>
+  row_spec(1:nrow(v1), extra_css = "line-height: 0.75; padding-top:2px; padding-bottom:2px; font-size: 12px; border-bottom: 0.5px solid #ccc;") |>
   row_spec(
-    which(v$used != 1),
+    which(v1$used != 1),
     extra_css = "text-decoration: line-through;"
-  )
+  ) |>
+  row_spec(0, extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px; font-size: 14px; border-bottom: 0px solid #ccc;") 
+
+```
 
 
+## Variables disponibles
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "60%"}
+
+kable(v2, format = "html", table.attr = "class='table'", row.names = FALSE, align = c("l", "l", "l", "c", "c")) |>
+  kable_styling(full_width = FALSE, bootstrap_options = "condensed") |>
+  row_spec(1:nrow(v2), extra_css = "line-height: 0.75; padding-top:2px; padding-bottom:2px; font-size: 12px; border-bottom: 0px solid #ccc;") |>
+  row_spec(
+    which(v2$used != 1),
+    extra_css = "text-decoration: line-through;"
+  ) |>
+  row_spec(0, extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px; font-size: 14px; border-bottom: 0px solid #ccc;") 
 
 ```
 
@@ -282,22 +340,49 @@ species_vars <- list(
 `Glaucomys volans` = c("forest")
 )
 
+species_vars <- list(
+`Rainette faux-grillon de l'Ouest` = c("wetland", "marais", "marecage", "geomflat"), 
+`Salamandre pourpre` = c("elevation", "ruggedness", "forest", "geomflat", "twi"), 
+`Salamandre sombre des montagnes` = c("elevation", "ruggedness", "forest", "geomflat", "twi"), 
+`Tortue mouchetée` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"),
+`Tortue des bois` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "sand"),
+`Couleuvre d'eau` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"),
+`Couleuvre tachetée` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"), 
+`Aigle royal` = c("elevation", "ruggedness"), 
+`Grive de Bicknell` = c("elevation", "ruggedness"), 
+`Paruline azurée` = c("forest", "ph", "silt", "nitrogen"), 
+`Râle jaune` = c("flat", "marais", "wetland", "prairie_humide"), 
+`Petit Blongios` = c("geomflat", "wetland", "marais", "eau_peu_profonde"), 
+`Petit Polatouche` = c("forest")
+)
+
 sv <- data.frame(Espèces = names(species_vars), Variables = sapply(species_vars, paste, collapse = ", "))
 rownames(sv) <- 1:nrow(sv)
 kable(sv, format = "html", table.attr = "class='table'") |>
   kable_styling(full_width = FALSE) |>
-  row_spec(1:nrow(sv), extra_css = "line-height: 1.25; padding-top:3px; padding-bottom:3px; font-size: 16px;")
-
-
+  row_spec(1:nrow(sv), extra_css = "line-height: 1.25; padding-top:3px; padding-bottom:3px; font-size: 16px; border-bottom: 0px solid #ccc;") |>
+  row_spec(0, extra_css = "font-size: 20px; border-bottom: 1px solid #ccc;") 
 
 ```
 
+## Variables manquantes?
+
+Géomorphologie? Topographie? Autres? 
 
 ## Modélisation
 
+Plusieurs types de modèles selon:
+
+- Climat
+- Habitat
+- Échelles
+- Combinaisons
+
 ## Modèle de climat
 
-```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "70%", fig.height = 3, fig.width = 6}
+Effet quadratique ou effet contraint à une forme de cloche (GAM)
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "80%", fig.height = 4, fig.width = 8}
 
 # Define x range
 x <- seq(-25, 25, length.out = 1000)
@@ -321,10 +406,9 @@ yy <- -a * (x - 6)^2 + b
 y <- inv.logit(yy)
 
 # Plot
-par(mfrow = c(1, 2), mar = c(2, 2, 0, 0), oma = c(2, 2, 0, 0))
+par(mfrow = c(1, 2), mar = c(1.5, 1.5, 0, 0), oma = c(2, 2, 1.25, 0))
 plot(x, y, type = "l", lwd = 4, col = "seagreen", tcl = -0.2, mgp = c(1, 0.25, 0), xlab = "", ylab = "")
-
-
+mtext(side = 3, line = 0.25, outer = FALSE, text = "Climat (quadratique)", xpd = TRUE, font = 2)
 
 y <- yy 
 y[x <= -3] <- -5
@@ -339,10 +423,11 @@ p <- inv.logit(predict(scam(y ~ s(x, k = 12, bs = "cv")), data.frame(x = x)))
 p <- predict(scam(yyy ~ s(x, k = 29, bs = "cv"), family = binomial, weights = rep(1000, length(y))), data.frame(x = x), type = "response")
 
 plot(x, p, type = "l", lwd = 4, col = "seagreen", tcl = -0.2, mgp = c(1, 0.25, 0), xlab = "", ylab = "")
+mtext(side = 3, line = 0.25, outer = FALSE, text = "Climat GAM", xpd = TRUE, font = 2)
 #points(x, inv.logit(y))
 
-mtext(side = 1, line = 1, outer = TRUE, text = "Température moyenne annuelle")
-mtext(side = 2, line = 1, outer = TRUE, text = "Probabilité de présence")
+mtext(side = 1, line = 0, outer = TRUE, text = "Température moyenne annuelle")
+mtext(side = 2, line = 0, outer = TRUE, text = "Probabilité de présence")
 
 
 ```
@@ -350,31 +435,30 @@ mtext(side = 2, line = 1, outer = TRUE, text = "Probabilité de présence")
 
 ## Modèle d'habitat
 
-Deux modèles on été effectués, un modèle à l'échelle nord américaine et un modèle à l'échelle du Québec. Ces modèles ne sont pas d'intérêt en soir, mais ils sont plutôt destinés à être couplés avec les modèles climatiques. Le modèle à l'écehelle du Québec comporte 2 avantages: 
-
-  - il permet de prendre en compte certaines variables d'habitat qui ne sont disponibles qu'en territoire québécois
-  - il permet d'obtenir un modèle d'habitat basé uniquement sur la réalité locale propre au Québec
+- Deux échelles, Québec et Am. du Nord
+- Destinés à être combinés
+- Deux avantages:
+  - Modèle d'habitat basé uniquement sur la réalité locale propre au Québec
+  - Prendre en compte des variables qui ne sont disponibles qu'au Québec
 
 ## Modèle de climat et d'habitat
 
-Approche standard combinant différents types de variables
+Approche standard combinant différents types de variables au sein d'un même modèle
 
 ## Modèles combinés
 
-- Grande échelle: climat
-- Petite échelle: habitat et couverture du sol
+- Grande échelle: climat, toujours à l'échelle Am. du Nord
+- Petite échelle: habitat
 
 Avantages:
 
-  - permet de coupler des modèles effectués à différentes échelles (_e.g._ un modèle climatique à grande échelle couplé à un modèle d'habitat à plus petit échelle)
-  
-  - permet d'isoler l'effet des variables climatiques de celui des variables d'habitats dans un contexte où les deux types de variables sont potentiellement spatialement corrélées et attribuer les variations en probabilité de présence ou d'abondance à grande échelle aux variables climatiques 
+- Permet d'isoler l'effet des variables climatiques de celui des variables d'habitats 
+- Permet de coupler des modèles effectués à différentes échelles
 
 
 ## Modèles combinés
 
 Modèle de climat à grande échelle rapporté au Québec
-
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE, fig.height = 5, out.width = "100%"}
 
@@ -408,6 +492,7 @@ plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = 0:1), main = exp
 
 
 
+
 ## Modèles combinés
 
 Modèle de climat à grande échelle combiné à un modèle d'habitat
@@ -423,6 +508,7 @@ par(mar = c(0,0,0,0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = "")
 plot(r3 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), axes = FALSE, main = "Combiné");add_background()
 
 ```
+
 
 
 ## Résumé des modèles
@@ -485,11 +571,15 @@ plot(r3 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), a
 
 ## Paramétrisation des modèles
 
+- Effets quadratiques uniquement (x + x^2) (sauf GAM)
+- Variables non-fortement corrélées
+- Résolution (1000m et 500m)
+
 ## Effort
 
-- Pseudos-absences formées de l'ensemble des occurrences du groupe cible (_target group_) (amphibiens/reptiles, oiseaux, mammifères)
+- Pseudos-absences formées de l'ensemble des occurrences du groupe cible (_target group_) 
 
-- Amphibiens/reptiles, oiseaux, mammifères (excluant les données de chasse de la grande faune)
+- Group amphibiens/reptiles, oiseaux, mammifères (excluant les données de chasse de la grande faune)
 
 - Pour les oiseaux, les localisations de feuillets eBird ont été utilisées
 
@@ -547,8 +637,8 @@ plot(st_geometry(b), lwd = 0.1, add = TRUE)
 plot(st_geometry(ob), cex = 1, pch = 21, bg = "#ffffff00", col = "black", lwd = 0.5, add = TRUE)
 legend("topright", inset = c(0.15, 0.1), legend = c("Occurrences", "Pseudo-absences"), pch = 21, pt.bg = c(adjustcolor("darkorange1", 0.9), "#ffffff00"), col = "black", bty = "n")
 
-
 ```
+
 
 ## Dispersion
 
@@ -559,10 +649,100 @@ Tenir compte des capacités de dispersion? ([Shipley et al. 2021](https://doi.or
 
 ## Effets des variables
 
+- Effets individuels en maintenant les autres variables à leurs valeurs moyennes
+- Observations / Ensemble des observations (valeurs relatives)
+- Probabilité relative
+
+<div style="display: flex; justify-content: center; align-items: center;">
+<div style="width: 60%;"></div>
+<img src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_marginal_effects.png" style="clip-path: inset(0% 65% 0% 0%); transform: scale(1.75); transform-origin: top left; width: auto; height: auto;">
+</div>
+
 ## Scénarios climatiques
 
-CHELSA vs. Ouranos
+- CHELSA vs. Ouranos ?
+
+- Scénario "moyen" pour la représentation
+
+```{=html}
+
+<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 1em; text-align:center;">
+
+  <div>
+    <h5>Périodes</h5>
+    <ul>
+      <li>2011-2040</li>
+      <li>2041-2070</li>
+      <li>2071-2100</li>
+    </ul>
+  </div>
+
+  <div>
+    <h5>Scénarios</h5>
+    <ul>
+      <li>ssp126</li>
+      <li>ssp370</li>
+      <li>ssp585</li>
+    </ul>
+  </div>
+
+  <div>
+    <h5>Modèles</h5>
+    <ul>
+      <li>ukesm1-0-ll</li>
+      <li>mri-esm2-0</li>
+      <li>mpi-esm1-2-hr</li>
+      <li>ipsl-cm6a-lr</li>
+      <li>gfdl-esm4</li>
+    </ul>
+  </div>
+
+</div>
+
+```
+
+
+## Organisation du site
+
+Présente l'ensemble des résultats
+
+[https://biodiversitequebec.github.io/niches_climatiques/](https://biodiversitequebec.github.io/niches_climatiques/)
 
 ## Résultats
 
+Données
 
+ - source
+ - précision des coordonées
+ - filtrage
+
+Modèles
+
+ - modèles actuels et projetés
+ - répartition actuelle et projetées
+ - différences en modèles et en répartition
+ 
+Variables
+
+ - effets marginaux
+ 
+Comparaison
+
+ - grande échelle ou Québec
+
+## Questions
+ 
+ - Données (filtrage)
+ - Variables (importantes / manquantes)
+ - Buffer (X km)
+ - Régions (inclure / exclure)
+ - Modèles à privilégier
+
+
+## Prochaines étapes
+
+- Intégration des scénarios
+- Ajustement des seuils pour les répartitions
+- Sélection des meilleurs modèles
+- Consultation par petits groupes
+- Dispersion?
