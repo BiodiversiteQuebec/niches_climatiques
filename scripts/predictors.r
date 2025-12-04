@@ -13,13 +13,44 @@ forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduou
 bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe")
 
 predictors <- rast("data/predictors_1000_NA.tif")
-predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
-#predictors_proj <- rast("data/predictors_proj.tif")
-predictors_proj <- predictors
-predictors_proj[["mean_annual_air_temperature"]] <- predictors_proj[["mean_annual_air_temperature"]] +2
+predictors <- aggregate(predictors, 2, na.rm = TRUE) # 2
 
-plarge <- aggregate(predictors, 2, na.rm = TRUE) # 2
-plarge_proj <- aggregate(predictors_proj, 2, na.rm = TRUE) # 2
+# scenarios
+timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
+model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")
+ssp <- c("ssp585", "ssp370", "ssp126")
+
+keep <- grep(paste(c(timeperiod, model, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
+
+# scenarios to consider
+timeperiod <- timeperiod[1:3]
+model <- model[5]
+ssp <- ssp[2]
+
+scenarios <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
+      apply(1, function(i){paste(i, collapse = "_")})
+
+predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
+
+
+proj <- predictors
+predictors_proj <- lapply(scenarios, function(i){
+  climate <- proj[[grep(i, names(proj), value = TRUE, perl = TRUE)]]
+  names(climate) <- gsub(paste0("_", i), "", names(climate))
+  h <- names(predictors)[!names(predictors) %in% names(climate)]
+  c(predictors[[keep]][[h]], climate)
+})
+names(predictors_proj) <- scenarios
+    
+plarge <- predictors[[keep]]
+plarge_proj <- predictors_proj
+
+#png("proj.png", width = 10, height = 10, units = "in", res = 300)
+#r <- c(predictors$mean_annual_air_temperature, predictors_proj$mean_annual_air_temperature)
+#zlim <- global(r, "range", na.rm = TRUE) |> unlist() |> range()
+#plot(r, range = zlim)
+##plot(diff(r))
+#dev.off()
 
 #psmall <-rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/predictors_100_QC.tif") |>
 #  aggregate(5, na.rm = TRUE)
@@ -33,7 +64,7 @@ psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 p <- list(small = psmall, large = plarge)
 p_proj <- list(small = psmall, large = plarge_proj)
 
-rm(psmall, plarge, plarge_proj)
+rm(psmall, plarge, plarge_proj, predictors, predictors_proj)
 
 if(FALSE){
     url <- "/vsicurl/https://object-arbutus.cloud.computecanada.ca"
