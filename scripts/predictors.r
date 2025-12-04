@@ -8,9 +8,10 @@ options(width = 150)
 #predictors_proj <- rast("data/predictors_proj.tif")
 #names(predictors_proj)[c(20, 21, 24, 25, 26)] <- c("geomfootslope", "geomflat", "silt", "sand", "clay")
 
+### vars to pool
 forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduous", "deciduous", "temperate_deciduous", "taiga")
-
 bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe")
+openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 
 predictors <- rast("data/predictors_1000_NA.tif")
 predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
@@ -29,6 +30,7 @@ psmall <-rast("data/predictors_QC_500.tif")
 psmall <- aggregate(psmall, 2, na.rm = TRUE)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
+psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
 
 p <- list(small = psmall, large = plarge)
 p_proj <- list(small = psmall, large = plarge_proj)
