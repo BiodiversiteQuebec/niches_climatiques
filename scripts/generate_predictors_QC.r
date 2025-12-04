@@ -120,6 +120,12 @@ collections <- list(
     "Tourbière_ouverte_indifférenciée_7", "tourbiere_indifferenciee",
     "Tourbière_ouverte_minérotrophe_8", "tourbiere_minerotrophe",
     "Tourbière_ouverte_ombrotrophe_9", "tourbiere_ombrotrophe"
+  ),
+  "GRHQ" = c(
+    "lakes", "distance_to_lakes",
+    "rivers", "distance_to_rivers",
+    "streams", "distance_to_streams",
+    "stlawrence", "distance_to_stlawrence"
   )
  )
 
@@ -209,7 +215,7 @@ variables <- variables[-grep("tropical", variables$name), ]
 #variables <- variables[grep("depot", variables$name), ]
 #variables <- variables[1:5, ]
 
-if(FALSE){
+if(TRUE){
   desc <- variables
   names(desc) <- c("collection", "var", "variable", "url")
   desc <- desc[, c("collection", "variable")]
