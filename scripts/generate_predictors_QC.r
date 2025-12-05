@@ -447,7 +447,8 @@ system(cmd)
 
 #quit(save = "no")
 
-
+#s5cmd --numworkers 8 sync -acl public-read '/home/frousseu/data2/qc/*.tif' s3://bq-io/sdm_predictors/qc/
+#s5cmd --numworkers 8 sync -acl public-read '/home/frousseu/data2/qc/*.csv' s3://bq-io/sdm_predictors/qc/
 
 if(FALSE){
 
