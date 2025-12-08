@@ -14,7 +14,9 @@ bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerot
 openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 
 predictors <- rast("data/predictors_1000_NA.tif")
+#predictors <- predictors[[!duplicated(names(predictors))]] # not sure why there are some duplicates in there...
 predictors <- aggregate(predictors, 2, na.rm = TRUE) # 2
+predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
 
 # scenarios
 timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
@@ -31,14 +33,11 @@ ssp <- ssp[2]
 scenarios <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
       apply(1, function(i){paste(i, collapse = "_")})
 
-predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
-
-
 proj <- predictors
 predictors_proj <- lapply(scenarios, function(i){
   climate <- proj[[grep(i, names(proj), value = TRUE, perl = TRUE)]]
   names(climate) <- gsub(paste0("_", i), "", names(climate))
-  h <- names(predictors)[!names(predictors) %in% names(climate)]
+  h <- names(predictors)[!names(predictors) %in% c(names(climate), grep(paste(scenarios, collapse = "|"), names(predictors), value = TRUE))]
   c(predictors[[keep]][[h]], climate)
 })
 names(predictors_proj) <- scenarios
@@ -57,14 +56,14 @@ plarge_proj <- predictors_proj
 #  aggregate(5, na.rm = TRUE)
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
-psmall <-rast("data/predictors_QC_500.tif")
+psmall <-rast("data/predictors_500_QC.tif")
 psmall <- aggregate(psmall, 2, na.rm = TRUE)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
 
 p <- list(small = psmall, large = plarge)
-p_proj <- list(small = psmall, large = plarge_proj)
+p_proj <- list(small = psmall, large = plarge_proj[[2]]) # choose an intermdiate scenario here
 
 rm(psmall, plarge, plarge_proj, predictors, predictors_proj)
 
