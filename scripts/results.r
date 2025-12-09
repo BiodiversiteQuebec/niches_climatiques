@@ -1,5 +1,12 @@
 
 
+## Choose scenario to produce image from
+display_scenario <- scenarios[2]
+
+predictions_proj <- predictions_proj[[display_scenario]]
+ran_proj <- ran_proj[[display_scenario]]
+polran_proj <- polran_proj[[display_scenario]]
+
 #buffd <- 200*1000
 
 if(echelle == "large"){
@@ -7,7 +14,6 @@ if(echelle == "large"){
 } else {
   bregion <- st_intersection(qc, region)
 }
-
 
 plot_background <- function(){
   plot(st_geometry(bregion), border = NA, col = "grey90") 
@@ -41,6 +47,11 @@ topng <- function(x){
 
 #topng(file_range_proj)
 
+# add scenario to figures
+add_scenario <- function(x){
+  text(par("usr")[1], par("usr")[4], adj = c(-0.01, 1.01), label = paste("Scénario de projection: ", display_scenario), cex = 1.25, col = "grey70", xpd = TRUE)
+}
+
 
 plg <- list(size = c(0.33, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
 #plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
@@ -67,7 +78,6 @@ plot_foreground(observations = TRUE, echelle = echelle)
 legend("topright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = range_cols, bty = "n", xjust = 1, xpd = TRUE)
 dev.off()
 
-
 png(topng(file_sdm_proj), units = "in", height = 6, width = 7.5, res = 300)
 #par(mar = c(0, 0, 0, 8))
 #plot_background()
@@ -75,6 +85,7 @@ plot(crop(predictions_proj, bregion), axes = FALSE, add = FALSE, plg = plg, col 
 #plot(st_geometry(polran_proj), col = adjustcolor("black", 0.2), border = NA, add = TRUE)
 plot_foreground(observations = TRUE, echelle = echelle)
 #legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = range_cols, bty = "n", xjust = 1, xpd = TRUE)
+add_scenario()
 dev.off()
 
 
@@ -84,6 +95,7 @@ plot_background()
 plot(st_geometry(polran_proj), col = range_cols, border = NA, add = TRUE)
 plot_foreground(observations = FALSE, echelle = echelle)
 legend("topright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = range_cols, bty = "n", xjust = 1, xpd = TRUE)
+add_scenario()
 dev.off()
 
 
@@ -101,6 +113,7 @@ if(all(se == 0)){ # when no diff cause habitat only model
 plot(dif, axes = FALSE, add = FALSE, plg = plg, col = cols, mar = c(0, 0, 0, 0))
 plot_foreground(echelle = echelle)
 #legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = adjustcolor("black", 0.2), bty = "n", xjust = 1, xpd = TRUE)
+add_scenario()
 dev.off()
 
 
@@ -116,6 +129,7 @@ plot(st_geometry(plus), col = cols[2], border = NA, add = TRUE)
 plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
 plot_foreground(echelle = echelle)
 legend("topright", inset = c(0.1, 0.1), legend = c("Perte", "Gain", "Stable")[c(2, 3, 1)], pch = 15, pt.cex = 2, col = cols[c(2, 3, 1)], bty = "n", xjust = 1, xpd = TRUE)
+add_scenario()
 dev.off()
 
 
@@ -190,9 +204,6 @@ if(is.character(models[[i]])){
   dev.off()
 
 }
-
-
-
 
 
 

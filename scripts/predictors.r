@@ -63,7 +63,7 @@ psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
 
 p <- list(small = psmall, large = plarge)
-p_proj <- list(small = psmall, large = plarge_proj[[2]]) # choose an intermdiate scenario here
+p_proj <- list(small = psmall, large = plarge_proj)
 
 rm(psmall, plarge, plarge_proj, predictors, predictors_proj)
 
