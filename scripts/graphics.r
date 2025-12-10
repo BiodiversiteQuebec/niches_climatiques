@@ -9,9 +9,11 @@ add_range2 <- function(){
   }
 }
 
-#lf <- list.files("results/rasters", pattern = "_sdm_large", full = TRUE)
+#############################################################################
+### Compare actual models ###################################################
 lf <- gsub("_sdm_small.tif", "_sdm_large.tif", file_sdm)
 
+### QC wide
 lapply(lf, function(xx){
     fn <- gsub("_sdm_large.tif", "_sdm_compare.png", gsub("/rasters/", "/graphics/", xx))
     #print(paste("fn", fn))
@@ -39,6 +41,7 @@ lapply(lf, function(xx){
     #par(mfrow = c(1, 1), oma = c(0, 0, 0, 0), mar = c(5.1, 4.1, 4.1,2.1))
 })
 
+### Localized
 lapply(lf, function(i){
     png(gsub("_sdm_large.tif", "_sdm_compare_localized.png", gsub("/rasters/", "/graphics/", i)), units = "in", height = 8, width = 10, res = 300)
     r1 <- rast(i)
@@ -59,6 +62,33 @@ lapply(lf, function(i){
 graphics.off()
 #par(mfrow = c(1, 1), oma = c(0, 0, 0, 0), mar = c(5.1, 4.1, 4.1,2.1))
 
+
+#######################################################################
+### Compare projections models for climate only #######################
+lf <- gsub("_sdm_proj_small.tif", "_sdm_proj_large.tif", file_sdm_proj)
+
+display_model <- "climat"
+selected <- paste(display_model, scenarios)
+selected <- c(display_model, selected)
+
+lapply(lf, function(xx){
+    #print(paste("fn", fn))
+    r1 <- rast(xx)#[[1:6]]
+    r2 <- rast(gsub("_large", "_small", xx))
+    r0 <- rast(gsub("_proj", "", xx)) |> project(r2)
+    r3 <- project(r1, r2)
+    r4 <- c(r0, r3, r2)
+    r5 <- crop(r4, qc, mask = TRUE)
+    r5 <- r5[[names(r5) %in% selected]]
+    nc <- n2mfrow(nlyr(r5), asp = 3/1)
+    fn <- gsub("_sdm_proj_large.tif", "_sdm_proj_compare.png", gsub("/rasters/", "/graphics/", xx))
+    png(fn, units = "in", height = nc[1]*5, width = nc[2]*3.5, res = 300)
+    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = nc[2], fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = selected)
+    #plot_foreground(observation = FALSE)
+    dev.off()
+})
+
+graphics.off()
 
 if(FALSE){
 

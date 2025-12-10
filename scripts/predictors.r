@@ -31,7 +31,8 @@ model <- model[5]
 ssp <- ssp[2]
 
 scenarios <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
-      apply(1, function(i){paste(i, collapse = "_")})
+      apply(1, function(i){paste(i, collapse = "_")}) |>
+      sort()
 
 proj <- predictors
 predictors_proj <- lapply(scenarios, function(i){
@@ -62,10 +63,15 @@ psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
 
-p <- list(small = psmall, large = plarge)
-p_proj <- list(small = psmall, large = plarge_proj)
+# duplicate scenarios for psmall to facilitate iterations later (could want to produce scenarios also in QC predictors even though we only build climate models at large scale or adjust iterations later to avoid producing duplicates for models in which climate projections do not make sens since based only on habitat)
 
-rm(psmall, plarge, plarge_proj, predictors, predictors_proj)
+psmall_proj <- lapply(scenarios, function(j){psmall})
+names(psmall_proj) <- scenarios
+
+p <- list(small = psmall, large = plarge)
+p_proj <- list(small = psmall_proj, large = plarge_proj)
+
+rm(psmall, psmall_proj, plarge, plarge_proj, predictors, predictors_proj)
 
 if(FALSE){
     url <- "/vsicurl/https://object-arbutus.cloud.computecanada.ca"

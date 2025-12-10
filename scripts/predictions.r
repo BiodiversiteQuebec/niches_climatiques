@@ -45,10 +45,15 @@ if(is.character(models[[i]])){
   if(echelle == "large"){
     preds <- rast(file_sdm)[[names(models)[models[[i]]]]]
     predictions <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
-    preds <- rast(file_sdm_proj)[[names(models)[models[[i]]]]]
-    predictions_proj <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+    predictions_proj <- lapply(scenarios, function(s) {
+      preds <- rast(file_sdm_proj)[[paste(names(models)[models[[i]]], s)]]
+      predictions_proj <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+      names(predictions_proj) <- paste(names(models[i]), s)
+      predictions_proj
+    })
+    names(predictions_proj) <- scenarios
   } else {
-
+    #### need to iterate also here to fit with what is in large
     hab <- rast(file_sdm)[[names(models)[models[[i]]][2]]]
     clim <- rast(gsub("_small", "_large", file_sdm))[["climat"]] |>
               project(hab) |> 
