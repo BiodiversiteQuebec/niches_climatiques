@@ -68,9 +68,10 @@ graphics.off()
 lf <- gsub("_sdm_proj_small.tif", "_sdm_proj_large.tif", file_sdm_proj)
 
 display_model <- "climat (habitat)"
+display_name <- model_names[[display_model]]
 selected <- paste(display_model, scenarios)
 selected <- c(display_model, selected)
-display_names <- c(display_model, paste0(unname(model_names[display_model]), "\n", scenarios))
+display_names <- paste0(display_name, "\n", c("actuel", scenarios))
 
 lapply(lf, function(xx){
     #print(paste("fn", fn))
