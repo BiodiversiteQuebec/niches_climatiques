@@ -67,9 +67,10 @@ graphics.off()
 ### Compare projections models for climate only #######################
 lf <- gsub("_sdm_proj_small.tif", "_sdm_proj_large.tif", file_sdm_proj)
 
-display_model <- "climat"
+display_model <- "climat (habitat)"
 selected <- paste(display_model, scenarios)
 selected <- c(display_model, selected)
+display_names <- c(display_model, paste0(unname(model_names[display_model]), "\n", scenarios))
 
 lapply(lf, function(xx){
     #print(paste("fn", fn))
@@ -82,8 +83,8 @@ lapply(lf, function(xx){
     r5 <- r5[[names(r5) %in% selected]]
     nc <- n2mfrow(nlyr(r5), asp = 3/1)
     fn <- gsub("_sdm_proj_large.tif", "_sdm_proj_compare.png", gsub("/rasters/", "/graphics/", xx))
-    png(fn, units = "in", height = nc[1]*5, width = nc[2]*3.5, res = 300)
-    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = nc[2], fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = selected)
+    png(fn, units = "in", height = nc[1] * 5, width = nc[2] * 3.5, res = 300)
+    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 3, 0), nc = nc[2], fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = display_names)
     #plot_foreground(observation = FALSE)
     dev.off()
 })
