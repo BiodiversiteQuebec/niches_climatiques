@@ -41,7 +41,7 @@ if(is.character(models[[i]])){
     })
     names(predictions_proj) <- scenarios
  }
-} else { # this needs adapting for 2-scale model
+} else {
   if(echelle == "large"){
     preds <- rast(file_sdm)[[names(models)[models[[i]]]]]
     predictions <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
@@ -53,17 +53,21 @@ if(is.character(models[[i]])){
     })
     names(predictions_proj) <- scenarios
   } else {
-    #### need to iterate also here to fit with what is in large
     hab <- rast(file_sdm)[[names(models)[models[[i]]][2]]]
     clim <- rast(gsub("_small", "_large", file_sdm))[["climat"]] |>
               project(hab) |> 
               mask(hab)
     predictions <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
-    hab <- rast(file_sdm_proj)[[names(models)[models[[i]]][2]]]
-    clim <- rast(gsub("_small", "_large", file_sdm_proj))[["climat"]] |>
+    predictions_proj <- lapply(scenarios, function(s) {
+          hab <- rast(file_sdm_proj)[[paste(names(models)[models[[i]]][2], s)]]
+          clim <- rast(gsub("_small", "_large", file_sdm_proj))[[paste("climat", s)]] |>
               project(hab) |> 
               mask(hab)
-    predictions_proj <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
+          predictions_proj <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
+          names(predictions_proj) <- paste(names(models[i]), s)
+          predictions_proj
+    })
+    names(predictions_proj) <- scenarios
   }
 }
 
