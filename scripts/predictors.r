@@ -15,7 +15,7 @@ openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 
 predictors <- rast("data/predictors_1000_NA.tif")
 #predictors <- predictors[[!duplicated(names(predictors))]] # not sure why there are some duplicates in there...
-predictors <- aggregate(predictors, 2, na.rm = TRUE) # 2
+#predictors <- aggregate(predictors, 10, na.rm = TRUE) # 2
 predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
 
 # scenarios
@@ -58,7 +58,7 @@ plarge_proj <- predictors_proj
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_500_QC.tif")
-psmall <- aggregate(psmall, 2, na.rm = TRUE)
+#psmall <- aggregate(psmall, 10, na.rm = TRUE)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
@@ -72,6 +72,30 @@ p <- list(small = psmall, large = plarge)
 p_proj <- list(small = psmall_proj, large = plarge_proj)
 
 rm(psmall, psmall_proj, plarge, plarge_proj, predictors, predictors_proj)
+
+
+desc <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
+on <- names(p$small)[order(match(names(p$small), desc$variable), na.last = NA)]
+pp <- p$small[[on]]
+xxx <- ext(p$small)$xmin + 0.80 * abs((ext(p$small)$xmax - ext(p$small)$xmin))
+yyy <- ext(p$small)$ymin + 0.90 * abs((ext(p$small)$ymax - ext(p$small)$ymin))
+plg <- list(x = xxx, y = yyy, size = c(0.4, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
+png("predictors_small.png", width = 26, height = 36, units = "in", res = 200)
+plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = names(pp), plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
+dev.off()
+
+
+desc <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
+on <- names(p$large)[order(match(names(p$large), desc$variable), na.last = NA)]
+pp <- p$large[[on]]
+xxx <- ext(p$large)$xmin + 0.90 * abs((ext(p$large)$xmax - ext(p$large)$xmin))
+yyy <- ext(p$large)$ymin + 0.90 * abs((ext(p$large)$ymax - ext(p$large)$ymin))
+plg <- list(x = xxx, y = yyy, size = c(0.4, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
+png("predictors_large.png", width = 26, height = 26, units = "in", res = 200)
+plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = names(pp), plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
+dev.off()
+
+
 
 if(FALSE){
     url <- "/vsicurl/https://object-arbutus.cloud.computecanada.ca"
@@ -160,6 +184,25 @@ if(FALSE){
     p <- rast("/home/frousseu/data2/na/sand.tif")
 
     p <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/sand.tif")
+
+
+### produce below st-lawrence
+png("st.png", width = 5, height = 6, units = "in", res = 200)
+plot(p$small[["distance_to_stlawrence"]], mar = c(0, 0, 2, 0), maxcell = 1e6, plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
+plot(st_geometry(ps), add = TRUE)
+plot(st_geometry(south), border = "red", add = TRUE)
+dev.off()
+
+r <- p$small[["distance_to_stlawrence"]]
+r <- ifel(r > 0, 1, NA)
+ps <- as.polygons(r, aggregate = TRUE) |>
+  st_as_sf() |>
+  ms_explode() 
+
+south <- ps[rev(order(st_area(ps)))[2], ]  
+
+
+
 
 
 }
