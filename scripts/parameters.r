@@ -1,5 +1,9 @@
 
 
+# This script is currently not used and replaced by the job-defining scripts
+
+stop("Parameters now given in job script, not in parameters.r")
+
 species <- c("Pseudacris triseriata", "Hemidactylium scutatum", "Gyrinophilus porphyriticus", "Desmognathus ochrophaeus", "Emydoidea blandingii", "Glyptemys insculpta", "Nerodia sipedon", "Lampropeltis triangulum", "Aquila chrysaetos", "Catharus bicknelli", "Setophaga cerulea", "Coturnicops noveboracensis", "Ixobrychus exilis", "Glaucomys volans")
 
 
@@ -12,11 +16,11 @@ species_vars <- list(
 `Glyptemys insculpta` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "sand", "distance_to_streams", "distance_to_rivers"),
 `Nerodia sipedon` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "distance_to_openwater"),
 `Lampropeltis triangulum` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde"), 
-`Aquila chrysaetos` = c("elevation", "ruggedness"), 
+`Aquila chrysaetos` = c("elevation", "ruggedness", "roche"), 
 `Catharus bicknelli` = c("elevation", "ruggedness"), 
 `Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
-`Coturnicops noveboracensis` = c("flat", "marais", "wetland", "prairie_humide"), 
-`Ixobrychus exilis` = c("geomflat", "wetland", "marais", "eau_peu_profonde"), 
+`Coturnicops noveboracensis` = c("geomflat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique"), 
+`Ixobrychus exilis` = c("geomflat", "wetland", "marais", "eau_peu_profonde", "glaciomarin", "glaciolacustre", "alluvion"), 
 `Glaucomys volans` = c("forest")
 )
 

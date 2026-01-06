@@ -12,7 +12,8 @@ if(is.character(models[[i]])){
     if(grepl("climat|gam", names(models)[i])){
         vars <- c(vars, climate_vars)
     }
-
+    
+    print(paste("Variables used:", paste(vars, collapse = " ")))
 
     if(!grepl("gam", names(models)[i])){
 
@@ -24,7 +25,7 @@ if(is.character(models[[i]])){
 
 
         m <- MaxEnt(p[[echelle]][[vars]], 
-                    p = vect(obs[[echelle]]), a = vect(bg[[echelle]]),
+                    p = vect(obs[[echelle]]), a = vect(bg[[echelle]]),#[sample(1:nrow(bg[[echelle]]), nrow(obs[[echelle]])),]),
                     removeDuplicates = TRUE,
                     silent = FALSE,
                     args = arg
@@ -65,13 +66,13 @@ if(is.character(models[[i]])){
 
             dat <- dat[dat$eb > 0, ]
 
-            f <- paste("obs ~", paste("s(", vars, ", k = 30, bs = \"cv\", m = 2)")) |>
+            f <- paste("obs ~", paste("s(", vars, ", k = 20, bs = \"cv\", m = 2)")) |>
             as.formula()
 
             #optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
-            #optimizer <- c("efs", "bfgs")
-            #m <- scam(f, optimizer = optimizer, data = dat, family = poisson)
-            m <- scam(f, data = dat, family = binomial)
+            optimizer <- c("efs", "bfgs")
+            m <- scam(f, optimizer = optimizer, data = dat, family = binomial)
+            #m <- scam(f, data = dat, family = binomial)
 
         }
         

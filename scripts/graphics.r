@@ -51,7 +51,7 @@ lapply(lf, function(i){
     #par(mar = c(0, 0, 0, 8))
     #plot_background()
     r <- r[[names(model_names)]]
-    plot(crop(crop(r, st_buffer(obs$small, 100000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small");add_range2()}, main = unlist(model_names))
+    plot(crop(crop(r, st_buffer(obs$small, 150000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small");add_range2()}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
     #graphics.off()
@@ -92,6 +92,8 @@ lapply(lf, function(xx){
 
 graphics.off()
 
+
+
 if(FALSE){
 
   sp <- gsub(" ", "_", species[6])
@@ -113,6 +115,26 @@ if(FALSE){
   #plot(st_geometry(lg))
   plot(crop(r[[1]], lg)) 
   plot(st_geometry(lg), add = TRUE, col = adjustcolor("black", 0.1), border = NA)
+
+
+
+  ### test cutoff threshold 
+  i <- 6
+  preds1 <- rast(file_range)[[names(models)[models[[i]]]]]
+  preds2 <- rast(file_sdm)[[names(models)[models[[i]]]]]
+  preds <- c(preds1[[1]], preds2[[2]])
+  predictions <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+
+  png("test.png", width = 6, height = 6, units = "in", res = 300)
+  plot(predictions)
+  plot(st_geometry(qc), add = TRUE)
+  dev.off()
+  
+
+  st_layers(file.path(paste(sp, "_observations.gpkg")))
+
+
+
 
 }
 

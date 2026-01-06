@@ -83,8 +83,35 @@ dev.off()
 
 
 
+
+
+
+
+
 if(FALSE){
 
+  # var filtering
+  filter_vars <- function(vars, data, th = 5){
+      v <- vars
+      vifs <- car::vif(lm(y ~ ., data = cbind(y = 1, data[ , v])))
+      while(any(vifs >= th)){
+        rem <- names(vifs)[which.max(vifs)]
+        sprintf("Removing %s", rem)
+        print(rem)
+        v <- v[!v %in% rem]
+        vifs <- car::vif(lm(y ~ ., data = cbind(y = 1, data[ , v])))
+      }
+      v
+  }
+
+  rrr <- aggregate(p$small[[vars]], 5, na.rm = TRUE)
+  chosen <- names(rrr)
+  v <- values(rrr) |> as.data.frame()
+  vars_pool <- filter_vars(chosen, v)
+  car::vif(lm(y ~ ., data = cbind(y = 1, v[ , vars])))
+
+
+  
   library(vegan)
   r <- p$small
   climate <- grep("temperature|precipitation|isothermality", names(r), value = TRUE)
@@ -92,7 +119,6 @@ if(FALSE){
   #screeplot(rda(values(rr), scale = TRUE))
   pca <- rda(values(rr), scale = TRUE)
   barplot(cumsum(eigenvals(pca)/sum(eigenvals(pca))))
-  
   r <- p$small
   rr <- aggregate(r, 10, na.rm = TRUE)
   chosen <- climate
@@ -102,7 +128,6 @@ if(FALSE){
   chosen <- setdiff(use_small, c("lacustre", "human_modification", "organique"))
   v <- values(rr) |> as.data.frame()
   cor(v[, chosen], use = "complete.obs")
-
   car::vif(lm(y ~ ., data = cbind(y = 1, v[, chosen])))
 
 }

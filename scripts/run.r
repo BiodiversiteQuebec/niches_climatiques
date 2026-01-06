@@ -1,9 +1,25 @@
 
+
+t_init <- Sys.time()
+
+library(car)
+library(dismo)
 library(dplyr)
 library(duckdb)
 library(duckdbfs)
 
+on.exit({
+  if(exists("t_end", envir = .GlobalEnv)){
+    cat(paste("Species job completed -", sp, "- array id", array_id, "-", difftime(Sys.time(), t_init, units = "mins")), "\n")
+  } else {
+    cat(paste("Species job aborted -", sp, "- model id", i), "\n")
+  }
+  flush.console()
+}, add = TRUE
+)
+
 array_id <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
+#array_id <- 1
 
 args <- commandArgs(trailingOnly=TRUE)
 #args <- "niches_climatiques.r"
@@ -18,20 +34,25 @@ source("scripts/predictors.r")
 #if(TRUE){
 
 #for(sp in species){#[-c(9,10,11,13)]){
-    #sp <- species[1]    
-    sp <- species[array_id]
-    #sp <- species
-    print(sp)
-    source("scripts/data.r")
-    source("scripts/variables.r")
-    for(i in seq_along(models)){
-      #i <- 1
-      print(names(models)[i])
-      source("scripts/models.r")
-      source("scripts/predictions.r")
-      source("scripts/results.r")
-    }
-    source("scripts/graphics.r")
+#sp <- species[1]    
+sp <- species[array_id]
+#sp <- species
+print(sp)
+source("scripts/data.r")
+source("scripts/variables.r")
+for(i in seq_along(models)){
+  #i <- 1
+  print(names(models)[i])
+  source("scripts/models.r")
+  source("scripts/predictions.r")
+  source("scripts/results.r")
+}
+source("scripts/graphics.r")
+
+t_end <- Sys.time()
+
+difftime(Sys.time(), t_init, units = "mins")
+
 #}
 
 #}
