@@ -14,7 +14,7 @@ if(i %in% c(1, 4)){
   delete_layer <- TRUE
 }
 
-
+(sp<-species[5])
 file_sdm <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_", echelle, ".tif"))
 file_sdm_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_proj_", echelle, ".tif"))
 file_range <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif"))
@@ -43,24 +43,27 @@ if(is.character(models[[i]])){
  }
 } else {
   if(echelle == "large"){
-    preds <- rast(file_sdm)[[names(models)[models[[i]]]]]
-    predictions <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+    hab <- rast(file_sdm)[[names(models)[models[[i]]][2]]]
+    clim <- rast(file_range)[[names(models)[models[[i]]][1]]] # cut habitat with dichotomized climate distributions
+    predictions <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
+    #png("test.png", width = 12, height = 6, units = "in", res = 300); plot(crop(c(predictions, predictions2), qc, mask = TRUE)); dev.off()
     predictions_proj <- lapply(scenarios, function(s) {
-      preds <- rast(file_sdm_proj)[[paste(names(models)[models[[i]]], s)]]
-      predictions_proj <- preds[[2]] * (preds[[1]] / global(preds[[1]], "max", na.rm = TRUE)[1, 1])
+      hab <- rast(file_sdm_proj)[[paste(names(models)[models[[i]]][2], s)]]
+      clim <- rast(file_range_proj)[[paste(names(models)[models[[i]]][1], s)]]
+      predictions_proj <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
       names(predictions_proj) <- paste(names(models[i]), s)
       predictions_proj
     })
     names(predictions_proj) <- scenarios
   } else {
     hab <- rast(file_sdm)[[names(models)[models[[i]]][2]]]
-    clim <- rast(gsub("_small", "_large", file_sdm))[["climat"]] |>
+    clim <- rast(gsub("_small", "_large", file_range))[["climat"]] |>
               project(hab) |> 
               mask(hab)
     predictions <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
     predictions_proj <- lapply(scenarios, function(s) {
           hab <- rast(file_sdm_proj)[[paste(names(models)[models[[i]]][2], s)]]
-          clim <- rast(gsub("_small", "_large", file_sdm_proj))[[paste("climat", s)]] |>
+          clim <- rast(gsub("_small", "_large", file_range_proj))[[paste("climat", s)]] |>
               project(hab) |> 
               mask(hab)
           predictions_proj <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
@@ -105,6 +108,29 @@ e2 <- e2[rev(order(e2[,2])), ]
 val2 <- e2[round(threshold2 * nrow(e2)), 2]
 val <- min(c(val1, val2))
 
+
+### threshold sdm from sens_spec in Quebec
+zone <- crop(predictions, qc, mask = TRUE) # here restrict to Quebec
+predvalues <- values(zone)[, 1]
+
+presence <- rasterize(obs[[echelle]], zone, fun = "count", background = 0)
+presence <- ifel(presence > 0, 1, 0) |> mask(zone) |> values() |> _[,1]
+usen <- sum(presence, na.rm = TRUE)
+pp <- predvalues[sample(which(presence == 1), usen)]
+
+absence <- rasterize(bg[[echelle]], zone, fun = "count", background = 0)
+absence <- ifel(absence == 0, 1, 0) |> mask(zone) |> values() |> _[,1]
+aa <- predvalues[sample(which(absence == 1 & presence == 0), usen)]
+
+e <- evaluate2(p = pp, a = aa)
+val <- dismo::threshold(e)[['spec_sens']]
+
+#ran2 <- ifel(predictions > threshold(e)[['spec_sens']], 1, 0)
+
+
+
+
+
 ran <- ifel(predictions > val, 1, 0)
 names(ran) <- names(models[i])
 writeRaster(ran, file_range, overwrite = overwrite, gdal = gdal)
@@ -146,6 +172,61 @@ polran_proj <- lapply(pr_proj, "[[", 2)
 names(polran_proj) <- scenarios
 
 
+
+
+if(FALSE){
+
+  ### PA threshold
+
+  #usen <- 200
+
+
+  zone <- crop(predictions, qc, mask = TRUE)
+  predvalues <- values(zone)[, 1]
+
+  presence <- rasterize(obs[[echelle]], zone, fun = "count", background = 0)
+  presence <- ifel(presence > 0, 1, 0) |> mask(zone) |> values() |> _[,1]
+  usen <- sum(presence, na.rm = TRUE)
+  pp <- predvalues[sample(which(presence == 1), usen)]
+
+  absence <- rasterize(bg[[echelle]], zone, fun = "count", background = 0)
+  absence <- ifel(absence == 0, 1, 0) |> mask(zone) |> values() |> _[,1]
+  aa <- predvalues[sample(which(absence == 1 & presence == 0), usen)]
+
+  e <- evaluate2(p = pp, a = aa)
+  threshold(e)
+
+  ran2 <- ifel(predictions > threshold(e)[['spec_sens']], 1, 0)
+
+  png("test.png",width=8,height=4,units="in",res=200)
+  par(mfrow=c(1,2),mar=c(0,0,0,0))
+  plot(crop(ran,qc))
+  plot(st_geometry(qc),add=TRUE)
+  plot(st_geometry(obs[[echelle]]), bg = adjustcolor("orange", 0.70), col = "black", pch = 21, cex = 0.4, lwd= 0.10, add = TRUE)
+  plot(crop(ran2,qc))
+  plot(st_geometry(qc),add=TRUE)
+  plot(st_geometry(obs[[echelle]]), bg = adjustcolor("orange", 0.70), col = "black", pch = 21, cex = 0.4, lwd= 0.10, add = TRUE)
+  dev.off()
+
+
+
+
+  png("test.png",width=4,height=4,units="in",res=200);plot(mask(presence, predictions));dev.off()
+  png("test.png",width=4,height=4,units="in",res=200);plot(e, 'ROC');dev.off()
+  png("test.png",width=4,height=4,units="in",res=200);plot(e, 'TPR');dev.off()
+
+
+  e <- evaluate2(p = plogis(rnorm(100, -20, 1)), a = plogis(rnorm(100, -30, 1)))
+  threshold(e)
+
+
+
+
+
+
+
+
+}
 
 
 
