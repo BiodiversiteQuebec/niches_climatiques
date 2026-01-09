@@ -19,7 +19,7 @@ on.exit({
 )
 
 array_id <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
-#array_id <- 1
+#array_id <- 4
 
 args <- commandArgs(trailingOnly=TRUE)
 #args <- "niches_climatiques.r"
@@ -41,7 +41,7 @@ print(sp)
 source("scripts/data.r")
 source("scripts/variables.r")
 for(i in seq_along(models)){
-  #i <- 1
+  #i <- 4
   print(names(models)[i])
   source("scripts/models.r")
   source("scripts/predictions.r")

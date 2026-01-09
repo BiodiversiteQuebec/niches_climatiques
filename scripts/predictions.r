@@ -14,7 +14,7 @@ if(i %in% c(1, 4)){
   delete_layer <- TRUE
 }
 
-(sp<-species[5])
+#(sp<-species[5])
 file_sdm <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_", echelle, ".tif"))
 file_sdm_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_proj_", echelle, ".tif"))
 file_range <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif"))

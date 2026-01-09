@@ -266,10 +266,8 @@ dev.off()
 
 
 obs_file <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_observations.gpkg"))
-
-#st_write(obs_all, obs_file, layer = "NA", delete_dsn = TRUE)
-
-#st_write(obs_all[qc, ], obs_file, layer = "QC", append = TRUE)
+st_write(obs$large, obs_file, layer = "NA", delete_dsn = TRUE)
+st_write(obs$small, obs_file, layer = "QC", append = TRUE)
 
 #st_write(obs$large, obs_file, layer = "NAused", append = TRUE)
 

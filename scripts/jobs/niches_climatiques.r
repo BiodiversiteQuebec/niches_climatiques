@@ -6,8 +6,8 @@ species <- c("Pseudacris triseriata", "Hemidactylium scutatum", "Gyrinophilus po
 species_vars <- list(
 `Pseudacris triseriata` = c("wetland", "marais", "marecage", "geomflat"), 
 `Hemidactylium scutatum` = c("tourbiere", "marais", "organique"), 
-`Gyrinophilus porphyriticus` = c("elevation", "ruggedness", "forest", "geomflat", "twi", "distance_to_streams"), 
-`Desmognathus ochrophaeus` = c("elevation", "ruggedness", "forest", "geomflat", "twi", "distance_to_streams"), 
+`Gyrinophilus porphyriticus` = c("elevation", "ruggedness", "forest", "geomflat", "twi", "distance_to_streams", "southstlawrence"), 
+`Desmognathus ochrophaeus` = c("elevation", "ruggedness", "forest", "geomflat", "twi", "distance_to_streams", "southstlawrence"), 
 `Emydoidea blandingii` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "distance_to_streams", "distance_to_rivers"),
 `Glyptemys insculpta` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "sand", "distance_to_streams", "distance_to_rivers"),
 `Nerodia sipedon` = c("wetland", "marais", "marecage", "geomflat", "water", "eau_peu_profonde", "distance_to_openwater"),

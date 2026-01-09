@@ -137,6 +137,8 @@ dev.off()
 if(is.character(models[[i]])){
   e1 <- extract(p[[echelle]][[vars]], obs[[echelle]])
   e2 <- extract(p[[echelle]][[vars]], bg[[echelle]])
+  #e1 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), obs[[echelle]])
+  #e2 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), bg[[echelle]])
   reg <- st_buffer(st_convex_hull(obs[[echelle]]),500000)
   g <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), mean, na.rm = TRUE)
   gr <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), range, na.rm = TRUE)
@@ -146,7 +148,8 @@ if(is.character(models[[i]])){
       brks <- 500
       newdata <- t(g) |> as.data.frame()
       newdata <- newdata[rep(1, brks), , drop = FALSE]
-      v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
+      #v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
+      v <- seq(gr[j, 1], quantile(e2[[rownames(g)[j]]], probs = c(0.99), na.rm = TRUE), length.out = brks)
       newdata[ ,j] <- v
       if(!grepl("gam", names(models)[i])){
         pred <- predict(m, newdata, args = c("doClamp=FALSE"))
@@ -159,7 +162,8 @@ if(is.character(models[[i]])){
       brks <- 500
       newdata <- t(g) |> as.data.frame()
       newdata <- newdata[rep(1, brks), , drop = FALSE]
-      v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
+      #v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
+      v <- seq(gr[j, 1], quantile(e2[[rownames(g)[j]]], probs = c(0.99), na.rm = TRUE), length.out = brks)
       newdata[ ,j] <- v
       par(mar = c(2, 2, 0.5, 2))
       if(!grepl("gam", names(models)[i])){
@@ -167,7 +171,9 @@ if(is.character(models[[i]])){
       } else {
         pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
       }
-      ylim <- ran # pred
+      ylim <- ran # common scale
+      #ylim <- pred
+      #xlim <- if(rownames(g)[j] == "distance_to_streams"){c(0, 1500)} else {range(v, na.rm = TRUE)}
       plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 3, bty = "n")
       axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
       axis(2, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0)
@@ -175,10 +181,13 @@ if(is.character(models[[i]])){
       box(col = "grey80", lwd = 0.5)
       mtext(side = 1, line = 0.5, outer = FALSE, text = rownames(g)[j], cex = 0.5)
       mtext(side = 2, line = 0.75, outer = TRUE, text = "Relative occurrence rate (ROC)", cex = 0.5)
-      hbrks <- range(c(e1[ , rownames(g)[j]], e2[ , rownames(g)[j]]), na.rm = TRUE) 
+      #hbrks <- range(c(e1[ , rownames(g)[j]], e2[ , rownames(g)[j]]), na.rm = TRUE) 
+      hbrks <- range(v, na.rm = TRUE)
       hbrks <- seq(min(hbrks), max(hbrks), length.out = 30)
-      h1 <- hist(e1[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
-      h2 <- hist(e2[ , rownames(g)[j]], breaks = hbrks, plot = FALSE)
+      ee1 <- e1[ , rownames(g)[j]]
+      ee2 <- e2[ , rownames(g)[j]]
+      h1 <- hist(ee1[ee1 >= min(hbrks) & ee1 <= max(hbrks)], breaks = hbrks, plot = FALSE)
+      h2 <- hist(ee2[ee2 >= min(hbrks) & ee2 <= max(hbrks)], breaks = hbrks, plot = FALSE)
       h <- h1
       #h$counts <- scales::rescale(h1$counts + h2$counts, to = c(0, par("usr")[4] * 0.75)) # not sure why I was adding h1
       h$counts <- scales::rescale(h2$counts, to = c(0, par("usr")[4] * 0.75))
@@ -189,7 +198,10 @@ if(is.character(models[[i]])){
       }))
       #lines(h$mids, h$counts, col = adjustcolor("black", 0.25))
 
-      polygon(c(h$mids, rev(h$mids)), c(h$counts, rep(0, length(h$mids))), col = adjustcolor("black", 0.20), border = NA)
+      invisible(lapply(seq_along(h$mids), function(j){
+        rect(xleft = h$breaks[j], ybottom = 0, xright = h$breaks[j + 1], ytop = h$counts[j], col = adjustcolor("black", 0.20), border = NA)    
+      }))
+      #polygon(c(h$mids, rev(h$mids)), c(h$counts, rep(0, length(h$mids))), col = adjustcolor("black", 0.20), border = NA)
       
       par(new = TRUE)
       plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(pred, na.rm = TRUE)), lwd = 1, bty = "n", col = adjustcolor("black", 0.3))

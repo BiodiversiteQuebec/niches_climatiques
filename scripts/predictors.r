@@ -16,6 +16,15 @@ openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 predictors <- rast("data/predictors_1000_NA.tif")
 #predictors <- predictors[[!duplicated(names(predictors))]] # not sure why there are some duplicates in there...
 #predictors <- aggregate(predictors, 10, na.rm = TRUE) # 2
+
+fsl <- st_read("data/south_stlawrence.gpkg", layer = "south_stlawrence") |> st_transform(epsg)
+r <- ifel(is.na(predictors[[1]]), NA, 0)
+
+#png("st.png", width = 10, height = 10, units = "in", res = 300)
+#plot(mask(mask(r, fsl, updatevalue = 1, inverse = TRUE), predictors[[1]], inverse = FALSE))
+#dev.off()
+
+predictors$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), predictors[[1]], inverse = FALSE)
 predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
 
 # scenarios
@@ -59,6 +68,16 @@ plarge_proj <- predictors_proj
 
 psmall <-rast("data/predictors_500_QC.tif")
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
+
+
+r <- ifel(is.na(psmall[[1]]), NA, 0)
+
+#png("st.png", width = 10, height = 10, units = "in", res = 300)
+#plot(mask(mask(r, fsl, updatevalue = 1, inverse = TRUE), predictors[[1]], inverse = FALSE))
+#dev.off()
+
+psmall$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), psmall[[1]], inverse = FALSE)
+
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
@@ -187,11 +206,7 @@ if(FALSE){
 
 
 ### produce below st-lawrence
-png("st.png", width = 5, height = 6, units = "in", res = 200)
-plot(p$small[["distance_to_stlawrence"]], mar = c(0, 0, 2, 0), maxcell = 1e6, plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
-plot(st_geometry(ps), add = TRUE)
-plot(st_geometry(south), border = "red", add = TRUE)
-dev.off()
+
 
 r <- p$small[["distance_to_stlawrence"]]
 r <- ifel(r > 0, 1, NA)
@@ -199,9 +214,13 @@ ps <- as.polygons(r, aggregate = TRUE) |>
   st_as_sf() |>
   ms_explode() 
 
-south <- ps[rev(order(st_area(ps)))[2], ]  
+south <- ps[rev(order(st_area(ps)))[1:2], ]  
 
-
+png("st.png", width = 5, height = 6, units = "in", res = 200)
+plot(p$small[["distance_to_stlawrence"]], mar = c(0, 0, 2, 0), maxcell = 1e6, plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
+plot(st_geometry(ps), add = TRUE)
+plot(st_geometry(south), border = "red", add = TRUE)
+dev.off()
 
 
 
