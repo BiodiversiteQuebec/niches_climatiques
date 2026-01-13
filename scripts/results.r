@@ -136,7 +136,7 @@ dev.off()
 
 if(is.character(models[[i]])){
   e1 <- extract(p[[echelle]][[vars]], obs[[echelle]])
-  e2 <- extract(p[[echelle]][[vars]], bg[[echelle]])
+  e2 <- terra::extract(p[[echelle]][[vars]], bg[[echelle]])
   #e1 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), obs[[echelle]])
   #e2 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), bg[[echelle]])
   reg <- st_buffer(st_convex_hull(obs[[echelle]]),500000)
@@ -174,7 +174,7 @@ if(is.character(models[[i]])){
       ylim <- ran # common scale
       #ylim <- pred
       #xlim <- if(rownames(g)[j] == "distance_to_streams"){c(0, 1500)} else {range(v, na.rm = TRUE)}
-      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 3, bty = "n")
+      plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 1.5, bty = "n")
       axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
       axis(2, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0)
       grid(lwd = 0.5)
@@ -209,7 +209,7 @@ if(is.character(models[[i]])){
       axis(4, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0, col.axis = adjustcolor("black", 0.5))
 
       if(j == 1){
-        legend("topleft", inset = c(0.025, 0), legend = c("Predictions", "Observations / (Observations + Background)", "Observations + Background"), cex = 0.75, bty = "n", lwd = c(3, NA, NA), pch = c(NA, 15, 15), col = c("black", adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, 1.5, 1.5))
+        legend("topleft", inset = c(0.025, 0), legend = c("Prédictions (échelle commune, gauche)", "Prédictions (échelle individuelle, droite)", "Observations / (Observations + Background)", "Observations + Background"), cex = 0.5, bty = "n", lwd = c(1.5, 1, NA, NA), pch = c(NA, NA, 15, 15), col = c("black", adjustcolor("black", 0.3), adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, NA, 1, 1))
       }
 
   }))
