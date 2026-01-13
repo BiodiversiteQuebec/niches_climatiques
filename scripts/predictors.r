@@ -13,7 +13,10 @@ forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduou
 bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe")
 openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 
-predictors <- rast("data/predictors_1000_NA.tif")
+predictors <- rast("data/predictors_500_NA.tif")
+ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
+oo <- scoff(predictors$mean_annual_air_temperature )[2]
+predictors$mean_annual_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$mean_annual_air_temperature) * ss) + oo
 #predictors <- predictors[[!duplicated(names(predictors))]] # not sure why there are some duplicates in there...
 #predictors <- aggregate(predictors, 10, na.rm = TRUE) # 2
 
@@ -66,7 +69,7 @@ plarge_proj <- predictors_proj
 #  aggregate(5, na.rm = TRUE)
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
-psmall <-rast("data/predictors_500_QC.tif")
+psmall <-rast("data/predictors_200_QC.tif")
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
 
 
