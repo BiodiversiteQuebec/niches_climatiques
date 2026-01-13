@@ -2,13 +2,13 @@
 # create tif/gpkg files for the first model, else append
 if(i %in% c(1, 4)){ 
   overwrite <- TRUE
-  gdal <- ""
+  gdal <- c("BIGTIFF=YES")
   append <- FALSE
   delete_dsn <- TRUE
   delete_layer <- TRUE
 } else {
   overwrite <- FALSE
-  gdal <- "APPEND_SUBDATASET=YES"
+  gdal <- c("APPEND_SUBDATASET=YES", "BIGTIFF=YES")
   append <- TRUE
   delete_dsn <- FALSE
   delete_layer <- TRUE
@@ -87,7 +87,7 @@ predictions_proj <- lapply(seq_along(predictions_proj), function(j){
     g <- gdal
   } else {
     o <- FALSE
-    g <- "APPEND_SUBDATASET=YES"
+    g <- c("APPEND_SUBDATASET=YES", "BIGTIFF=YES")
   }
   writeRaster(predictions_proj[[j]], file_sdm_proj, overwrite = o, gdal = g)
   predictions_proj[[j]]
@@ -152,7 +152,7 @@ pr_proj <- lapply(seq_along(predictions_proj), function(j){
     dl <- delete_layer
   } else {
     o <- FALSE
-    g <- "APPEND_SUBDATASET=YES"
+    g <- c("APPEND_SUBDATASET=YES", "BIGTIFF=YES")
     a <- TRUE  
     dd <- FALSE
     dl <- TRUE
