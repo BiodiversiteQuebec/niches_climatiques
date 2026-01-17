@@ -111,8 +111,9 @@ if(sp %in% aires$species){
 source("scripts/filter.r")
 
 th_large <- res(p$large)[1] # 1000 # minimal precision # 20000
+th_climate <- max(c(30000, th_large)) # include obscured observations from iNat for climate models
 
-cols <- adjustcolor(c("forestgreen", "gold2", "tomato2"), 0.85)
+cols <- adjustcolor(c("forestgreen", "gold2", "tomato2", "black"), 0.85)
 ring <- adjustcolor("black", 0.5)
 
 
@@ -129,12 +130,14 @@ plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 obsna <- st_geometry(obs[is.na(obs$coordinate_uncertainty), ])
-obsoverth <- st_geometry(obs[which(obs$coordinate_uncertainty >= th_large), ])
+obsoverclimate <- st_geometry(obs[which(obs$coordinate_uncertainty >= th_climate), ])
+obsoverth <- st_geometry(obs[which(obs$coordinate_uncertainty >= th_large & obs$coordinate_uncertainty <= th_climate), ])
 obsunderth <- st_geometry(obs[which(obs$coordinate_uncertainty < th_large), ])
-points(obsoverth, pch = 21, lwd = 0.25, col = ring, bg = cols[3])
-points(obsna, pch = 21, lwd = 0.25, col = ring,, bg = cols[2])
+points(obsoverclimate, pch = 21, lwd = 0.25, col = ring, bg = cols[4])
+points(obsoverth, pch = 21, lwd = 0.25, col = ring, bg = cols[2])
+points(obsna, pch = 21, lwd = 0.25, col = ring,, bg = cols[3])
 points(obsunderth, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
-legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 3, 2)], col = ring, legend = c(paste("<", th_large, "/ n =", length(obsunderth)), paste("\u2265", th_large, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna))), cex = 1.25, bty = "n", title = "Précision (en m)")
+legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 2, 3, 4)], col = ring, legend = c(paste("<", th_large, "/ n =", length(obsunderth)), paste("\u2265", th_large, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna)), paste("\u2265", th_climate, "/ n =", length(obsoverclimate))), cex = 1.25, bty = "n", title = "Précision (en m)")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
@@ -165,12 +168,13 @@ dev.off()
 
 
 obs_all <- obs
+bg_all <- background
 
 obs <- obs[region, ]
 background <- background[region, ]
 
-obs <- obs[which(obs$coordinate_uncertainty <= th_large | is.na(obs$coordinate_uncertainty)), ]
-background <- background[which(background$coordinate_uncertainty <= th_large | is.na(background$coordinate_uncertainty)), ]
+obs <- obs[which(obs$coordinate_uncertainty <= th_climate | is.na(obs$coordinate_uncertainty)), ]
+background <- background[which(background$coordinate_uncertainty <= th_climate | is.na(background$coordinate_uncertainty)), ]
 
 if(species_target_groups[[sp]] == "birds"){
   obs <- obs[obs$source %in% "ebird", ]
@@ -195,6 +199,7 @@ buff <- st_buffer(obs, 250000) |> st_union()
 nbuff <- 1000000
 x <- st_difference(region, buff) |> st_sample(size = nbuff)# |> st_as_sf()
 x <- st_as_sf(cbind(st_drop_geometry(bg[rep(1, nbuff), ]), geometry = x), crs = epsg)
+x$coordinate_uncertainty <- 0 
 bg <- rbind(bg, x)
 
 th_small <- res(p$small)[1] # th_large
@@ -203,12 +208,15 @@ obs_small <- obs_small[which(obs_small$coordinate_uncertainty <= th_small | is.n
 bg_small <- bg[qc, ]
 bg_small <- bg_small[which(bg_small$coordinate_uncertainty <= th_small | is.na(bg_small$coordinate_uncertainty)), ]
 
-print(sprintf("Large: %s observations, %s background", nrow(obs), nrow(bg)))
+obs_large <- obs[which(obs$coordinate_uncertainty <= th_large | is.na(obs$coordinate_uncertainty)), ]
+bg_large <- bg[which(bg$coordinate_uncertainty <= th_large | is.na(bg$coordinate_uncertainty)), ]
+
+print(sprintf("Climate: %s observations, %s background", nrow(obs), nrow(bg)))
+print(sprintf("Large: %s observations, %s background", nrow(obs_large), nrow(bg_large)))
 print(sprintf("Small: %s observations, %s background", nrow(obs_small), nrow(bg_small)))
 
-obs <- list(large = obs, small = obs_small)
-bg <- list(large = bg, small = bg_small)
-
+obs <- list(climate = list(large = obs), habitat = list(large = obs_large, small = obs_small))
+bg <- list(climate = list(large = bg), habitat = list(large = bg_large, small = bg_small))
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_na_used.png")), width = 8, height = 8, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
@@ -217,8 +225,9 @@ plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 points(obs_all, pch = 21, lwd = 0.25, col = ring, bg = cols[3])
-points(obs$large, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
-legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all), ")"), paste0("used ", "(n = ", nrow(obs$large), ")")), cex = 1.25, bty = "n", title = "Occurrences utilisées ?")
+points(obs[["climate"]]$large, pch = 21, lwd = 0.25, col = ring, bg = cols[2])
+points(obs[["habitat"]]$large, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
+legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 2, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all), ")"), paste0("climate ", "(n = ", nrow(obs[["climate"]]$large), ")"), paste0("habitat ", "(n = ", nrow(obs[["habitat"]]$large), ")")), cex = 1.25, bty = "n", title = "Occurrences utilisées ?")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
@@ -231,7 +240,7 @@ add_range()
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
 plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5)
 points(obs_all[qc, ], pch = 21, lwd = 0.25, col = ring, bg = cols[3])
-points(obs$small, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
+points(obs$habitat$small, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
 legend("topright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all[qc, ]), ")"), paste0("used ", "(n = ", nrow(obs$small), ")")), cex = 0.75, bty = "n", title = "Occurrences utilisées ?")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
@@ -254,9 +263,9 @@ uncertainty_plot <- function(x){
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_uncertainty.png")), width = 8, height = 4, units = "in", res = 300)
 par(mfrow = c(1, 2), oma = c(1, 1, 0, 0), mar = c(2.5, 2.5, 0.5, 0.5))
-uncertainty_plot(obs$large$coordinate_uncertainty)
+uncertainty_plot(obs$habitat$large$coordinate_uncertainty)
 mtext("Amérique du Nord", side = 3, line = -2)
-uncertainty_plot(obs$small$coordinate_uncertainty)
+uncertainty_plot(obs$habitat$small$coordinate_uncertainty)
 mtext("Québec", side = 3, line = -2)
 mtext("Incertitude des coordonnées (m)", outer = TRUE, side = 1, font = 2)
 mtext("Nb d'observations", outer = TRUE, side = 2, font = 2)
@@ -266,8 +275,9 @@ dev.off()
 
 
 obs_file <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_observations.gpkg"))
-st_write(obs$large, obs_file, layer = "NA", delete_dsn = TRUE)
-st_write(obs$small, obs_file, layer = "QC", append = TRUE)
+st_write(obs$climate$large, obs_file, layer = "climate", delete_dsn = TRUE)
+st_write(obs$habitat$large, obs_file, layer = "NA", append = TRUE)
+st_write(obs$habitat$small, obs_file, layer = "QC", append = TRUE)
 
 #st_write(obs$large, obs_file, layer = "NAused", append = TRUE)
 

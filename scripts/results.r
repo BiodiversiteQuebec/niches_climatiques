@@ -21,7 +21,7 @@ plot_background <- function(){
 
 plot_foreground <- function(observations = FALSE, echelle = "large"){
   if(observations){
-    points(st_geometry(obs[[echelle]]), bg = adjustcolor("orange", 0.90), col = "black", pch = 21, cex = 0.4, lwd= 0.10)
+    points(st_geometry(obs[[dataunc]][[echelle]]), bg = adjustcolor("orange", 0.90), col = "black", pch = 21, cex = 0.4, lwd= 0.10)
   }
   plot(st_geometry(na), lwd = 0.1, border = adjustcolor("black", 0.75), add = TRUE)
   plot(st_geometry(lakes), col = "white", lwd = 0.1, border = adjustcolor("black", 0.5), add = TRUE)
@@ -52,6 +52,10 @@ add_scenario <- function(x){
   text(par("usr")[1], par("usr")[4], adj = c(-0.01, 1.01), label = paste("Scénario de projection: ", display_scenario), cex = 1.25, col = "grey70", xpd = TRUE)
 }
 
+add_time <- function(x){
+  mtext(line =  par("mar")[1] - 1, text = format(t_init), side = 1, adj = 0.9, padj = 0, xpd = TRUE, cex = 0.65, col = "grey70")
+}
+
 
 plg <- list(size = c(0.33, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
 #plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
@@ -64,9 +68,10 @@ png(topng(file_sdm), units = "in", height = 6, width = 7.5, res = 300)
 #par(mar = c(0, 0, 0, 8))
 #plot_background()
 plot(crop(predictions, bregion), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, mar = c(0, 0, 0, 0))
-#plot(crop(predictions, st_buffer(obs[[echelle]], buffd)), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, mar = c(0, 0, 0, 0))
+#plot(crop(predictions, st_buffer(obs[[dataunc]][[echelle]], buffd)), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, mar = c(0, 0, 0, 0))
 #plot(predictions, axes = FALSE, plg = plg, col = sdm_cols)
 plot_foreground(observation = TRUE, echelle = echelle)
+add_time()
 dev.off()
 
 
@@ -135,11 +140,11 @@ dev.off()
 
 
 if(is.character(models[[i]])){
-  e1 <- extract(p[[echelle]][[vars]], obs[[echelle]])
-  e2 <- terra::extract(p[[echelle]][[vars]], bg[[echelle]])
-  #e1 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), obs[[echelle]])
-  #e2 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), bg[[echelle]])
-  reg <- st_buffer(st_convex_hull(obs[[echelle]]),500000)
+  e1 <- extract(p[[echelle]][[vars]], obs[[dataunc]][[echelle]])
+  e2 <- terra::extract(p[[echelle]][[vars]], bg[[dataunc]][[echelle]])
+  #e1 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), obs[[dataunc]][[echelle]])
+  #e2 <- extract(crop(p[[echelle]][[vars]], region, mask = TRUE), bg[[dataunc]][[echelle]])
+  reg <- st_buffer(st_convex_hull(obs[[dataunc]][[echelle]]),500000)
   g <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), mean, na.rm = TRUE)
   gr <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), range, na.rm = TRUE)
   png(file.path("results/graphics", paste(gsub(" ", "_", sp), names(models)[i], "marginal_effects.png", sep = "_")), units = "in", height = ceiling(nrow(g)/3) * 1.5, width = 8, res = 300)

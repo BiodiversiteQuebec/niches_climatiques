@@ -97,10 +97,10 @@ names(predictions_proj) <- ns
 
 
 ### threshold sdm from obs
-threshold1 <- 0.98
-threshold2 <- 0.98
-e1 <- extract(predictions, obs[[echelle]][qc, ])
-e2 <- extract(predictions, obs[[echelle]][st_difference(region, qc), ])
+threshold1 <- 0.95
+threshold2 <- 0.95
+e1 <- extract(predictions, obs[[dataunc]][[echelle]][qc, ])
+e2 <- extract(predictions, obs[[dataunc]][[echelle]][st_difference(region, qc), ])
 #e <- rbind(e1)#, e2)
 e1 <- e1[rev(order(e1[,2])), ]
 val1 <- e1[round(threshold1 * nrow(e1)), 2] # this needs to be rethoughted...
@@ -110,26 +110,24 @@ val <- min(c(val1, val2))
 
 
 ### threshold sdm from sens_spec in Quebec
-zone <- crop(predictions, qc, mask = TRUE) # here restrict to Quebec
+
+cropzone <- na[na$NAME_1 %in% c("Québec","Ontario","New Brunswick","Nova Scotia","Prince Edward Island","Newfoundland and Labrador","Vermont","New Hampshire","Maine", "New York", "Massachusetts", "Rhode Island", "Connecticut", "Pennsylvania", "New Jersey", "Michigan", "Minnesota", "Wisconsin"), ]
+cropzone <- qc
+
+zone <- crop(predictions, cropzone, mask = TRUE) # here restrict to Quebec
 predvalues <- values(zone)[, 1]
 
-presence <- rasterize(obs[[echelle]], zone, fun = "count", background = 0)
+presence <- rasterize(obs[[dataunc]][[echelle]], zone, fun = "count", background = 0)
 presence <- ifel(presence > 0, 1, 0) |> mask(zone) |> values() |> _[,1]
 usen <- sum(presence, na.rm = TRUE)
 pp <- predvalues[sample(which(presence == 1), usen)]
 
-absence <- rasterize(bg[[echelle]], zone, fun = "count", background = 0)
+absence <- rasterize(bg[[dataunc]][[echelle]], zone, fun = "count", background = 0)
 absence <- ifel(absence == 0, 1, 0) |> mask(zone) |> values() |> _[,1]
 aa <- predvalues[sample(which(absence == 1 & presence == 0), usen)]
 
 e <- evaluate2(p = pp, a = aa)
 val <- dismo::threshold(e)[['spec_sens']]
-
-#ran2 <- ifel(predictions > threshold(e)[['spec_sens']], 1, 0)
-
-
-
-
 
 ran <- ifel(predictions > val, 1, 0)
 names(ran) <- names(models[i])
@@ -138,6 +136,17 @@ writeRaster(ran, file_range, overwrite = overwrite, gdal = gdal)
 polran <- ifel(ran == 1, 1, NA) |>
   as.polygons() |>
   st_as_sf()
+
+#mean(lengths(st_intersects(obs[["small"]], polran)))
+
+
+#png("st.png", width = 12, height = 12, units = "in", res = 300);plot(ran);plot(st_geometry(polran), add = TRUE);plot(st_geometry(na), add = TRUE);plot(st_geometry(obs[[dataunc]][[echelle]]), cex = 0.5, col = "orange2", add = TRUE);dev.off()
+#png("st.png", width = 12, height = 12, units = "in", res = 300);plot(presence);plot(st_geometry(na), add = TRUE);dev.off()
+#png("st.png", width = 12, height = 12, units = "in", res = 300);plot(absence);plot(st_geometry(na), add = TRUE);dev.off()
+
+
+
+
 
 st_write(polran, file_pol, layer = names(models[i]), append = append, delete_dsn = delete_dsn, delete_layer = delete_layer)
 
@@ -189,7 +198,7 @@ if(FALSE){
   usen <- sum(presence, na.rm = TRUE)
   pp <- predvalues[sample(which(presence == 1), usen)]
 
-  absence <- rasterize(bg[[echelle]], zone, fun = "count", background = 0)
+  absence <- rasterize(bg[[dataunc]][[echelle]], zone, fun = "count", background = 0)
   absence <- ifel(absence == 0, 1, 0) |> mask(zone) |> values() |> _[,1]
   aa <- predvalues[sample(which(absence == 1 & presence == 0), usen)]
 

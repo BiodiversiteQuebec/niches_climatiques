@@ -4,6 +4,17 @@
 
 echelle <- c("large", "small")[as.integer(grepl("small", names(models)[i])) + 1]
 
+if(names(models)[i] %in% c("climat", "gam")){
+  dataunc <- "climate"
+} else {
+  dataunc <- "habitat"
+}
+
+
+
+
+
+
 if(is.character(models[[i]])){
 
     vars <- models[[i]]
@@ -25,7 +36,7 @@ if(is.character(models[[i]])){
 
 
         m <- MaxEnt(p[[echelle]][[vars]], 
-                    p = vect(obs[[echelle]]), a = vect(bg[[echelle]]),#[sample(1:nrow(bg[[echelle]]), nrow(obs[[echelle]])),]),
+                    p = vect(obs[[dataunc]][[echelle]]), a = vect(bg[[dataunc]][[echelle]]),#[sample(1:nrow(bg[[dataunc]][[echelle]]), nrow(obs[[dataunc]][[echelle]])),]),
                     removeDuplicates = TRUE,
                     silent = FALSE,
                     args = arg
@@ -37,8 +48,8 @@ if(is.character(models[[i]])){
         
         if(gamfamily == "poisson"){
             ppp <- aggregate(p[[echelle]][[vars]], 2)
-            eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0) |> values()
-            eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0) |> values()
+            eo <- rasterize(obs[[dataunc]][[echelle]], ppp, fun = "count", background = 0) |> values()
+            eb <- rasterize(bg[[dataunc]][[echelle]], ppp, fun = "count", background = 0) |> values()
             ep <- values(ppp[[vars]])
 
             dat <- data.frame(eo, eb, ep)
@@ -55,8 +66,8 @@ if(is.character(models[[i]])){
             m <- scam(f, data = dat, family = poisson)
         } else {
             ppp <- aggregate(p[[echelle]][[vars]], 2)
-            eo <- rasterize(obs[[echelle]], ppp, fun = "count", background = 0)
-            eb <- rasterize(bg[[echelle]], ppp, fun = "count", background = 0)
+            eo <- rasterize(obs[[dataunc]][[echelle]], ppp, fun = "count", background = 0)
+            eb <- rasterize(bg[[dataunc]][[echelle]], ppp, fun = "count", background = 0)
             eo <- ifel(eo > 0, 1, 0) |> values()
             eb <- ifel(eb > 0, 1, 0) |> values()
             ep <- values(ppp[[vars]])
@@ -66,13 +77,13 @@ if(is.character(models[[i]])){
 
             dat <- dat[dat$eb > 0, ]
 
-            f <- paste("obs ~", paste("s(", vars, ", k = 20, bs = \"cv\", m = 2)")) |>
+            f <- paste("obs ~", paste("s(", vars, ", k = 35, bs = \"cv\", m = 2)")) |>
             as.formula()
 
             #optimizer <- c("bfgs", "newton")#c("efs", "bfgs")
-            optimizer <- c("efs", "bfgs")
-            m <- scam(f, optimizer = optimizer, data = dat, family = binomial)
-            #m <- scam(f, data = dat, family = binomial)
+            #optimizer <- c("efs", "bfgs")
+            #m <- scam(f, optimizer = optimizer, data = dat, family = binomial)
+            m <- scam(f, data = dat, family = binomial)
 
         }
         

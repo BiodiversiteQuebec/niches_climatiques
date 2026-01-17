@@ -51,7 +51,7 @@ lapply(lf, function(i){
     #par(mar = c(0, 0, 0, 8))
     #plot_background()
     r <- r[[names(model_names)]]
-    plot(crop(crop(r, st_buffer(obs$small, 150000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small");add_range2()}, main = unlist(model_names))
+    plot(crop(crop(r, st_buffer(obs[["habitat"]]$small, 150000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){plot_foreground(observations = TRUE, echelle = "small");add_range2()}, main = unlist(model_names))
     #plot_foreground(observation = FALSE)
     dev.off()
     #graphics.off()
