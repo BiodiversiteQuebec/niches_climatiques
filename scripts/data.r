@@ -104,8 +104,15 @@ if(sp %in% aires$species){
   aire <- aires[aires$species == sp, ]# |>
     #st_transform(epsg)
 } else {
-  aire <- NULL
+  if(sp %in% emvs$SNAME){
+    aire <- emvs |> filter(SNAME == sp) |> st_transform(epsg) |> st_buffer(20000) |> st_union() |> st_as_sf()
+  } else {
+    aire <- NULL
+  }
 }
+
+#png("test.png", width = 8, height = 8, units = "in", res = 300);plot(st_geometry(qc)); plot(st_geometry(aire), add = TRUE, col = adjustcolor("forestgreen", 0.5), border = NA);dev.off()
+
 
 # filter out wrong observations per species
 source("scripts/filter.r")
@@ -155,7 +162,7 @@ par(mar = c(0.5, 0.5, 0.5, 0.5))
 if(nrow(obs_qc) == 0){
   plot(st_geometry(st_crop(na, qc)))
 } else {
-  plot(st_geometry(st_crop(na, obs_qc)))
+  plot(st_geometry(st_crop(na, st_buffer(obs_qc, 100000))))
 }
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 add_range()
@@ -234,7 +241,7 @@ dev.off()
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_quebec_used.png")), width = 5, height = 5, units = "in", res = 300)
 par(mar = c(0.5, 0.5, 0.5, 0.5))
-plot(st_geometry(st_crop(na, obs_all[qc, ])))
+plot(st_geometry(st_crop(na, st_buffer(obs_all[qc, ], 100000))))
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 add_range()
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
@@ -278,6 +285,9 @@ obs_file <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_observatio
 st_write(obs$climate$large, obs_file, layer = "climate", delete_dsn = TRUE)
 st_write(obs$habitat$large, obs_file, layer = "NA", append = TRUE)
 st_write(obs$habitat$small, obs_file, layer = "QC", append = TRUE)
+if(!is.null(aire)){
+  st_write(aire, obs_file, layer = "range", append = TRUE)
+}
 
 #st_write(obs$large, obs_file, layer = "NAused", append = TRUE)
 

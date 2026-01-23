@@ -17,6 +17,11 @@ predictors <- rast("data/predictors_500_NA.tif")
 ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
 oo <- scoff(predictors$mean_annual_air_temperature )[2]
 predictors$mean_annual_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$mean_annual_air_temperature) * ss) + oo
+ss <- scoff(predictors$annual_range_of_air_temperature)[1] # temp fix for scoff differently applied
+oo <- scoff(predictors$annual_range_of_air_temperature )[2]
+predictors$annual_range_of_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$annual_range_of_air_temperature) * ss) + oo
+
+
 #predictors <- predictors[[!duplicated(names(predictors))]] # not sure why there are some duplicates in there...
 #predictors <- aggregate(predictors, 10, na.rm = TRUE) # 2
 

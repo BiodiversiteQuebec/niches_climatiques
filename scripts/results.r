@@ -355,8 +355,12 @@ dev.off()
 
 
 
-
-
+#library(sf)
+#library(rmapshaper)
+#x <- st_read("results/rasters/Glaucomys_volans_range_small.gpkg", layer = "climat (small)") |>
+#  st_transform(4326) |>
+#  ms_simplify(0.001) |>
+#  st_write("results/rasters/Glaucomys_volans.geojson", append = FALSE)
 
 
 

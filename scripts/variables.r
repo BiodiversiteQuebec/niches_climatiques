@@ -33,7 +33,7 @@ large_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", 
 #dput(grep("temperature|precipitation|isothermality", names(psmall), invert = TRUE, value = TRUE))
 small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
 "eau_peu_profonde", "elevation", "eolien", "forest", "geomflat", "geomfootslope", 
-"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "twi", "urban", "water", "wetland", "distance_to_lakes", "distance_to_rivers", "distance_to_streams", "distance_to_stlawrence", "southstlawrence")
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "prairie_humide", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "tourbiere", "twi", "urban", "water", "wetland", "distance_to_lakes", "distance_to_rivers", "distance_to_streams", "distance_to_stlawrence", "distance_to_openwater", "southstlawrence")
 #pp <- p$large[[other_vars]]
 #name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", "sable", "argile", "% forêt", "% urbain", "% eau", "% milieu humide", "% agricole")
 #names(pp) <- name_vars
