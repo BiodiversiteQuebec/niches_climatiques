@@ -57,13 +57,13 @@ if(is.character(models[[i]])){
     names(predictions_proj) <- scenarios
   } else {
     hab <- rast(file_sdm)[[names(models)[models[[i]]][2]]]
-    clim <- rast(gsub("_small", "_large", file_range))[["climat"]] |>
+    clim <- rast(gsub("_small", "_large", file_range))[[names(models)[models[[i]]][1]]] |>
               project(hab) |> 
               mask(hab)
     predictions <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
     predictions_proj <- lapply(scenarios, function(s) {
           hab <- rast(file_sdm_proj)[[paste(names(models)[models[[i]]][2], s)]]
-          clim <- rast(gsub("_small", "_large", file_range_proj))[[paste("climat", s)]] |>
+          clim <- rast(gsub("_small", "_large", file_range_proj))[[paste(names(models)[models[[i]]][1], s)]] |>
               project(hab) |> 
               mask(hab)
           predictions_proj <- hab * (clim / global(clim, "max", na.rm = TRUE)[1, 1])
@@ -112,7 +112,7 @@ val <- min(c(val1, val2))
 ### threshold sdm from sens_spec in Quebec
 
 cropzone <- na[na$NAME_1 %in% c("Québec","Ontario","New Brunswick","Nova Scotia","Prince Edward Island","Newfoundland and Labrador","Vermont","New Hampshire","Maine", "New York", "Massachusetts", "Rhode Island", "Connecticut", "Pennsylvania", "New Jersey", "Michigan", "Minnesota", "Wisconsin"), ]
-cropzone <- qc
+#cropzone <- qc
 
 zone <- crop(predictions, cropzone, mask = TRUE) # here restrict to Quebec
 predvalues <- values(zone)[, 1]
