@@ -176,8 +176,11 @@ if(is.character(models[[i]])){
       } else {
         pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
       }
-      ylim <- ran # common scale
-      #ylim <- pred
+      if(rownames(g)[j] == "southstlawrence"){
+         ylim <- pred # individual
+      } else {
+         ylim <- ran # common scale
+      }
       #xlim <- if(rownames(g)[j] == "distance_to_streams"){c(0, 1500)} else {range(v, na.rm = TRUE)}
       plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 1.5, bty = "n")
       axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
