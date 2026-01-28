@@ -115,7 +115,7 @@ if(all(se == 0)){ # when no diff cause habitat only model
   cols <- adjustcolor(coloScale(seq(min(se), max(se), length.out = 500), c("darkred", "tomato", "white", "blue", "navyblue"), center = TRUE), 0.5)
 }
 #plot_background()
-plot(dif, axes = FALSE, add = FALSE, plg = plg, col = cols, mar = c(0, 0, 0, 0))
+plot(dif, axes = FALSE, add = FALSE, plg = plg, col = cols, mar = c(0, 0, 0, 0), range = se)
 plot_foreground(echelle = echelle)
 #legend("bottomright", inset = c(0.1, 0.1), legend = "Range", pch = 15, pt.cex = 2, col = adjustcolor("black", 0.2), bty = "n", xjust = 1, xpd = TRUE)
 add_scenario()
