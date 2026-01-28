@@ -254,7 +254,7 @@ cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
-cmd <- sprintf('gdal_translate -of COG -r average -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/%s.tif %s/%s_cog.tif', tmpath, variables$name[i], tmpath, variables$name[i])
+cmd <- sprintf('gdal_translate -of COG -r average -co OVERVIEW_RESAMPLING=AVERAGE -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/%s.tif %s/%s_cog.tif', tmpath, variables$name[i], tmpath, variables$name[i])
 system(cmd)
 cmd <- sprintf('rm %s/%s.tif
 
@@ -272,9 +272,10 @@ stopCluster(cl)
 cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
+variables <- variables[c(49, 52), ]
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
 #cmd <- sprintf('gdal_translate -of COG -r average -tr 1000 1000 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i])
-cmd <- sprintf('gdalwarp -of COG -r average -tr 1000 1000 -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling
+cmd <- sprintf('gdalwarp -of COG -r average -tr 1000 1000 -co OVERVIEW_RESAMPLING=AVERAGE -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling
 system(cmd)
 }
 
@@ -313,7 +314,7 @@ cmd <- sprintf('bash -c "
   
   gdalinfo --version
 
-  gdal_translate -of COG -r average -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_1000_NA.tif"', tmpath, tmpath, tmpath, tmpath)
+  gdal_translate -of COG -r average -co OVERVIEW_RESAMPLING=AVERAGE -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_1000_NA.tif"', tmpath, tmpath, tmpath, tmpath)
 system(cmd)
 
 
