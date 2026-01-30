@@ -180,6 +180,8 @@ variables$url <- URLencode(variables$url)
 
 #variables <- variables[c(1, 5, 14, 17, 55), ]
 
+if(FALSE){
+
 if(TRUE){
   desc <- variables
   names(desc) <- c("collection", "var", "variable", "url")
@@ -266,16 +268,19 @@ system(cmd)
 }
 stopCluster(cl)
 
+
+}
 ##############################################################
 ### little add-on to produce low res predictors ############## 
 
-cl <- makeCluster(10)
+cl <- makeCluster(15)
 registerDoParallel(cl)
 getDoParWorkers()
-variables <- variables[c(49, 52), ]
+#variables <- variables[c(49, 52), ]
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
 #cmd <- sprintf('gdal_translate -of COG -r average -tr 1000 1000 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i])
-cmd <- sprintf('gdalwarp -of COG -r average -tr 1000 1000 -co OVERVIEW_RESAMPLING=AVERAGE -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling
+#cmd <- sprintf('gdalwarp -of COG -r average -tr 500 500 -co OVERVIEW_RESAMPLING=AVERAGE -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling
+cmd <- sprintf('gdalwarp -r average -tr 500 500 -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling and no need to produce COG here
 system(cmd)
 }
 
@@ -305,7 +310,6 @@ vrt_ds = None
 
 system2("/usr/bin/python3", args = c("-c", shQuote(py_script)))
 
-
 cmd <- sprintf('bash -c "
 
   source /home/frousseu/miniconda3/etc/profile.d/conda.sh 
@@ -313,8 +317,8 @@ cmd <- sprintf('bash -c "
   conda activate gdal-env
   
   gdalinfo --version
-
-  gdal_translate -of COG -r average -co OVERVIEW_RESAMPLING=AVERAGE -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_1000_NA.tif"', tmpath, tmpath, tmpath, tmpath)
+  
+  gdal_translate -of COG -r average -co OVERVIEW_RESAMPLING=AVERAGE -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_500_NA.tif"', tmpath, tmpath, tmpath, tmpath) # COG mostly creates problems
 system(cmd)
 
 
