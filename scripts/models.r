@@ -1,6 +1,7 @@
 ### Maxent parameters!
 # https://github.com/mrmaxent/Maxent/blob/master/density/parameters.csv
 
+cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, names(models)[i], "models.r", sep = " - "), "\n"))
 
 echelle <- c("large", "small")[as.integer(grepl("small", names(models)[i])) + 1]
 
@@ -9,10 +10,6 @@ if(names(models)[i] %in% c("climat", "gam")){
 } else {
   dataunc <- "habitat"
 }
-
-
-
-
 
 
 if(is.character(models[[i]])){
