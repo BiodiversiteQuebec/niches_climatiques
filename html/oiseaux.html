@@ -384,6 +384,7 @@
 <a class="toc" href="#Aquila_chrysaetos_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
 <a class="toc" href="#Aquila_chrysaetos_compare">&nbsp comparaison</a><br>
 <a class="toc" href="#Aquila_chrysaetos_compare_localized">&nbsp comparaison localisée</a><br>
+<a class="toc" href="#Aquila_chrysaetos_proj_compare">&nbsp projection</a><br>
 <a class="toc" href="#Catharus_bicknelli_data"><b>Grive de bicknell</b></a><br>
 <a class="toc" href="#Catharus_bicknelli_data">&nbsp données</a><br>
 <a class="toc" href="#Catharus_bicknelli_climat">&nbsp climat</a><br>
@@ -397,6 +398,7 @@
 <a class="toc" href="#Catharus_bicknelli_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
 <a class="toc" href="#Catharus_bicknelli_compare">&nbsp comparaison</a><br>
 <a class="toc" href="#Catharus_bicknelli_compare_localized">&nbsp comparaison localisée</a><br>
+<a class="toc" href="#Catharus_bicknelli_proj_compare">&nbsp projection</a><br>
 <a class="toc" href="#Coturnicops_noveboracensis_data"><b>Râle jaune</b></a><br>
 <a class="toc" href="#Coturnicops_noveboracensis_data">&nbsp données</a><br>
 <a class="toc" href="#Coturnicops_noveboracensis_climat">&nbsp climat</a><br>
@@ -410,6 +412,7 @@
 <a class="toc" href="#Coturnicops_noveboracensis_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
 <a class="toc" href="#Coturnicops_noveboracensis_compare">&nbsp comparaison</a><br>
 <a class="toc" href="#Coturnicops_noveboracensis_compare_localized">&nbsp comparaison localisée</a><br>
+<a class="toc" href="#Coturnicops_noveboracensis_proj_compare">&nbsp projection</a><br>
 <a class="toc" href="#Ixobrychus_exilis_data"><b>Petit blongios</b></a><br>
 <a class="toc" href="#Ixobrychus_exilis_data">&nbsp données</a><br>
 <a class="toc" href="#Ixobrychus_exilis_climat">&nbsp climat</a><br>
@@ -423,6 +426,7 @@
 <a class="toc" href="#Ixobrychus_exilis_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
 <a class="toc" href="#Ixobrychus_exilis_compare">&nbsp comparaison</a><br>
 <a class="toc" href="#Ixobrychus_exilis_compare_localized">&nbsp comparaison localisée</a><br>
+<a class="toc" href="#Ixobrychus_exilis_proj_compare">&nbsp projection</a><br>
 <a class="toc" href="#Setophaga_cerulea_data"><b>Paruline azurée</b></a><br>
 <a class="toc" href="#Setophaga_cerulea_data">&nbsp données</a><br>
 <a class="toc" href="#Setophaga_cerulea_climat">&nbsp climat</a><br>
@@ -435,7 +439,8 @@
 <a class="toc" href="#Setophaga_cerulea_climat (small)">&nbsp habitatQC (climat)</a><br>
 <a class="toc" href="#Setophaga_cerulea_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
 <a class="toc" href="#Setophaga_cerulea_compare">&nbsp comparaison</a><br>
-<a class="toc" href="#Setophaga_cerulea_compare_localized">&nbsp comparaison localisée</a></nav>
+<a class="toc" href="#Setophaga_cerulea_compare_localized">&nbsp comparaison localisée</a><br>
+<a class="toc" href="#Setophaga_cerulea_proj_compare">&nbsp projection</a></nav>
   </div>
   <div class="right">
   <h1>Niches climatiques</h1>
@@ -486,7 +491,7 @@
         <!-- <a target="_blank" href="url"> -->
         <div class="container" style="border: 0px solid red;">
           <a class="aim" target="_blank" href="url">
-            <div class="infotop">Nidification 06-07 / 08-23<br>scénario = RPC XY.Z</div>
+            <div class="infotop">Nidification 06-07 / 08-23<br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
             <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Aquila_chrysaetos_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
@@ -1141,7 +1146,7 @@
   <section id="Aquila_chrysaetos_compare" class="section">
   <h2 class="h2">Aigle royal —— comparaison</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Aquila_chrysaetos_compare','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Aquila_chrysaetos_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Aquila_chrysaetos_comparepanelzero">
       <div class="col1" id="Aquila_chrysaetos_comparepanel0">
@@ -1157,11 +1162,27 @@
   <section id="Aquila_chrysaetos_compare_localized" class="section">
   <h2 class="h2">Aigle royal —— comparaison localisée</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Aquila_chrysaetos_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Aquila_chrysaetos_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Aquila_chrysaetos_compare_localizedpanelzero">
       <div class="col1" id="Aquila_chrysaetos_compare_localizedpanel0">
         <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Aquila_chrysaetos_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Aquila_chrysaetos_proj_compare" class="section">
+  <h2 class="h2">Aigle royal —— projection</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Aquila_chrysaetos_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+    </div>
+    <div class="row" id="Aquila_chrysaetos_proj_comparepanelzero">
+      <div class="col1" id="Aquila_chrysaetos_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Aquila_chrysaetos_sdm_proj_compare.png" alt="">
       </div>
     </div>
   </section>
@@ -1187,7 +1208,7 @@
         <!-- <a target="_blank" href="url"> -->
         <div class="container" style="border: 0px solid red;">
           <a class="aim" target="_blank" href="url">
-            <div class="infotop">Nidification 06-07 / 07-12<br>scénario = RPC XY.Z</div>
+            <div class="infotop">Nidification 06-07 / 07-12<br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
             <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Catharus_bicknelli_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
@@ -1842,7 +1863,7 @@
   <section id="Catharus_bicknelli_compare" class="section">
   <h2 class="h2">Grive de bicknell —— comparaison</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Catharus_bicknelli_compare','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Catharus_bicknelli_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Catharus_bicknelli_comparepanelzero">
       <div class="col1" id="Catharus_bicknelli_comparepanel0">
@@ -1858,11 +1879,27 @@
   <section id="Catharus_bicknelli_compare_localized" class="section">
   <h2 class="h2">Grive de bicknell —— comparaison localisée</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Catharus_bicknelli_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Catharus_bicknelli_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Catharus_bicknelli_compare_localizedpanelzero">
       <div class="col1" id="Catharus_bicknelli_compare_localizedpanel0">
         <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Catharus_bicknelli_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Catharus_bicknelli_proj_compare" class="section">
+  <h2 class="h2">Grive de bicknell —— projection</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Catharus_bicknelli_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+    </div>
+    <div class="row" id="Catharus_bicknelli_proj_comparepanelzero">
+      <div class="col1" id="Catharus_bicknelli_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Catharus_bicknelli_sdm_proj_compare.png" alt="">
       </div>
     </div>
   </section>
@@ -1888,7 +1925,7 @@
         <!-- <a target="_blank" href="url"> -->
         <div class="container" style="border: 0px solid red;">
           <a class="aim" target="_blank" href="url">
-            <div class="infotop">Nidification 06-07 / 08-24<br>scénario = RPC XY.Z</div>
+            <div class="infotop">Nidification 06-07 / 08-24<br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
             <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Coturnicops_noveboracensis_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
@@ -2543,7 +2580,7 @@
   <section id="Coturnicops_noveboracensis_compare" class="section">
   <h2 class="h2">Râle jaune —— comparaison</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Coturnicops_noveboracensis_compare','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Coturnicops_noveboracensis_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Coturnicops_noveboracensis_comparepanelzero">
       <div class="col1" id="Coturnicops_noveboracensis_comparepanel0">
@@ -2559,11 +2596,27 @@
   <section id="Coturnicops_noveboracensis_compare_localized" class="section">
   <h2 class="h2">Râle jaune —— comparaison localisée</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Coturnicops_noveboracensis_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Coturnicops_noveboracensis_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Coturnicops_noveboracensis_compare_localizedpanelzero">
       <div class="col1" id="Coturnicops_noveboracensis_compare_localizedpanel0">
         <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Coturnicops_noveboracensis_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Coturnicops_noveboracensis_proj_compare" class="section">
+  <h2 class="h2">Râle jaune —— projection</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Coturnicops_noveboracensis_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+    </div>
+    <div class="row" id="Coturnicops_noveboracensis_proj_comparepanelzero">
+      <div class="col1" id="Coturnicops_noveboracensis_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Coturnicops_noveboracensis_sdm_proj_compare.png" alt="">
       </div>
     </div>
   </section>
@@ -2589,7 +2642,7 @@
         <!-- <a target="_blank" href="url"> -->
         <div class="container" style="border: 0px solid red;">
           <a class="aim" target="_blank" href="url">
-            <div class="infotop">Nidification 06-07 / 07-19<br>scénario = RPC XY.Z</div>
+            <div class="infotop">Nidification 06-07 / 07-19<br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
             <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Ixobrychus_exilis_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
@@ -3244,7 +3297,7 @@
   <section id="Ixobrychus_exilis_compare" class="section">
   <h2 class="h2">Petit blongios —— comparaison</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Ixobrychus_exilis_compare','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Ixobrychus_exilis_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Ixobrychus_exilis_comparepanelzero">
       <div class="col1" id="Ixobrychus_exilis_comparepanel0">
@@ -3260,11 +3313,27 @@
   <section id="Ixobrychus_exilis_compare_localized" class="section">
   <h2 class="h2">Petit blongios —— comparaison localisée</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Ixobrychus_exilis_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Ixobrychus_exilis_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Ixobrychus_exilis_compare_localizedpanelzero">
       <div class="col1" id="Ixobrychus_exilis_compare_localizedpanel0">
         <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Ixobrychus_exilis_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Ixobrychus_exilis_proj_compare" class="section">
+  <h2 class="h2">Petit blongios —— projection</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Ixobrychus_exilis_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+    </div>
+    <div class="row" id="Ixobrychus_exilis_proj_comparepanelzero">
+      <div class="col1" id="Ixobrychus_exilis_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Ixobrychus_exilis_sdm_proj_compare.png" alt="">
       </div>
     </div>
   </section>
@@ -3290,7 +3359,7 @@
         <!-- <a target="_blank" href="url"> -->
         <div class="container" style="border: 0px solid red;">
           <a class="aim" target="_blank" href="url">
-            <div class="infotop">Nidification 05-24 / 07-12<br>scénario = RPC XY.Z</div>
+            <div class="infotop">Nidification 05-24 / 07-12<br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
             <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Setophaga_cerulea_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
@@ -3945,7 +4014,7 @@
   <section id="Setophaga_cerulea_compare" class="section">
   <h2 class="h2">Paruline azurée —— comparaison</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Setophaga_cerulea_compare','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Setophaga_cerulea_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Setophaga_cerulea_comparepanelzero">
       <div class="col1" id="Setophaga_cerulea_comparepanel0">
@@ -3961,11 +4030,27 @@
   <section id="Setophaga_cerulea_compare_localized" class="section">
   <h2 class="h2">Paruline azurée —— comparaison localisée</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Setophaga_cerulea_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM&#8628</button>
+      <button class="showmore" onclick="showmorezero('Setophaga_cerulea_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
     </div>
     <div class="row" id="Setophaga_cerulea_compare_localizedpanelzero">
       <div class="col1" id="Setophaga_cerulea_compare_localizedpanel0">
         <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Setophaga_cerulea_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Setophaga_cerulea_proj_compare" class="section">
+  <h2 class="h2">Paruline azurée —— projection</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Setophaga_cerulea_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+    </div>
+    <div class="row" id="Setophaga_cerulea_proj_comparepanelzero">
+      <div class="col1" id="Setophaga_cerulea_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Setophaga_cerulea_sdm_proj_compare.png" alt="">
       </div>
     </div>
   </section>
