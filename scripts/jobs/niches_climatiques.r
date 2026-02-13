@@ -58,7 +58,7 @@ info <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas
   collect() |>
   as.data.frame()
 
-
+info$group <- sapply(species_target_groups[match(info$species, names(species_target_groups))], paste, collapse = " / ")
 info$period <- sapply(breeding_periods[match(info$species, names(breeding_periods))], paste, collapse = " / ")
 info$period <- ifelse(info$period == "", NA, info$period)
 

@@ -142,9 +142,11 @@ e <- evaluate2(p = pp, a = aa)
 
 val <- dismo::threshold(e)[['spec_sens']]
 
-if(valqc < val){
-  val <- valqc
-  sprintf("Threshold adjusted for %s Québec", thresholdqc)
+if(names(models)[i] %in% c("climat", "gam")){ ### if a climate model, keep % in QC
+  if(valqc < val){
+    val <- valqc
+    sprintf("Threshold adjusted for %s Québec", thresholdqc)
+  }
 }
 
 ran <- ifel(predictions > val, 1, 0)

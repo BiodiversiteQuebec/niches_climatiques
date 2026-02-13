@@ -63,11 +63,33 @@ graphics.off()
 #par(mfrow = c(1, 1), oma = c(0, 0, 0, 0), mar = c(5.1, 4.1, 4.1,2.1))
 
 
+### Localized
+lapply(lf, function(i){
+    png(gsub("_sdm_large.tif", "_sdm_compare_localized_noobs.png", gsub("/rasters/", "/graphics/", i)), units = "in", height = 8, width = 10, res = 300)
+    r1 <- rast(i)
+    r2 <- rast(gsub("_large", "_small", i))
+    r1 <- project(r1, r2)
+    r <- c(r1, r2)
+    #par(mar = c(0, 0, 0, 8))
+    #plot_background()
+    r <- r[[names(model_names)]]
+    plot(crop(crop(r, st_buffer(obs[["habitat"]]$small, 150000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, fun = function(){}, main = unlist(model_names))
+    #plot_foreground(observation = FALSE)
+    dev.off()
+    #graphics.off()
+    #par(mfrow = c(1, 1), oma = c(0, 0, 0, 0), mar = c(5.1, 4.1, 4.1,2.1))
+})
+
+
+
 #######################################################################
 ### Compare projections models for climate only #######################
 lf <- gsub("_sdm_proj_small.tif", "_sdm_proj_large.tif", file_sdm_proj)
 
-display_model <- "climat (habitat)"
+display_model <- "climat (small)"
+if(grepl("small", display_model)){
+  lf <- gsub("large", "small", lf)
+}
 display_name <- model_names[[display_model]]
 selected <- paste(display_model, scenarios)
 selected <- c(display_model, selected)
@@ -76,16 +98,16 @@ display_names <- paste0(display_name, "\n", c("actuel", scenarios))
 lapply(lf, function(xx){
     #print(paste("fn", fn))
     r1 <- rast(xx)#[[1:6]]
-    r2 <- rast(gsub("_large", "_small", xx))
+    r2 <- rast(gsub("_large", "_small", xx))[[1]]
     r0 <- rast(gsub("_proj", "", xx)) |> project(r2)
     r3 <- project(r1, r2)
-    r4 <- c(r0, r3, r2)
+    r4 <- c(r0, r3)#, r2)
     r5 <- crop(r4, qc, mask = TRUE)
     r5 <- r5[[names(r5) %in% selected]]
     nc <- n2mfrow(nlyr(r5), asp = 3/1)
-    fn <- gsub("_sdm_proj_large.tif", "_sdm_proj_compare.png", gsub("/rasters/", "/graphics/", xx))
+    fn <- gsub("_sdm_proj_large.tif|_sdm_proj_small.tif", "_sdm_proj_compare.png", gsub("/rasters/", "/graphics/", xx))
     png(fn, units = "in", height = nc[1] * 5, width = nc[2] * 3.5, res = 300)
-    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 3, 0), nc = nc[2], fun = function(){plot_foreground(observations = TRUE, echelle = "small")}, main = display_names)
+    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 3, 0), nc = nc[2], fun = function(){plot_foreground(observations = FALSE, echelle = "small")}, main = display_names)
     #plot_foreground(observation = FALSE)
     dev.off()
 })

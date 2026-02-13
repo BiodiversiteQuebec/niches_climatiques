@@ -232,7 +232,7 @@ if(is.character(models[[i]])){
   }))
   par(fig = c(0, 1, 0, 1), new = TRUE, mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0))
   plot.new()
-  legend("top", horiz = TRUE, legend = c("Prédictions (échelle commune, gauche)", "Prédictions (échelle individuelle, droite)", "Observations / (Observations + Effort)", "Observations + Effort"), cex = 0.65, bty = "n", lwd = c(1.5, 1, NA, NA), pch = c(NA, NA, 15, 15), col = c("black", adjustcolor("black", 0.3), adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, NA, 1, 1))
+  legend("top", horiz = TRUE, legend = c("Prédictions (échelle commune, gauche)", "Prédictions (échelle individuelle, droite)", "Observations / (Observations + Effort)", "Observations + Effort"), cex = 0.75, bty = "n", lwd = c(1.5, 1, NA, NA), pch = c(NA, NA, 15, 15), col = c("black", adjustcolor("black", 0.3), adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, NA, 1, 1))
   dev.off()
 
 }
