@@ -8,7 +8,7 @@ library(magick)
 
 pages <- list(
   tortues = "Glyptemys|Emyd",
-  salamandres = "Gyrino|Desmog",
+  salamandres = "Gyrino|Desmog|Hemi",
   rainette = "Pseudacr",
   oiseaux = "Setoph|Aquila|Catharus|Ixo|Coturn",
   couleuvres = "Nerodia|Lampro",
