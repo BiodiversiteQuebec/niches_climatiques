@@ -126,7 +126,15 @@ collections <- list(
     "rivers", "distance_to_rivers",
     "streams", "distance_to_streams",
     "stlawrence", "distance_to_stlawrence"
-  )
+  ),
+  "cop-dem-glo" = c(
+    "elevation", "elevation",
+    "ruggedness", "ruggedness",
+    "distance_to_cliffs", "distance_to_cliffs"
+  ),
+  "geomorphons_percentages" = c(
+    "flat", "flat"
+  ),
  )
 
 collections <- lapply(collections, function(i){
