@@ -64,73 +64,100 @@ coll <- "chelsa-clim"
 
 collections <- list(
   "earthenv_topography_derived" = c(
-    "geomflat_perc", "geomflat", 
-    "geomfootslope_per", "geomfootslope"
+    "geomflat_perc", "geomflat", "% de terrains plats", 
+    "geomfootslope_per", "geomfootslope", "% de bas de pentes"
   ),
   "earthenv_topography" = c(
-    "elevation", "elevation",
-    "vrm", "ruggedness"
+    "elevation", "elevation", "Élévation",
+    "vrm", "ruggedness", "Indice de rugosité topographique"
   ),
   "soilgrids" = c(
-    "sand_0-5cm", "sand",
-    "clay_0-5cm", "clay",
-    "silt_0-5cm", "silt",
-    "phh2o_0-5cm", "ph",
-    "nitrogen_0-5cm", "nitrogen",
-    "bdod_0-5cm", "bulk_density",
-    "soc_0-5cm", "soil_organic_carbon",
-    "ocd_0-5cm", "organic_carbon_density"
+    "sand_0-5cm", "sand", "% de sable",
+    "clay_0-5cm", "clay", "% d'argile",
+    "silt_0-5cm", "silt", "% de limon",
+    "phh2o_0-5cm", "ph", "pH",
+    "nitrogen_0-5cm", "nitrogen", "Azote",
+    "bdod_0-5cm", "bulk_density", "Densité volumique",
+    "soc_0-5cm", "soil_organic_carbon", "Carbone organique du sol",
+    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique"
   ),
   "distance_to_roads" = c(
-    "distance_to_roads", "distance_to_roads"
+    "distance_to_roads", "distance_to_roads", "Distance aux routes"
   ),
   "silvis" = c(
-   "NDVI16_cumulative", "ndvi",
-   "LAI8_cumulative", "lai"
+   "NDVI16_cumulative", "ndvi", "NDVI",
+   "LAI8_cumulative", "lai", "Index de surface foliaire"
   ),
   "ghmts" = c(
-    "GHMTS", "human_modification"
+    "GHMTS", "human_modification", "Modifications humaines"
   )
 )
 
 collections <- lapply(collections, function(i){
   list(
-    var = i[seq(1, length(i), by = 2)],
-    name = i[seq(2, length(i), by = 2)]   
+    var = i[seq(1, length(i), by = 3)],
+    name = i[seq(2, length(i), by = 3)],
+    fr = i[seq(3, length(i), by = 3)]   
   )
 })
-
-
 
 
 ###############################################
 ### add collections with automated names ######
 
+climvars <- c(
+  "mean annual air temperature", "Température moyenne annuelle",
+  "mean diurnal air temperature range", "Amplitude de la température moyenne annuelle ",
+  "isothermality", "Isothermalité",
+  "temperature seasonality", "Saisonnalité de la température",
+  "mean daily maximum air temperature of the warmest month", "Température maximale quotidienne moyenne du mois le plus chaud",
+  "mean daily minimum air temperature of the coldest month", "Température minimale quotidienne moyenne du mois le plus froid",
+  "annual range of air temperature", "Amplitude annuelle de la température",
+  "mean daily mean air temperatures of the wettest quarter", "Température moyenne quotidienne du trimestre le hlus humide",
+  "mean daily mean air temperatures of the driest quarter", "Température moyenne quotidienne du trimestre le plus sec",
+  "mean daily mean air temperatures of the warmest quarter", "Température moyenne quotidienne du trimestre le plus chaud",
+  "mean daily mean air temperatures of the coldest quarter", "Température moyenne quotidienne du trimestre le plus froid",
+  "annual precipitation amount", "Précipitations annuelles",
+  "precipitation amount of the wettest month", "Précipitations du mois le plus humide",
+  "precipitation amount of the driest month", "Précipitations du mois le plus sec",
+  "precipitation seasonality", "Saisonnalité des précipitations",
+  "mean monthly precipitation amount of the wettest quarter", "Précipitations mensuelles moyennes du trimestre le plus humide",
+  "mean monthly precipitation amount of the driest quarter", "Précipitations mensuelles moyennes du trimestre le plus sec",
+  "mean monthly precipitation amount of the warmest quarter", "Précipitations mensuelles moyennes du trimestre le plus chaud",
+  "mean monthly precipitation amount of the coldest quarter", "Précipitations mensuelles moyennes du trimestre le plus froid"
+)
+
+
 collections[["chelsa-clim"]]$var <- paste0("bio", 1:19)
-collections[["chelsa-clim"]]$name <- gsub(" ", "_", c(
-    "mean annual air temperature",
-    "mean diurnal air temperature range",
-    "isothermality",
-    "temperature seasonality",
-    "mean daily maximum air temperature of the warmest month",
-    "mean daily minimum air temperature of the coldest month",
-    "annual range of air temperature",
-    "mean daily mean air temperatures of the wettest quarter",
-    "mean daily mean air temperatures of the driest quarter",
-    "mean daily mean air temperatures of the warmest quarter",
-    "mean daily mean air temperatures of the coldest quarter",
-    "annual precipitation amount",
-    "precipitation amount of the wettest month",
-    "precipitation amount of the driest month",
-    "precipitation seasonality",
-    "mean monthly precipitation amount of the wettest quarter",
-    "mean monthly precipitation amount of the driest quarter",
-    "mean monthly precipitation amount of the warmest quarter",
-    "mean monthly precipitation amount of the coldest quarter"
-  ))
+collections[["chelsa-clim"]]$name <- gsub(" ", "_", climvars[seq(1, length(climvars), by = 2)])
+collections[["chelsa-clim"]]$fr <- climvars[seq(2, length(climvars), by = 2)]
+
+cecvars <- c(
+  "coniferous", "% de forêts conifériennes",
+  "taiga", "% de forêts de taïga",
+  "tropical_evergreen", "% de forêts tropicales sempervirentes",
+  "tropical_deciduous", "% de forêts feuillues tropicales",
+  "deciduous", "% de forêts feuillues",
+  "mixed", "% de forêts mixtes", 
+  "tropical_shrub", "% d'arbustaies tropicales", 
+  "temperate_shrub", "% d'arbustaies tempérées", 
+  "tropical_grass", "% de prairies tropicales", 
+  "temperate_grass", "% de prairies tempérées", 
+  "polar_shrub", "% d'arbustaies polaires", 
+  "polar_grass", "% de prairies polaires", 
+  "lichen", "% de lichens", 
+  "wetland", "% de milieux humides", 
+  "cropland", "% de milieux cultivés ou agricoles", 
+  "barren", "% de milieux dénudés", 
+  "urban", "% de milieux urbains", 
+  "water", "% de d'eau", 
+  "snow", "% de surfaces enneigées"
+)
 
 collections[["cec_land_cover_percentage"]]$var <- paste0("cec_land_cover_percent_class_", 1:19)
-collections[["cec_land_cover_percentage"]]$name <- c("coniferous", "taiga", "tropical_evergreen", "tropical_deciduous", "temperate_deciduous", "mixed", "tropical_shrub", "temperate_shrub", "tropical_grass", "temperate_grass", "polar_shrub", "polar_grass", "polar_lichen", "wetland", "cropland", "barren", "urban", "water", "snow")
+collections[["cec_land_cover_percentage"]]$name <- cecvars[seq(1, length(cecvars), by = 2)]
+collections[["cec_land_cover_percentage"]]$fr <- cecvars[seq(2, length(cecvars), by = 2)]
+
 
 
 ###############################################
@@ -159,16 +186,19 @@ ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]
 
 #chelsavars <- variables[variables$coll == "chelsa-clim", ]
 idsname <- ids
+idsfr <- ids
 for(i in seq_along(collections[["chelsa-clim"]]$var)){
   idsname <- gsub(paste0(collections[["chelsa-clim"]]$var[i], "_"), paste0(collections[["chelsa-clim"]]$name[i], "_"), idsname)
+  idsfr <- gsub(paste0(collections[["chelsa-clim"]]$var[i], "_"), paste0(collections[["chelsa-clim"]]$fr[i], " "), idsfr)
 } 
 
 collections[["chelsa-clim-proj"]]$var <- ids
 collections[["chelsa-clim-proj"]]$name <- idsname
+collections[["chelsa-clim-proj"]]$fr <- idsfr
 
 
 
-variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE))
+variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
 
 
 urls <- lapply(seq_along(collections), function(i){
@@ -184,9 +214,9 @@ if(FALSE){
 
 if(TRUE){
   desc <- variables
-  names(desc) <- c("collection", "var", "variable", "url")
-  desc <- desc[, c("collection", "variable", "url")]
-  desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na", paste0(desc$variable, ".tif"))
+  names(desc) <- c("collection", "var", "variable", "fr", "url")
+  #desc <- desc[, c("collection", "variable", "url")]
+  #desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na", paste0(desc$variable, ".tif"))
   write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
   #system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
   #x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
