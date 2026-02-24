@@ -144,7 +144,7 @@ points(obsoverclimate, pch = 21, lwd = 0.25, col = ring, bg = cols[4])
 points(obsoverth, pch = 21, lwd = 0.25, col = ring, bg = cols[2])
 points(obsna, pch = 21, lwd = 0.25, col = ring,, bg = cols[3])
 points(obsunderth, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
-legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 2, 3, 4)], col = ring, legend = c(paste("<", th_large, "/ n =", length(obsunderth)), paste("\u2265", th_large, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna)), paste("\u2265", th_climate, "/ n =", length(obsoverclimate))), cex = 1.25, bty = "n", title = "Précision (en m)")
+legend("topright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(1, 2, 3, 4)], col = ring, legend = c(paste("<", th_large, "/ n =", length(obsunderth)), paste("\u2265", th_large, "/ n =", length(obsoverth)), paste("NA", "/ n =", length(obsna)), paste("\u2265", th_climate, "/ n =", length(obsoverclimate))), cex = 1.25, bty = "n", title = "Précision (en m)")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 
@@ -226,7 +226,7 @@ obs <- list(climate = list(large = obs), habitat = list(large = obs_large, small
 bg <- list(climate = list(large = bg), habitat = list(large = bg_large, small = bg_small))
 
 png(file.path("results/graphics", paste0(gsub(" ", "_", sp), "_na_used.png")), width = 8, height = 8, units = "in", res = 300)
-par(mar = c(0.5, 0.5, 0.5, 0.5))
+par(mar = c(0.5, 0.5, 0.5, 1.5))
 plot(st_geometry(na))
 plot(st_geometry(na), col = "grey90", border = "white", lwd = 1, add = TRUE)
 text(st_coordinates(st_centroid(st_buffer(na, -50000))), labels = na$NAME_1, col = "white", lwd = 0.25, cex = 0.75)
@@ -234,7 +234,7 @@ plot(st_geometry(lakes), col = "white", border = "grey80", add = TRUE, lwd = 0.5
 points(obs_all, pch = 21, lwd = 0.25, col = ring, bg = cols[3])
 points(obs[["climate"]]$large, pch = 21, lwd = 0.25, col = ring, bg = cols[2])
 points(obs[["habitat"]]$large, pch = 21, lwd = 0.25, col = ring, bg = cols[1])
-legend("bottomright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 2, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all), ")"), paste0("climate ", "(n = ", nrow(obs[["climate"]]$large), ")"), paste0("habitat ", "(n = ", nrow(obs[["habitat"]]$large), ")")), cex = 1.25, bty = "n", title = "Occurrences utilisées ?")
+legend("topright", pch = 21, pt.lwd = 0.25, pt.bg = cols[c(3, 2, 1)], col = ring, legend = c(paste0("all ", "(n = ", nrow(obs_all), ")"), paste0("climate ", "(n = ", nrow(obs[["climate"]]$large), ")"), paste0("habitat ", "(n = ", nrow(obs[["habitat"]]$large), ")")), cex = 1.25, bty = "n", title = "Occurrences utilisées ?")
 #mtext(side = 3, line = -2.5, text = sp, font = 2, cex = 2, adj = 0.02)
 dev.off()
 

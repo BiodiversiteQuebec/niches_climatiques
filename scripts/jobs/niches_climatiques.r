@@ -15,7 +15,7 @@ species_vars <- list(
 `Aquila chrysaetos` = c("elevation", "ruggedness", "roche"), 
 `Catharus bicknelli` = c("elevation", "ruggedness"), 
 `Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
-`Coturnicops noveboracensis` = c("geomflat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique"), 
+`Coturnicops noveboracensis` = c("geomflat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique", "distance_to_coast"), 
 `Ixobrychus exilis` = c("geomflat", "wetland", "marais", "eau_peu_profonde", "glaciomarin", "glaciolacustre", "alluvion"), 
 `Glaucomys volans` = c("forest")
 )
@@ -58,7 +58,7 @@ info <- duckdbfs::open_dataset("data/atlas_2025-03-17.parquet", tblname = "atlas
   collect() |>
   as.data.frame()
 
-
+info$group <- sapply(species_target_groups[match(info$species, names(species_target_groups))], paste, collapse = " / ")
 info$period <- sapply(breeding_periods[match(info$species, names(breeding_periods))], paste, collapse = " / ")
 info$period <- ifelse(info$period == "", NA, info$period)
 

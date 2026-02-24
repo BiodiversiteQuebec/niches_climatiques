@@ -1,4 +1,4 @@
-
+cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, names(models)[i], "results.r", sep = " - "), "\n"))
 
 ## Choose scenario to produce image from
 display_scenario <- scenarios[2]
@@ -64,6 +64,17 @@ sdm_cols <- coloScale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen
 range_cols <- adjustcolor("forestgreen", 0.75)
 
 
+png(topng(gsub(".tif", "_coarse.tif", file_sdm)), units = "in", height = 6, width = 7.5, res = 300)
+#par(mar = c(0, 0, 0, 8))
+#plot_background()
+rrr <- crop(project(aggregate(crop(predictions, bregion), 50, fun = "mean", na.rm = TRUE), crop(predictions, bregion)), bregion, mask = TRUE)
+plot(rrr, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, mar = c(0, 0, 0, 0))
+#plot(crop(predictions, st_buffer(obs[[dataunc]][[echelle]], buffd)), axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, mar = c(0, 0, 0, 0))
+#plot(predictions, axes = FALSE, plg = plg, col = sdm_cols)
+plot_foreground(observation = FALSE, echelle = echelle)
+add_time()
+dev.off()
+
 png(topng(file_sdm), units = "in", height = 6, width = 7.5, res = 300)
 #par(mar = c(0, 0, 0, 8))
 #plot_background()
@@ -106,7 +117,7 @@ dev.off()
 
 png(topng(gsub("_sdm", "_sdm_diff", file_sdm)), units = "in", height = 6, width = 7.5, res = 300)
 #par(mar = c(0, 0, 0, 8))  
-dif <- crop(predictions, bregion) - crop(predictions_proj, bregion)
+dif <- crop(predictions_proj, bregion) - crop(predictions, bregion)
 se <- unlist(global(dif, range, na.rm = TRUE)[1, ])
 if(all(se == 0)){ # when no diff cause habitat only model
   cols <- "white"
@@ -128,7 +139,7 @@ minus <- st_difference(polran, polran_proj)
 plus <- st_difference(polran_proj, polran)
 equal <- st_intersection(polran_proj, polran)
 plot_background()
-cols <- adjustcolor(c("blue", "tomato", "darkgreen"), 0.5)
+cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
 plot(st_geometry(minus), col = cols[1], border = NA, add = TRUE)
 plot(st_geometry(plus), col = cols[2], border = NA, add = TRUE)
 plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
@@ -148,8 +159,9 @@ if(is.character(models[[i]])){
   g <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), mean, na.rm = TRUE)
   gr <- global(crop(p[[echelle]][[vars]], region, mask = TRUE), range, na.rm = TRUE)
   png(file.path("results/graphics", paste(gsub(" ", "_", sp), names(models)[i], "marginal_effects.png", sep = "_")), units = "in", height = ceiling(nrow(g)/3) * 1.5, width = 8, res = 300)
-  par(mfrow = c(ceiling(nrow(g)/3), 3), oma = c(0, 2, 0, 0))
+  par(mfrow = c(ceiling(nrow(g)/3), 3), oma = c(0, 2, 1, 0))
   ran <- invisible(range(unlist(sapply(1:nrow(g), function(j){
+      if(rownames(g)[j] == "southstlawrence"){return(0)}
       brks <- 500
       newdata <- t(g) |> as.data.frame()
       newdata <- newdata[rep(1, brks), , drop = FALSE]
@@ -182,6 +194,7 @@ if(is.character(models[[i]])){
          ylim <- ran # common scale
       }
       #xlim <- if(rownames(g)[j] == "distance_to_streams"){c(0, 1500)} else {range(v, na.rm = TRUE)}
+      #if(rownames(g)[j] == "distance_to_coast"){v <- exp(v) - 1}
       plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 1.5, bty = "n")
       axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
       axis(2, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0)
@@ -216,11 +229,10 @@ if(is.character(models[[i]])){
       #axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
       axis(4, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0, col.axis = adjustcolor("black", 0.5))
 
-      if(j == 1){
-        legend("topleft", inset = c(0.025, 0), legend = c("Prédictions (échelle commune, gauche)", "Prédictions (échelle individuelle, droite)", "Observations / (Observations + Background)", "Observations + Background"), cex = 0.5, bty = "n", lwd = c(1.5, 1, NA, NA), pch = c(NA, NA, 15, 15), col = c("black", adjustcolor("black", 0.3), adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, NA, 1, 1))
-      }
-
   }))
+  par(fig = c(0, 1, 0, 1), new = TRUE, mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0))
+  plot.new()
+  legend("top", horiz = TRUE, legend = c("Prédictions (échelle commune, gauche)", "Prédictions (échelle individuelle, droite)", "Observations / (Observations + Effort)", "Observations + Effort"), cex = 0.75, bty = "n", lwd = c(1.5, 1, NA, NA), pch = c(NA, NA, 15, 15), col = c("black", adjustcolor("black", 0.3), adjustcolor("forestgreen", 0.65), adjustcolor("black", 0.20)), pt.cex = c(NA, NA, 1, 1))
   dev.off()
 
 }

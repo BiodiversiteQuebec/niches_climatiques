@@ -1,4 +1,6 @@
 
+cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, names(models)[i], "predictions.r", sep = " - "), "\n"))
+
 # create tif/gpkg files for the first model, else append
 if(i %in% c(1, 4)){ 
   overwrite <- TRUE
@@ -97,8 +99,8 @@ names(predictions_proj) <- ns
 
 
 ### threshold sdm from obs
-threshold1 <- 0.95
-threshold2 <- 0.95
+threshold1 <- 0.98
+threshold2 <- 0.98
 e1 <- extract(predictions, obs[[dataunc]][[echelle]][qc, ])
 e2 <- extract(predictions, obs[[dataunc]][[echelle]][st_difference(region, qc), ])
 #e <- rbind(e1)#, e2)
@@ -109,8 +111,14 @@ val2 <- e2[round(threshold2 * nrow(e2)), 2]
 val <- min(c(val1, val2))
 
 
-### threshold sdm from sens_spec in Quebec
+### Quebec threshold for % of obs contained
+thresholdqc <- 0.95
+eqc <- extract(predictions, obs[[dataunc]][[echelle]][qc, ])
+eqc <- eqc[rev(order(eqc[,2])), ]
+valqc <- eqc[round(thresholdqc * nrow(eqc)), 2]
 
+
+### threshold sdm from sens_spec in Quebec
 cropzone <- na[na$NAME_1 %in% c("Québec","Ontario","New Brunswick","Nova Scotia","Prince Edward Island","Newfoundland and Labrador","Vermont","New Hampshire","Maine", "New York", "Massachusetts", "Rhode Island", "Connecticut", "Pennsylvania", "New Jersey", "Michigan", "Minnesota", "Wisconsin"), ]
 #cropzone <- qc
 
@@ -127,25 +135,35 @@ absence <- ifel(absence == 0, 1, 0) |> mask(zone) |> values() |> _[,1]
 aa <- predvalues[sample(which(absence == 1 & presence == 0), usen)]
 
 e <- evaluate2(p = pp, a = aa)
+
+#if(!names(models)[i] %in% c("climat", "gam")){ ### if not a climate model, use % and not spec_sens
+#  val <- dismo::threshold(e)[['spec_sens']]
+#}
+
 val <- dismo::threshold(e)[['spec_sens']]
+
+if(names(models)[i] %in% c("climat", "gam")){ ### if a climate model, keep % in QC
+  if(valqc < val){
+    val <- valqc
+    sprintf("Threshold adjusted for %s Québec", thresholdqc)
+  }
+}
 
 ran <- ifel(predictions > val, 1, 0)
 names(ran) <- names(models[i])
 writeRaster(ran, file_range, overwrite = overwrite, gdal = gdal)
 
 polran <- ifel(ran == 1, 1, NA) |>
+  aggregate(5, fun = "max", na.rm = TRUE) |>
   as.polygons() |>
   st_as_sf()
 
 #mean(lengths(st_intersects(obs[["small"]], polran)))
 
 
-#png("st.png", width = 12, height = 12, units = "in", res = 300);plot(ran);plot(st_geometry(polran), add = TRUE);plot(st_geometry(na), add = TRUE);plot(st_geometry(obs[[dataunc]][[echelle]]), cex = 0.5, col = "orange2", add = TRUE);dev.off()
+#png("st.png", width = 12, height = 12, units = "in", res = 300);plot(ran);plot(st_geometry(polran), add = TRUE);plot(st_geometry(na), add = TRUE);plot(st_geometry(obs[[dataunc]][[echelle]]), cex = 0.5, col = adjustcolor("orange2", 0.5), add = TRUE);dev.off()
 #png("st.png", width = 12, height = 12, units = "in", res = 300);plot(presence);plot(st_geometry(na), add = TRUE);dev.off()
 #png("st.png", width = 12, height = 12, units = "in", res = 300);plot(absence);plot(st_geometry(na), add = TRUE);dev.off()
-
-
-
 
 
 st_write(polran, file_pol, layer = names(models[i]), append = append, delete_dsn = delete_dsn, delete_layer = delete_layer)
@@ -168,6 +186,7 @@ pr_proj <- lapply(seq_along(predictions_proj), function(j){
   }
 writeRaster(ran_proj, file_range_proj, overwrite = o, gdal = g)
 polran_proj <- ifel(ran_proj == 1, 1, NA) |>
+  aggregate(5, fun = "max", na.rm = TRUE) |>
   as.polygons() |>
   st_as_sf()
 st_write(polran_proj, file_pol_proj, layer = paste(names(models[i]), names(predictions_proj)[j]), append = a, delete_dsn = dd, delete_layer = dl)

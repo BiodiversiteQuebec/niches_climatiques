@@ -90,6 +90,25 @@ psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
 
+
+### distance to st lawrence + coast
+psmall$distance_to_coast <- rast("data/coast_stlawrence.tif") |> project(psmall)
+psmall$distance_to_coast <- log(psmall$distance_to_coast + 1)
+
+#stl <- st_read("data/grhq.gpkg", layer = "stlawrence") |>
+#  st_transform(st_crs(ocean))
+
+#ocean2 <- mask(ocean, stl, updatevalue = 0, inverse = TRUE)
+
+#png("st.png", width = "10", height = "10", units = "in", res = 300)
+#plot(log(ocean + 1))
+#plot(st_geometry(stl), add = TRUE, col = "lightblue")
+#dev.off()
+
+
+
+
+
 # duplicate scenarios for psmall to facilitate iterations later (could want to produce scenarios also in QC predictors even though we only build climate models at large scale or adjust iterations later to avoid producing duplicates for models in which climate projections do not make sens since based only on habitat)
 
 psmall_proj <- lapply(scenarios, function(j){psmall})
@@ -103,6 +122,7 @@ rm(psmall, psmall_proj, plarge, plarge_proj, predictors, predictors_proj)
 
 desc <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
 on <- names(p$small)[order(match(names(p$small), desc$variable), na.last = NA)]
+on <- c(on, setdiff(names(p$small), on))
 pp <- p$small[[on]]
 xxx <- ext(p$small)$xmin + 0.80 * abs((ext(p$small)$xmax - ext(p$small)$xmin))
 yyy <- ext(p$small)$ymin + 0.90 * abs((ext(p$small)$ymax - ext(p$small)$ymin))
@@ -114,6 +134,7 @@ dev.off()
 
 desc <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
 on <- names(p$large)[order(match(names(p$large), desc$variable), na.last = NA)]
+on <- c(on, setdiff(names(p$large), on))
 pp <- p$large[[on]]
 xxx <- ext(p$large)$xmin + 0.90 * abs((ext(p$large)$xmax - ext(p$large)$xmin))
 yyy <- ext(p$large)$ymin + 0.90 * abs((ext(p$large)$ymax - ext(p$large)$ymin))
