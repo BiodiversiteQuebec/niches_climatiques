@@ -125,7 +125,8 @@ collections <- list(
     "lakes", "distance_to_lakes", "Distance aux lacs",
     "rivers", "distance_to_rivers", "Distance aux rivières",
     "streams", "distance_to_streams", "Distance aux cours d'eau",
-    "stlawrence", "distance_to_stlawrence", "Distance au Saint Laurent"
+    "stlawrence", "distance_to_stlawrence", "Distance au Saint Laurent",
+    "coast_stlawrence", "distance_to_coaststlawrence", "Distance à à côte et à l'axe du St-Laurent"
   ),
   "cop-dem-glo" = c(
     "elevation", "elevation", "Élévation",
