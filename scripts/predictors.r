@@ -14,6 +14,9 @@ bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerot
 openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 
 predictors <- rast("data/predictors_500_NA.tif")
+desc_large <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
+if(any(names(predictors) == "polar_lichen")){w <- which(names(predictors) == "polar_lichen");names(predictors)[w]<-"lichen"} # temp fix will become obsolete
+if(any(names(predictors) == "temperate_deciduous")){w <- which(names(predictors) == "temperate_deciduous");names(predictors)[w]<-"deciduous"} # temp fix will become obsolete
 ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
 oo <- scoff(predictors$mean_annual_air_temperature )[2]
 predictors$mean_annual_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$mean_annual_air_temperature) * ss) + oo
@@ -32,8 +35,17 @@ r <- ifel(is.na(predictors[[1]]), NA, 0)
 #plot(mask(mask(r, fsl, updatevalue = 1, inverse = TRUE), predictors[[1]], inverse = FALSE))
 #dev.off()
 
+### Add variables
 predictors$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), predictors[[1]], inverse = FALSE)
+add <- desc_large[1, ]
+add$variable <- "southstlawrence"; add$fr <- "Sud du Saint-Laurent"; add$var <- NA; add$url <- NA; add$collection <- NA
+desc_large <- rbind(desc_large, add)
+
 predictors$forest <- sum(predictors[[intersect(forest_cats, names(predictors))]])
+add <- desc_large[desc_large$variable == "deciduous", ]
+add$variable <- "forest"; add$fr <- "% de forêts"; add$var <- NA; add$url <- NA
+desc_large <- rbind(desc_large, add)
+
 
 # scenarios
 timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
@@ -76,7 +88,7 @@ plarge_proj <- predictors_proj
 
 psmall <-rast("data/predictors_200_QC.tif")
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
-
+desc_small <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
 
 r <- ifel(is.na(psmall[[1]]), NA, 0)
 
@@ -84,16 +96,32 @@ r <- ifel(is.na(psmall[[1]]), NA, 0)
 #plot(mask(mask(r, fsl, updatevalue = 1, inverse = TRUE), predictors[[1]], inverse = FALSE))
 #dev.off()
 
+### Add variables
 psmall$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), psmall[[1]], inverse = FALSE)
+add <- desc_small[desc_small$variable == "distance_to_coaststlawrence", ]
+add$variable <- "southstlawrence"; add$fr <- "Sud du Saint-Laurent"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
 
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
+add <- desc_small[desc_small$variable == "deciduous", ]
+add$variable <- "forest"; add$fr <- "% de forêts"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
+
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
+add <- desc_small[desc_small$variable == "tourbiere_ombrotrophe", ]
+add$variable <- "tourbiere"; add$fr <- "% de tourbières"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
+
 psmall$distance_to_openwater <- min(psmall[[intersect(openwater_cats, names(psmall))]])
+add <- desc_small[desc_small$variable == "distance_to_lakes", ]
+add$variable <- "distance_to_openwater"; add$fr <- "Distance à un point d'eau"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
 
+psmall$logdistance_to_coaststlawrence <- log(psmall$distance_to_coaststlawrence + 1)
+add <- desc_small[desc_small$variable == "distance_to_lakes", ]
+add$variable <- "logdistance_to_coaststlawrence"; add$fr <- "Distance à la côte et au Saint-Laurent (log)"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
 
-### distance to st lawrence + coast
-psmall$distance_to_coast <- rast("data/coast_stlawrence.tif") |> project(psmall)
-psmall$distance_to_coast <- log(psmall$distance_to_coast + 1)
 
 #stl <- st_read("data/grhq.gpkg", layer = "stlawrence") |>
 #  st_transform(st_crs(ocean))
@@ -104,8 +132,6 @@ psmall$distance_to_coast <- log(psmall$distance_to_coast + 1)
 #plot(log(ocean + 1))
 #plot(st_geometry(stl), add = TRUE, col = "lightblue")
 #dev.off()
-
-
 
 
 
@@ -120,27 +146,26 @@ p_proj <- list(small = psmall_proj, large = plarge_proj)
 rm(psmall, psmall_proj, plarge, plarge_proj, predictors, predictors_proj)
 
 
-desc <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
-on <- names(p$small)[order(match(names(p$small), desc$variable), na.last = NA)]
+on <- names(p$small)[order(match(names(p$small), desc_small$variable), na.last = NA)]
 on <- c(on, setdiff(names(p$small), on))
 pp <- p$small[[on]]
 xxx <- ext(p$small)$xmin + 0.80 * abs((ext(p$small)$xmax - ext(p$small)$xmin))
 yyy <- ext(p$small)$ymin + 0.90 * abs((ext(p$small)$ymax - ext(p$small)$ymin))
 plg <- list(x = xxx, y = yyy, size = c(0.4, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
 png("predictors_small.png", width = 26, height = 36, units = "in", res = 200)
-plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = names(pp), plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
+plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = desc_small$fr[match(names(pp), desc_small$variable)], plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
 dev.off()
 
 
-desc <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
-on <- names(p$large)[order(match(names(p$large), desc$variable), na.last = NA)]
+
+on <- names(p$large)[order(match(names(p$large), desc_large$variable), na.last = NA)]
 on <- c(on, setdiff(names(p$large), on))
 pp <- p$large[[on]]
 xxx <- ext(p$large)$xmin + 0.90 * abs((ext(p$large)$xmax - ext(p$large)$xmin))
 yyy <- ext(p$large)$ymin + 0.90 * abs((ext(p$large)$ymax - ext(p$large)$ymin))
 plg <- list(x = xxx, y = yyy, size = c(0.4, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#777", tic = "out")
 png("predictors_large.png", width = 26, height = 26, units = "in", res = 200)
-plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = names(pp), plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
+plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = desc_large$fr[match(names(pp), desc_large$variable)], plg = plg, axes = FALSE, fun = function(){plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)})
 dev.off()
 
 
