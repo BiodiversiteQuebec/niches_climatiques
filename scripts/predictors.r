@@ -8,13 +8,16 @@ options(width = 150)
 #predictors_proj <- rast("data/predictors_proj.tif")
 #names(predictors_proj)[c(20, 21, 24, 25, 26)] <- c("geomfootslope", "geomflat", "silt", "sand", "clay")
 
+desc_large <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
+desc_small <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
+
 ### vars to pool
 forest_cats <- c("mixed", "coniferous", "tropical_evergreen", "tropical_deciduous", "deciduous", "temperate_deciduous", "taiga")
 bog_cats <- c("tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe")
 openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
+meubles_cats <- desc_small$variable[desc_small$collection %in% c("sigeom_zones_morphosedimentologiques_percentage") & !desc_small$variable %in% c("anthropogenique", "organique", "roche")]
 
 predictors <- rast("data/predictors_500_NA.tif")
-desc_large <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
 if(any(names(predictors) == "polar_lichen")){w <- which(names(predictors) == "polar_lichen");names(predictors)[w]<-"lichen"} # temp fix will become obsolete
 if(any(names(predictors) == "temperate_deciduous")){w <- which(names(predictors) == "temperate_deciduous");names(predictors)[w]<-"deciduous"} # temp fix will become obsolete
 ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
@@ -88,7 +91,6 @@ plarge_proj <- predictors_proj
 
 psmall <-rast("data/predictors_200_QC.tif")
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
-desc_small <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
 
 r <- ifel(is.na(psmall[[1]]), NA, 0)
 
@@ -120,6 +122,11 @@ desc_small <- rbind(desc_small, add)
 psmall$logdistance_to_coaststlawrence <- log(psmall$distance_to_coaststlawrence + 1)
 add <- desc_small[desc_small$variable == "distance_to_lakes", ]
 add$variable <- "logdistance_to_coaststlawrence"; add$fr <- "Distance à la côte et au Saint-Laurent (log)"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
+
+psmall$meubles <- sum(psmall[[intersect(meubles_cats, names(psmall))]])
+add <- desc_small[desc_small$variable == "alluvion", ]
+add$variable <- "meubles"; add$fr <- "% de dépôts meubles"; add$var <- NA; add$url <- NA
 desc_small <- rbind(desc_small, add)
 
 
