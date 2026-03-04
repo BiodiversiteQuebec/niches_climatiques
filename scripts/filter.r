@@ -62,3 +62,16 @@ dev.off()
 
 
 }
+
+
+
+if(sp == "Glaucomys volans"){
+
+    # eliminate observation in Mingan (based on acoustics only and doubtful)
+    keep <- st_transform(obs, 4326) |>
+      st_coordinates() |>
+      (\(.){!.[,2] >= 50 & .[,2] >= -63.7})()
+    obs <- obs[keep, ]
+
+}
+
