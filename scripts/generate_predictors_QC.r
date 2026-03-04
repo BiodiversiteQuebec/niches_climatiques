@@ -62,12 +62,12 @@ coll <- "chelsa-clim"
 
 collections <- list(
   "earthenv_topography_derived" = c(
-    "geomflat_perc", "geomflat", "% de terrains plats",
-    "geomfootslope_per", "geomfootslope", "% de bas de pentes"
+    "geomflat_perc", "earthenv_geomflat", "% de terrains plats",
+    "geomfootslope_per", "earthenv_geomfootslope", "% de bas de pentes"
   ),
   "earthenv_topography" = c(
-    "elevation", "elevation", "Élévation",
-    "vrm", "ruggedness", "Indice de rugosité topographique"
+    "elevation", "earthenv_elevation", "Élévation",
+    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique"
   ),
   "soilgrids" = c(
     "sand_0-5cm", "sand", "% de sable",
@@ -125,8 +125,8 @@ collections <- list(
     "lakes", "distance_to_lakes", "Distance aux lacs",
     "rivers", "distance_to_rivers", "Distance aux rivières",
     "streams", "distance_to_streams", "Distance aux cours d'eau",
-    "stlawrence", "distance_to_stlawrence", "Distance au Saint Laurent",
-    "coast_stlawrence", "distance_to_coaststlawrence", "Distance à à côte et à l'axe du St-Laurent"
+    "stlawrence", "distance_to_stlawrence", "Distance au Saint-Laurent",
+    "coast_stlawrence", "distance_to_coaststlawrence", "Distance à la côte et à l'axe du Saint-Laurent"
   ),
   "cop-dem-glo" = c(
     "elevation", "elevation", "Élévation",
@@ -135,6 +135,9 @@ collections <- list(
   ),
   "geomorphons_percentages" = c(
     "flat", "flat", "% de terrains plats"
+  ),
+  "carte_eco_code_terrain_depot" = c(
+    "distance_aux_habitats_tortues", "distance_aux_habitats_tortues", "Distance aux habitats de tortues"
   )
 )
 
@@ -361,6 +364,7 @@ custom_mask <- function(v){
 
 custom_mask("mhc")
 custom_mask("twi")
+custom_mask("distance_aux_habitats_tortues")
 
 system(sprintf('rm %s/maskr.gpkg', tmpath))
 system(sprintf('rm %s/*_original.tif', tmpath))
@@ -435,7 +439,7 @@ registerDoParallel(cl)
 getDoParWorkers()
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
 #cmd <- sprintf('gdal_translate -of COG -r average -tr 500 500 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i])
-cmd <- sprintf('gdalwarp -r average -tr 500 500 -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling and no need to produce COG here
+cmd <- sprintf('gdalwarp -r average -tr 200 200 -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling and no need to produce COG here
 system(cmd)
 }
 
@@ -474,7 +478,7 @@ cmd <- sprintf('bash -c "
   
   gdalinfo --version
 
-  gdal_translate -of COG -r average -co OVERVIEW_RESAMPLING=AVERAGE -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_500_QC.tif"', tmpath, tmpath, tmpath, tmpath)
+  gdal_translate -of COG -r average -co OVERVIEW_RESAMPLING=AVERAGE -co INTERLEAVE=BAND -co COMPRESS=DEFLATE -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES %s/stacked.vrt %s/predictors_200_QC.tif"', tmpath, tmpath, tmpath, tmpath)
 system(cmd)
 
 

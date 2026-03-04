@@ -218,7 +218,7 @@ if(TRUE){
   #desc <- desc[, c("collection", "variable", "url")]
   #desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na", paste0(desc$variable, ".tif"))
   write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
-  #system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
+  system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
   #x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
 }
 
