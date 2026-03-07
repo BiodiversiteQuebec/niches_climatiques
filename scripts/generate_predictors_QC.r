@@ -32,6 +32,16 @@ get_ids <- function(coll, stac){
     sapply(X = _, function(i){i$id})
 }
 
+get_fr <- function(coll, stac){ # should pool with get_ids, but a lot of coll do not have fr names yet...
+  stac |>
+    stac_search(collections = coll) |>
+    post_request() |> 
+    items_fetch() |>
+    _$features |>
+    sapply(X = _, function(i){i$properties[["description:fr"]]})
+}
+
+
 get_urls <- function(coll, ids, stac){
   gids <- get_ids(coll, stac)
   w <- which(gids %in% ids)
@@ -207,8 +217,21 @@ collections[["cec_land_cover_percentage"]]$name <- cecvars[seq(1, length(cecvars
 collections[["cec_land_cover_percentage"]]$fr <- cecvars[seq(2, length(cecvars), by = 2)]
 
 
+### Ouranos
+coll <- "ouranos_past_climate_period"
+
+ids <- get_ids(coll, io)
+fr <- get_fr(coll, io)
+
+collections[[coll]]$var <- ids
+collections[[coll]]$name <- ids
+collections[[coll]]$fr <- fr
+
+
 ###############################################
 ### add collections with more complex names ###
+
+### Chelsa ####################################
 coll <- "chelsa-clim-proj"
 
 ids <- get_ids(coll, io)
@@ -234,6 +257,42 @@ ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]
 #collections[["chelsa-clim-proj"]]$var <- ids
 #collections[["chelsa-clim-proj"]]$name <- ids
 
+
+### Ouranos ####################################
+coll <- "ouranos_climate_projections"
+
+ids <- get_ids(coll, io)
+fr <- get_fr(coll, io)
+ 
+grep("2030|2060|2090", ids, value = TRUE) |>
+ strsplit("_") |>
+ lapply("[", 3:5) |>
+   do.call("rbind", args = _) |>
+   as.data.table() |>
+   setnames(c("ssp", "timeperiod", "model")) |>
+   _[ , (n = .N), by = .(model, ssp)]
+invisible(lapply(3:5, function(i){
+  dput(sort(unique(sapply(strsplit(ids, "_"), "[", i))))
+}))
+
+timeperiod <- c("1950", "1960", "1970", "1980", "1990", "2000", "2010", "2020", 
+"2030", "2040", "2050", "2060", "2070", "2080", "2090")[c(9, 12, 15)]
+model <- c("mean", "perc10", "perc50", "perc90")[3]
+ssp <- c("ssp245", "ssp370", "ssp585")[1:3]
+
+variables <- expand.grid(ssp = ssp, timeperiod = timeperiod, model = model) |>
+      apply(1, function(i){paste(i, collapse = "_")})
+kids <- ids[which(sub("^([^_]*_){2}", "", ids) %in% variables)] |>
+  grep("P1_", x = _, value = TRUE)     
+kfr <- fr[match(kids, ids)]  
+
+#collections[[coll]]$var <- kids
+#collections[[coll]]$name <- sub("(_|\\s)[^_\\s]*$", "", kids)
+#collections[[coll]]$fr <- sub("(_|\\s)[^_\\s]*$", "", kfr)
+
+
+################################################
+#### Put vars together #########################
 
 variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
 

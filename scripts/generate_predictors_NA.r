@@ -30,6 +30,15 @@ get_ids <- function(coll, stac){
     sapply(X = _, function(i){i$id})
 }
 
+get_fr <- function(coll, stac){ # should pool with get_ids, but a lot of coll do not have fr names yet...
+  stac |>
+    stac_search(collections = coll) |>
+    post_request() |> 
+    items_fetch() |>
+    _$features |>
+    sapply(X = _, function(i){i$properties[["description:fr"]]})
+}
+
 get_urls <- function(coll, ids, stac){
   gids <- get_ids(coll, stac)
   w <- which(gids %in% ids)
@@ -105,6 +114,7 @@ collections <- lapply(collections, function(i){
 ###############################################
 ### add collections with automated names ######
 
+### Chelsa ####################################
 climvars <- c(
   "mean annual air temperature", "Température moyenne annuelle",
   "mean diurnal air temperature range", "Amplitude de la température moyenne annuelle ",
@@ -158,10 +168,20 @@ collections[["cec_land_cover_percentage"]]$var <- paste0("cec_land_cover_percent
 collections[["cec_land_cover_percentage"]]$name <- cecvars[seq(1, length(cecvars), by = 2)]
 collections[["cec_land_cover_percentage"]]$fr <- cecvars[seq(2, length(cecvars), by = 2)]
 
+### Ouranos ######################################
+coll <- "ouranos_past_climate_period"
 
+ids <- get_ids(coll, io)
+fr <- get_fr(coll, io)
+
+collections[[coll]]$var <- ids
+collections[[coll]]$name <- ids
+collections[[coll]]$fr <- fr
 
 ###############################################
 ### add collections with more complex names ###
+
+### Chelsa ####################################
 coll <- "chelsa-clim-proj"
 
 ids <- get_ids(coll, io)
@@ -182,7 +202,8 @@ ssp <- c("ssp585", "ssp370", "ssp126")[2]
 
 variables <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
       apply(1, function(i){paste(i, collapse = "_")})
-ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]      
+ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)] |>
+  grep("bio1_|bio2_|bio5_|bio6_|bio12_", x = _, value = TRUE)      
 
 #chelsavars <- variables[variables$coll == "chelsa-clim", ]
 idsname <- ids
@@ -197,7 +218,42 @@ collections[["chelsa-clim-proj"]]$name <- idsname
 collections[["chelsa-clim-proj"]]$fr <- idsfr
 
 
+### Ouranos ####################################
+coll <- "ouranos_climate_projections"
 
+ids <- get_ids(coll, io)
+fr <- get_fr(coll, io)
+ 
+grep("2030|2060|2090", ids, value = TRUE) |>
+ strsplit("_") |>
+ lapply("[", 3:5) |>
+   do.call("rbind", args = _) |>
+   as.data.table() |>
+   setnames(c("ssp", "timeperiod", "model")) |>
+   _[ , (n = .N), by = .(model, ssp)]
+invisible(lapply(3:5, function(i){
+  dput(sort(unique(sapply(strsplit(ids, "_"), "[", i))))
+}))
+
+timeperiod <- c("1950", "1960", "1970", "1980", "1990", "2000", "2010", "2020", 
+"2030", "2040", "2050", "2060", "2070", "2080", "2090")[c(9, 12, 15)]
+model <- c("mean", "perc10", "perc50", "perc90")[3]
+ssp <- c("ssp245", "ssp370", "ssp585")[1:3]
+
+variables <- expand.grid(ssp = ssp, timeperiod = timeperiod, model = model) |>
+      apply(1, function(i){paste(i, collapse = "_")})
+kids <- ids[which(sub("^([^_]*_){2}", "", ids) %in% variables)] |>
+  grep("P1_|P2_|P5_|P6_|P12_", x = _, value = TRUE)       
+kfr <- fr[match(kids, ids)]  
+
+collections[[coll]]$var <- kids
+collections[[coll]]$name <- sub("(_|\\s)[^_\\s]*$", "", kids)
+collections[[coll]]$fr <- sub("(_|\\s)[^_\\s]*$", "", kfr)
+
+
+
+#####################################################
+### Pool variables together #########################
 variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
 
 
@@ -210,7 +266,7 @@ variables$url <- URLencode(variables$url)
 
 #variables <- variables[c(1, 5, 14, 17, 55), ]
 
-if(FALSE){
+if(TRUE){
 
 if(TRUE){
   desc <- variables
@@ -226,7 +282,7 @@ cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
-cmd <- sprintf('gdalwarp -overwrite -cutline %s/NA.gpkg -crop_to_cutline -dstnodata -9999.0 -r average -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$name[i])
+cmd <- sprintf('gdalwarp -overwrite -cutline %s/NA.gpkg -crop_to_cutline -dstnodata -9999.0 -r average -tr 200 200 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$name[i])
 system(cmd)
 #system(sprintf('cp %s/%s.tif %s/%s_original.tif', tmpath, variables$name[i], tmpath, variables$name[i])) # keep snapshot of original for precise masking
 py_cmd <- sprintf("from osgeo import gdal; gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
