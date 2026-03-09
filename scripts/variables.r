@@ -6,35 +6,12 @@
 climate_vars <- c("mean_annual_air_temperature")
 #climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount", "mean_diurnal_air_temperature_range")
 #climate_vars <- c("mean_annual_air_temperature", "mean_diurnal_air_temperature_range")
-#other_vars <- names(predictors)[20:nlyr(predictors)]
-other_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland")
 
-
-#vars <- c(names(p)[1:19])
-#vars <- c(names(p)[1:19], other_vars)
-#vars <- c(climate_vars, other_vars)
-#vars <- c(climate_vars[c(2, 3)], other_vars)
-#vars <- c(climate_vars[1:2], other_vars[1:2])
-#vars <- c(climate_vars[1:2])#, other_vars)
-#vars <- c(climate_vars[c(1, 3)])
-#vars <- c(other_vars[c(1, 2, 9, 10)])
-#vars <- climate_vars[c(1, 3, 4)]
-#vars <- c(other_vars)#, other_vars)
-#vars <- climate_vars[c(1)]
-#vars <- c(climate_vars[1], other_vars[c(2, 10)])
-#vars <- c(other_vars)
-#vars <- c(climate_vars[c(1, 2, 3, 4)])
-#vars <- c(climate_vars[c(1:4)])
-#vars <- c(climate_vars[c(1:4)], other_vars)
-#vars <- c(other_vars)
-
-other_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland")
-large_vars <- c("geomfootslope", "geomflat", "ruggedness", "elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland", "southstlawrence")
+large_vars <- c("earthenv_geomfootslope", "earthenv_geomflat", "earthenv_ruggedness", "earthenv_elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland", "southstlawrence")
 #dput(grep("temperature|precipitation|isothermality", names(psmall), invert = TRUE, value = TRUE))
 small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "depot","distance_to_roads", 
-"eau_peu_profonde", "elevation", "eolien", "forest", "geomflat", "geomfootslope", 
-"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "prairie_humide", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "tourbiere", "twi", "urban", "water", "wetland", "distance_to_lakes", "distance_to_rivers", "distance_to_streams", "distance_to_stlawrence", "distance_to_openwater", "southstlawrence", "distance_to_coast")
-#pp <- p$large[[other_vars]]
+"eau_peu_profonde", "elevation", "eolien", "forest", "flat", "earthenv_geomfootslope", 
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "prairie_humide", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "tourbiere", "twi", "urban", "water", "wetland", "distance_to_lakes", "distance_to_rivers", "distance_to_streams", "distance_to_stlawrence", "distance_to_openwater", "southstlawrence", "distance_to_coaststlawrence", "distance_to_cliffs")
 #name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", "sable", "argile", "% forêt", "% urbain", "% eau", "% milieu humide", "% agricole")
 #names(pp) <- name_vars
 #use_small <- unique(c(c("urban", "geomflat"), sample(small_vars)))
