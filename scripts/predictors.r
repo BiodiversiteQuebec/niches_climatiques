@@ -18,6 +18,12 @@ openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 meubles_cats <- desc_small$variable[desc_small$collection %in% c("sigeom_zones_morphosedimentologiques_percentage") & !desc_small$variable %in% c("anthropogenique", "organique", "roche")]
 
 predictors <- rast("data/predictors_500_NA.tif")
+predictors <- predictors[[grep("^P\\d+_", names(predictors), value = TRUE, invert = TRUE)]] # temp remove ouranos
+
+if(any(names(predictors) == "geomflat")){w <- which(names(predictors) == "geomflat");names(predictors)[w]<-"earthenv_geomflat"} # temp fix will become obsolete
+if(any(names(predictors) == "geomfootslope")){w <- which(names(predictors) == "geomfootslope");names(predictors)[w]<-"earthenv_geomfootslope"} # temp fix will become obsolete
+if(any(names(predictors) == "elevation")){w <- which(names(predictors) == "elevation");names(predictors)[w]<-"earthenv_elevation"} # temp fix will become obsolete
+if(any(names(predictors) == "ruggedness")){w <- which(names(predictors) == "ruggedness");names(predictors)[w]<-"earthenv_ruggedness"} # temp fix will become obsolete
 if(any(names(predictors) == "polar_lichen")){w <- which(names(predictors) == "polar_lichen");names(predictors)[w]<-"lichen"} # temp fix will become obsolete
 if(any(names(predictors) == "temperate_deciduous")){w <- which(names(predictors) == "temperate_deciduous");names(predictors)[w]<-"deciduous"} # temp fix will become obsolete
 ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
@@ -50,7 +56,14 @@ add$variable <- "forest"; add$fr <- "% de forêts"; add$var <- NA; add$url <- NA
 desc_large <- rbind(desc_large, add)
 
 
-# scenarios
+### scenarios
+# ouranos
+#timeperiod <- c("2030", "2060", "2090")
+#ssp <- c("ssp585", "ssp370", "ssp245")
+#keep <- grep(paste(c(timeperiod, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
+#keep <- grep("^P\\d+_", keep, value = TRUE, invert = TRUE) # temporarily remove ouranos vars
+
+# chelsa
 timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
 model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")
 ssp <- c("ssp585", "ssp370", "ssp126")
@@ -90,6 +103,7 @@ plarge_proj <- predictors_proj
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_200_QC.tif")
+psmall <- psmall[[grep("^P\\d+_", names(psmall), value = TRUE, invert = TRUE)]] # temp remove ouranos
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
 
 r <- ifel(is.na(psmall[[1]]), NA, 0)
