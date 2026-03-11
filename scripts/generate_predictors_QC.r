@@ -107,7 +107,7 @@ collections <- list(
   ),
   "sigeom_zones_morphosedimentologiques_percentage" = c(
     "Alluvion_1", "alluvion", "% de terrains d'alluvions",
-    "Dépôt_2", "depot", "% de terrains de dépôts",
+    "Dépôt_2", "versant", "% de dépôts de versants",
     "Éolien_3", "eolien", "% de dépôts éoliens",
     "Glaciaire_4", "glaciaire", "% de dépôts glaciaires",
     "Anthropogénique_5", "anthropogenique", "% de dépôts anthropogéniques",
