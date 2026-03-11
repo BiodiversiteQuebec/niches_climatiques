@@ -117,7 +117,7 @@ collections <- list(
     "Glaciomarin_9", "glaciomarin", "% de dépôts glaciomarins",
     "Organique_10", "organique", "% de dépôts organiques",
     "Quaternaire_11", "quaternaire", "% de dépôts quaternaires",
-    "Roche_12", "roche", "% de dépôt rocheux",
+    "Roche_12", "roche", "% de dépôts rocheux",
     "Till_13", "till", "% de dépôts de till"
   ),
   "mhp2023_percentage" = c(
