@@ -73,12 +73,12 @@ coll <- "chelsa-clim"
 
 collections <- list(
   "earthenv_topography_derived" = c(
-    "geomflat_perc", "geomflat", "% de terrains plats", 
-    "geomfootslope_per", "geomfootslope", "% de bas de pentes"
+    "geomflat_perc", "earthenv_geomflat", "% de terrains plats", 
+    "geomfootslope_per", "earthenv_geomfootslope", "% de bas de pentes"
   ),
   "earthenv_topography" = c(
-    "elevation", "elevation", "Élévation",
-    "vrm", "ruggedness", "Indice de rugosité topographique"
+    "elevation", "earthenv_elevation", "Élévation",
+    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique"
   ),
   "soilgrids" = c(
     "sand_0-5cm", "sand", "% de sable",
