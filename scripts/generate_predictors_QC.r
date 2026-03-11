@@ -106,7 +106,7 @@ collections <- list(
     "mhc", "mhc", "Hauteur de la canopée"
   ),
   "sigeom_zones_morphosedimentologiques_percentage" = c(
-    "Alluvion_1", "alluvion", "% de terrains d'alluvions",
+    "Alluvion_1", "alluvion", "% de dépots d'alluvions",
     "Dépôt_2", "versant", "% de dépôts de versants",
     "Éolien_3", "eolien", "% de dépôts éoliens",
     "Glaciaire_4", "glaciaire", "% de dépôts glaciaires",
