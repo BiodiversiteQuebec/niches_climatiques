@@ -18,7 +18,11 @@ openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 meubles_cats <- desc_small$variable[desc_small$collection %in% c("sigeom_zones_morphosedimentologiques_percentage") & !desc_small$variable %in% c("anthropogenique", "organique", "roche")]
 
 predictors <- rast("data/predictors_500_NA.tif")
-predictors <- predictors[[grep("^P\\d+_", names(predictors), value = TRUE, invert = TRUE)]] # temp remove ouranos
+#predictors <- aggregate(predictors, 10, na.rm = TRUE)
+#predictors <- predictors[[grep("^P\\d+_", names(predictors), value = TRUE, invert = TRUE)]] # temp remove ouranos
+predictors <- predictors[[names(predictors)[!names(predictors) %in% desc_large$variable[grep("chelsa", desc_large$collection)]]]] # remove chelsa
+predictors[[grep("P1_", names(predictors), value = TRUE)]] - 273.15
+
 
 if(any(names(predictors) == "geomflat")){w <- which(names(predictors) == "geomflat");names(predictors)[w]<-"earthenv_geomflat"} # temp fix will become obsolete
 if(any(names(predictors) == "geomfootslope")){w <- which(names(predictors) == "geomfootslope");names(predictors)[w]<-"earthenv_geomfootslope"} # temp fix will become obsolete
@@ -26,26 +30,33 @@ if(any(names(predictors) == "elevation")){w <- which(names(predictors) == "eleva
 if(any(names(predictors) == "ruggedness")){w <- which(names(predictors) == "ruggedness");names(predictors)[w]<-"earthenv_ruggedness"} # temp fix will become obsolete
 if(any(names(predictors) == "polar_lichen")){w <- which(names(predictors) == "polar_lichen");names(predictors)[w]<-"lichen"} # temp fix will become obsolete
 if(any(names(predictors) == "temperate_deciduous")){w <- which(names(predictors) == "temperate_deciduous");names(predictors)[w]<-"deciduous"} # temp fix will become obsolete
-ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
-oo <- scoff(predictors$mean_annual_air_temperature )[2]
-predictors$mean_annual_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$mean_annual_air_temperature) * ss) + oo
-ss <- scoff(predictors$annual_range_of_air_temperature)[1] # temp fix for scoff differently applied
-oo <- scoff(predictors$annual_range_of_air_temperature )[2]
-predictors$annual_range_of_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$annual_range_of_air_temperature) * ss) + oo
+#ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
+#oo <- scoff(predictors$mean_annual_air_temperature )[2]
+#predictors$mean_annual_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$mean_annual_air_temperature) * ss) + oo
+#ss <- scoff(predictors$annual_range_of_air_temperature)[1] # temp fix for scoff differently applied
+#oo <- scoff(predictors$annual_range_of_air_temperature )[2]
+#predictors$annual_range_of_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$annual_range_of_air_temperature) * ss) + oo
 
+ #png("plot.png", width = 10, height = 10, units = "in", res = 300);plot(crop(aggregate(p$small$southstlawrence, 2), obs$habitat$small), mar = c(0,0,0,0));plot(st_geometry(obs$habitat$small), add = TRUE);dev.off()
+
+ #png("plot.png", width = 10, height = 10, units = "in", res = 300);plot(crop(p$large$P1_AnnMeanTemp, st_buffer(qc, 100000)), mar = c(0,0,0,0));plot(st_geometry(obs$habitat$small), add = TRUE);dev.off()
+
+#r <- rast("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/P1_AnnMeanTemp.tif")
+
+ #png("plot.png", width = 10, height = 10, units = "in", res = 300);plot(crop(predictors$southstlawrence, st_buffer(qc, 100000)), mar = c(0,0,0,0));plot(st_geometry(obs$habitat$small), add = TRUE);dev.off()
 
 #predictors <- predictors[[!duplicated(names(predictors))]] # not sure why there are some duplicates in there...
 #predictors <- aggregate(predictors, 10, na.rm = TRUE) # 2
 
 fsl <- st_read("data/south_stlawrence.gpkg", layer = "south_stlawrence") |> st_transform(epsg)
-r <- ifel(is.na(predictors[[1]]), NA, 0)
+r <- ifel(is.na(predictors[["earthenv_elevation"]]), NA, 0)
 
 #png("st.png", width = 10, height = 10, units = "in", res = 300)
 #plot(mask(mask(r, fsl, updatevalue = 1, inverse = TRUE), predictors[[1]], inverse = FALSE))
 #dev.off()
 
 ### Add variables
-predictors$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), predictors[[1]], inverse = FALSE)
+predictors$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), predictors[["earthenv_elevation"]], inverse = FALSE)
 add <- desc_large[1, ]
 add$variable <- "southstlawrence"; add$fr <- "Sud du Saint-Laurent"; add$var <- NA; add$url <- NA; add$collection <- NA
 desc_large <- rbind(desc_large, add)
@@ -58,24 +69,23 @@ desc_large <- rbind(desc_large, add)
 
 ### scenarios
 # ouranos
-#timeperiod <- c("2030", "2060", "2090")
-#ssp <- c("ssp585", "ssp370", "ssp245")
-#keep <- grep(paste(c(timeperiod, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
-#keep <- grep("^P\\d+_", keep, value = TRUE, invert = TRUE) # temporarily remove ouranos vars
+timeperiod <- c("2030", "2060", "2090")
+ssp <- c("ssp585", "ssp370", "ssp245")
+keep <- grep(paste(c(timeperiod, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
+##keep <- grep("^P\\d+_", keep, value = TRUE, invert = TRUE) # temporarily remove ouranos vars
 
 # chelsa
-timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
-model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")
-ssp <- c("ssp585", "ssp370", "ssp126")
-
-keep <- grep(paste(c(timeperiod, model, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
+#timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
+#model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")
+#ssp <- c("ssp585", "ssp370", "ssp126")
+#keep <- grep(paste(c(timeperiod, model, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
 
 # scenarios to consider
 timeperiod <- timeperiod[1:3]
-model <- model[5]
-ssp <- ssp[2]
+#model <- model[5]
+ssp <- ssp[1:3]
 
-scenarios <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
+scenarios <- expand.grid(ssp = ssp, timeperiod = timeperiod) |>
       apply(1, function(i){paste(i, collapse = "_")}) |>
       sort()
 
@@ -103,17 +113,18 @@ plarge_proj <- predictors_proj
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_200_QC.tif")
-psmall <- psmall[[grep("^P\\d+_", names(psmall), value = TRUE, invert = TRUE)]] # temp remove ouranos
 #psmall <- aggregate(psmall, 10, na.rm = TRUE)
+#psmall <- psmall[[grep("^P\\d+_", names(psmall), value = TRUE, invert = TRUE)]] # temp remove ouranos
+psmall <- psmall[[names(psmall)[!names(psmall) %in% desc_small$variable[grep("chelsa", desc_small$collection)]]]] # remove chelsa
 
-r <- ifel(is.na(psmall[[1]]), NA, 0)
+r <- ifel(is.na(psmall[["elevation"]]), NA, 0)
 
 #png("st.png", width = 10, height = 10, units = "in", res = 300)
 #plot(mask(mask(r, fsl, updatevalue = 1, inverse = TRUE), predictors[[1]], inverse = FALSE))
 #dev.off()
 
 ### Add variables
-psmall$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = FALSE), psmall[[1]], inverse = FALSE)
+psmall$southstlawrence <- mask(mask(r, fsl, updatevalue = 1, inverse = TRUE, touches = TRUE), psmall[["elevation"]], inverse = FALSE)
 add <- desc_small[desc_small$variable == "distance_to_coaststlawrence", ]
 add$variable <- "southstlawrence"; add$fr <- "Sud du Saint-Laurent"; add$var <- NA; add$url <- NA
 desc_small <- rbind(desc_small, add)

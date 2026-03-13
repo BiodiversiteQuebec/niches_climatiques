@@ -1,7 +1,8 @@
 cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, names(models)[i], "results.r", sep = " - "), "\n"))
 
 ## Choose scenario to produce image from
-display_scenario <- scenarios[2]
+#display_scenario <- scenarios[2]
+display_scenario <- c("ssp245_2030", "ssp245_2060", "ssp245_2090", "ssp370_2030", "ssp370_2060", "ssp370_2090", "ssp585_2030", "ssp585_2060", "ssp585_2090")[6]
 
 predictions_proj <- predictions_proj[[display_scenario]]
 ran_proj <- ran_proj[[display_scenario]]
@@ -37,9 +38,9 @@ plot_foreground <- function(observations = FALSE, echelle = "large"){
 
 topng <- function(x){
   if(any(grepl(".tif", x))){
-    res <- gsub("/rasters/", "/graphics/", gsub(".tif", ".png", x))
+    res <- gsub(path_raster, "results/graphics", gsub(".tif", ".png", x))
   } else {
-    res <- gsub("/rasters/", "/graphics/", gsub(".gpkg", ".png", x))
+    res <- gsub(path_raster, "results/graphics", gsub(".gpkg", ".png", x))
   }
   spf <- gsub(" ", "_", sp)
   gsub(spf, paste(spf, names(models)[i], sep = "_"), res)
@@ -149,6 +150,12 @@ add_scenario()
 dev.off()
 
 
+get_frname <- function(v){
+  frnames <- c(desc_small$fr, desc_large$fr)
+  varnames <- c(desc_small$variable, desc_large$variable)
+  frnames[match(v, varnames)]
+}
+#get_frname("distance_to_streams")
 
 if(is.character(models[[i]])){
   e1 <- extract(p[[echelle]][[vars]], obs[[dataunc]][[echelle]])
@@ -196,12 +203,12 @@ if(is.character(models[[i]])){
       #xlim <- if(rownames(g)[j] == "distance_to_streams"){c(0, 1500)} else {range(v, na.rm = TRUE)}
       #if(rownames(g)[j] == "distance_to_coast"){v <- exp(v) - 1}
       plot(v, pred, type = "l", xlab = "", ylab = "", xaxt = "n", yaxt = "n", ylim = c(0, max(ylim, na.rm = TRUE)), lwd = 1.5, bty = "n")
-      axis(1, mgp = c(0, -0.10, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
+      axis(1, mgp = c(0, -0.30, 0), tcl = -0.2, cex.axis = 0.5, lwd = 0)
       axis(2, mgp = c(1, 0.25, 0), tcl = -0.2, cex.axis = 0.5, las = 2, lwd = 0)
       grid(lwd = 0.5)
       box(col = "grey80", lwd = 0.5)
-      mtext(side = 1, line = 0.5, outer = FALSE, text = rownames(g)[j], cex = 0.5)
-      mtext(side = 2, line = 0.75, outer = TRUE, text = "Relative occurrence rate (ROC)", cex = 0.5)
+      mtext(side = 1, line = 0.5, outer = FALSE, text = get_frname(rownames(g)[j]), cex = 0.4)
+      mtext(side = 2, line = 0.0, outer = TRUE, text = "Probabilité d'occurrence relative (ROR)", cex = 0.4)
       #hbrks <- range(c(e1[ , rownames(g)[j]], e2[ , rownames(g)[j]]), na.rm = TRUE) 
       hbrks <- range(v, na.rm = TRUE)
       hbrks <- seq(min(hbrks), max(hbrks), length.out = 30)

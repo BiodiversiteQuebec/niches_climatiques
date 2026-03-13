@@ -15,7 +15,7 @@ species_vars <- list(
 `Aquila chrysaetos` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "roche", "distance_to_cliffs"), 
 `Catharus bicknelli` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness"), 
 `Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
-`Coturnicops noveboracensis` = c("earthenv_geomflat", "flat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique", "distance_to_coaststlawrence"), 
+`Coturnicops noveboracensis` = c("earthenv_geomflat", "flat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique", "logdistance_to_coaststlawrence"), 
 `Ixobrychus exilis` = c("earthenv_geomflat", "flat", "wetland", "marais", "eau_peu_profonde", "glaciomarin", "glaciolacustre", "alluvion"), 
 `Glaucomys volans` = c("forest")
 )

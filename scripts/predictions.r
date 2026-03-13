@@ -16,11 +16,13 @@ if(i %in% c(1, 4)){
   delete_layer <- TRUE
 }
 
-#(sp<-species[5])
-file_sdm <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_", echelle, ".tif"))
-file_sdm_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_sdm_proj_", echelle, ".tif"))
-file_range <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif"))
-file_range_proj <- file.path("results/rasters", paste0(gsub(" ", "_", sp), "_range_proj_", echelle, ".tif"))
+
+path_raster <- system("echo $SCRATCH", intern = TRUE) # results/rasters
+
+file_sdm <- file.path(path_raster, paste0(gsub(" ", "_", sp), "_sdm_", echelle, ".tif"))
+file_sdm_proj <- file.path(path_raster, paste0(gsub(" ", "_", sp), "_sdm_proj_", echelle, ".tif"))
+file_range <- file.path(path_raster, paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif"))
+file_range_proj <- file.path(path_raster, paste0(gsub(" ", "_", sp), "_range_proj_", echelle, ".tif"))
 file_pol <- gsub(".tif", ".gpkg", file_range)
 file_pol_proj <- gsub(".tif", ".gpkg", file_range_proj)
 

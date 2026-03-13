@@ -15,7 +15,7 @@ lf <- gsub("_sdm_small.tif", "_sdm_large.tif", file_sdm)
 
 ### QC wide
 lapply(lf, function(xx){
-    fn <- gsub("_sdm_large.tif", "_sdm_compare.png", gsub("/rasters/", "/graphics/", xx))
+    fn <- gsub("_sdm_large.tif", "_sdm_compare.png", gsub(path_raster, "results/graphics", xx))
     #print(paste("fn", fn))
     png(fn, units = "in", height = 12, width = 10, res = 300)
     r1 <- rast(xx)#[[1:6]]
@@ -43,7 +43,7 @@ lapply(lf, function(xx){
 
 ### Localized
 lapply(lf, function(i){
-    png(gsub("_sdm_large.tif", "_sdm_compare_localized.png", gsub("/rasters/", "/graphics/", i)), units = "in", height = 8, width = 10, res = 300)
+    png(gsub("_sdm_large.tif", "_sdm_compare_localized.png", gsub(path_raster, "results/graphics", i)), units = "in", height = 8, width = 10, res = 300)
     r1 <- rast(i)
     r2 <- rast(gsub("_large", "_small", i))
     r1 <- project(r1, r2)
@@ -65,7 +65,7 @@ graphics.off()
 
 ### Localized
 lapply(lf, function(i){
-    png(gsub("_sdm_large.tif", "_sdm_compare_localized_noobs.png", gsub("/rasters/", "/graphics/", i)), units = "in", height = 8, width = 10, res = 300)
+    png(gsub("_sdm_large.tif", "_sdm_compare_localized_noobs.png", gsub(path_raster, "results/graphics", i)), units = "in", height = 8, width = 10, res = 300)
     r1 <- rast(i)
     r2 <- rast(gsub("_large", "_small", i))
     r1 <- project(r1, r2)
@@ -105,7 +105,7 @@ lapply(lf, function(xx){
     r5 <- crop(r4, qc, mask = TRUE)
     r5 <- r5[[names(r5) %in% selected]]
     nc <- n2mfrow(nlyr(r5), asp = 3/1)
-    fn <- gsub("_sdm_proj_large.tif|_sdm_proj_small.tif", "_sdm_proj_compare.png", gsub("/rasters/", "/graphics/", xx))
+    fn <- gsub("_sdm_proj_large.tif|_sdm_proj_small.tif", "_sdm_proj_compare.png", gsub(path_raster, "results/graphics", xx))
     png(fn, units = "in", height = nc[1] * 5, width = nc[2] * 3.5, res = 300)
     plot(r5, axes = FALSE, add = FALSE, plg = plg, col = sdm_cols, legend = FALSE, mar = c(0, 0, 3, 0), nc = nc[2], fun = function(){plot_foreground(observations = FALSE, echelle = "small")}, main = display_names)
     #plot_foreground(observation = FALSE)
