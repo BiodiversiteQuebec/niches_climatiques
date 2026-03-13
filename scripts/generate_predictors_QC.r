@@ -106,8 +106,8 @@ collections <- list(
     "mhc", "mhc", "Hauteur de la canopée"
   ),
   "sigeom_zones_morphosedimentologiques_percentage" = c(
-    "Alluvion_1", "alluvion", "% de terrains d'alluvions",
-    "Dépôt_2", "depot", "% de terrains de dépôts",
+    "Alluvion_1", "alluvion", "% de dépôts d'alluvions",
+    "Dépôt_2", "versant", "% de dépôts de versants",
     "Éolien_3", "eolien", "% de dépôts éoliens",
     "Glaciaire_4", "glaciaire", "% de dépôts glaciaires",
     "Anthropogénique_5", "anthropogenique", "% de dépôts anthropogéniques",
@@ -117,7 +117,7 @@ collections <- list(
     "Glaciomarin_9", "glaciomarin", "% de dépôts glaciomarins",
     "Organique_10", "organique", "% de dépôts organiques",
     "Quaternaire_11", "quaternaire", "% de dépôts quaternaires",
-    "Roche_12", "roche", "% de dépôt rocheux",
+    "Roche_12", "roche", "% de dépôts rocheux",
     "Till_13", "till", "% de dépôts de till"
   ),
   "mhp2023_percentage" = c(
@@ -322,14 +322,15 @@ if(TRUE){
   x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
 }
 
-
-
+#r <- rast("/home/frousseu/data2/qc/P1_AnnMeanTemp.tif")
+#png("plot.png", width = 10, height = 10, units = "in", res = 300);plot(r, mar = c(0,0,0,0));dev.off();system("code plot.png")
 
 cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
 foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
-cmd <- sprintf('gdalwarp -overwrite -cutline %s/QC.gpkg -crop_to_cutline -dstnodata -9999.0 -r average -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, variables$url[i], tmpath, variables$name[i])
+if(grepl("ouranos", variables$coll[i])){meth <- "bilinear"} else {meth <- "average"}  
+cmd <- sprintf('gdalwarp -overwrite -cutline %s/QC.gpkg -crop_to_cutline -dstnodata -9999.0 -r %s -tr 100 100 -t_srs EPSG:6624 -co COMPRESS=DEFLATE -co BIGTIFF=YES -ot Float32 -wm 6000 -wo NUM_THREADS=ALL_CPUS -wo CUTLINE_ALL_TOUCHED=TRUE --config GDAL_CACHEMAX 4096 /vsicurl/%s %s/%s.tif', tmpath, meth, variables$url[i], tmpath, variables$name[i])
 system(cmd)
 system(sprintf('cp %s/%s.tif %s/%s_original.tif', tmpath, variables$name[i], tmpath, variables$name[i])) # keep snapshot of original for precise masking
 py_cmd <- sprintf("from osgeo import gdal; gdal.UseExceptions(); ds = gdal.Open('%s/%s.tif', gdal.GA_Update); ds.GetRasterBand(1).SetDescription('%s'); ds = None", tmpath, variables$name[i], variables$name[i])
