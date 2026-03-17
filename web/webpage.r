@@ -50,9 +50,9 @@ for(ii in seq_along(pages)){
   #species <- grep(paste(gsub(" ", "_", keepsp), collapse = "|"), species, value = TRUE)
   species <- grep(pages[[ii]], species, value = TRUE)
   
-  ordre <- c("climat", "gam", "habitat", "climat + habitat", "climat (habitat)", "small", "gam (habitat)", "climat (small)", "gam (small)")
+  ordre <- c("climatX2", "climatGAM", "habitatNA", "climatX2 + habitatNA", "climatX2 (habitatNA)", "habitatQC", "climatGAM (habitatNA)", "climatX2 (habitatQC)", "climatGAM (habitatQC)")
   size <- c("large", "large", "large", "large", "large", "small", "large", "small", "small")
-  nom <- c("climat", "climatGAM", "habitatNA", "climat + habitatNA", "habitatNA (climat)", "habitatQC", "habitatNA (climatGAM)", "habitatQC (climat)", "habitatQC (climatGAM)")
+  nom <- ordre
   
   o <- c(1, 2, 3, 6, 4, 5, 7, 8, 9)
   ordre <- ordre[o]
@@ -661,7 +661,7 @@ for(ii in seq_along(pages)){
   
   <p>Modèles et résultats</p>
   
-  <h4>climat</h4>
+  <h4>climatX2</h4>
   <p>Modèle avec uniquement des variables de climat</p>
   <h4>climatGAM</h4>
   <p>Modèle de climat plus flexible, mais forcé concave</p>
@@ -669,15 +669,15 @@ for(ii in seq_along(pages)){
   <p>Modèle avec des variables d'habitat stables uniquement (Amérique du Nord)</p>
   <h4>habitatQC</h4>
   <p>Modèle avec des variables d'habitat stables uniquement (Québec)</p>
-  <h4>climat + habitatNA</h4>
+  <h4>climatX2 + habitatNA</h4>
   <p>Modèle avec les variables de climat et d'habitat (Amérique du Nord) dans le même modèle</p>
-  <h4>habitatNA (climat)</h4>
+  <h4>climatX2 (habitatNA)</h4>
   <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat</p>
-  <h4>habitatNA (climatGAM)</h4>
+  <h4>climatGAM (habitatNA)</h4>
   <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat GAM</p>
-  <h4>habitatQC (climat)</h4>
+  <h4>climatX2 (habitatQC)</h4>
   <p>Modèle des variables d'habitat locales clippées avec le modèle de climat</p>
-  <h4>habitatQC (climatGAM)</h4>
+  <h4>climatGAM (habitatQC)</h4>
   <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p>
   
   

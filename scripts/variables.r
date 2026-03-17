@@ -21,27 +21,27 @@ use_small <- use_small[1:min(c(length(use_small), 100))]
 
 
 models <- list(
-  "climat" = climate_vars,
-  "gam" = climate_vars,
-  "habitat" = c(large_vars),
-  "small" = use_small,
-  "climat + habitat" = c(climate_vars, large_vars),
-  "climat (habitat)" = c(1, 3), 
-  "gam (habitat)" = c(2, 3),
-  "climat (small)" = c(1, 4),
-  "gam (small)" = c(2, 4)
+  "climatX2" = climate_vars,
+  "climatGAM" = climate_vars,
+  "habitatNA" = c(large_vars),
+  "habitatQC" = use_small,
+  "climatX2 + habitatNA" = c(climate_vars, large_vars),
+  "climatX2 (habitatNA)" = c(1, 3), 
+  "climatGAM (habitatNA)" = c(2, 3),
+  "climatX2 (habtatQC)" = c(1, 4),
+  "climatGAM (habitatQC)" = c(2, 4)
 )
 
 model_names <- list(
-  "climat" = "climat",
-  "gam" = "climatGAM",
-  "habitat" = "habitatNA",
-  "small" = "habitatQC",
-  "climat + habitat" = "habitatNA + climat",
-  "climat (habitat)" = "habitatNA (climat)", 
-  "gam (habitat)" = "habitatNA (climatGAM)",
-  "climat (small)" = "habitatQC (climat)",
-  "gam (small)" = "habitatQC (climatGAM)"
+  "climatX2" = "climatX2",
+  "climatGAM" = "climatGAM",
+  "habitatNA" = "habitatNA",
+  "habitatQC" = "habitatQC",
+  "habitatNA + climatX2" = "habitatNA + climatX2",
+  "habitatNA (climatX2)" = "habitatNA (climatX2)", 
+  "habitatNA (climatGAM)" = "habitatNA (climatGAM)",
+  "habitatQC (climatX2)" = "habitatQC (climatX2)",
+  "habitatQC (climatGAM)" = "habitatQC (climatGAM)"
 )
 
 models <- models[run_model]

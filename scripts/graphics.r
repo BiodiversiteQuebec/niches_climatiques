@@ -86,8 +86,8 @@ lapply(lf, function(i){
 ### Compare projections models for climate only #######################
 lf <- gsub("_sdm_proj_small.tif", "_sdm_proj_large.tif", file_sdm_proj)
 
-display_model <- "climat (small)"
-if(grepl("small", display_model)){
+display_model <- "climatGAM (habitatQC)"
+if(grepl("QC", display_model)){
   lf <- gsub("large", "small", lf)
 }
 display_name <- model_names[[display_model]]
@@ -152,7 +152,7 @@ if(FALSE){
 
 if(FALSE){
 
-    mo <- "climat"
+    mo <- "climatX2"
     sc <- "ssp370"
     ye <- c("2030", "2060", "2090")
     sc_ye <- paste(sc, ye, sep = "_")
@@ -179,7 +179,7 @@ if(FALSE){
   lf <- list.files("results/rasters", pattern = sprintf("%s_sdm_small.tif|%s_sdm_large.tif", sp, sp), full = TRUE)
 
   lg <- list.files("results/rasters", pattern = sprintf("%s_range_small.gpkg|%s_range_large.gpkg", sp, sp), full = TRUE)[1] |>
-    st_read(layer = "climat + habitat") |>
+    st_read(layer = "climatX2 + habitatNA") |>
     st_crop(qc) |>
     st_bbox() |>
     st_as_sfc() |>

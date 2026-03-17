@@ -174,7 +174,7 @@ if(is.character(models[[i]])){
       #v <- seq(gr[j, 1], gr[j, 2], length.out = brks)
       v <- seq(gr[j, 1], quantile(e2[[rownames(g)[j]]], probs = c(0.99), na.rm = TRUE), length.out = brks)
       newdata[ ,j] <- v
-      if(!grepl("gam", names(models)[i])){
+      if(!grepl("climatGAM", names(models)[i])){
         pred <- predict(m, newdata, args = c("doClamp=FALSE"))
       } else {
         pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
@@ -189,7 +189,7 @@ if(is.character(models[[i]])){
       v <- seq(gr[j, 1], quantile(e2[[rownames(g)[j]]], probs = c(0.99), na.rm = TRUE), length.out = brks)
       newdata[ ,j] <- v
       par(mar = c(2, 2, 0.5, 2))
-      if(!grepl("gam", names(models)[i])){
+      if(!grepl("climatGAM", names(models)[i])){
         pred <- predict(m, newdata, args = c("doClamp=FALSE"))
       } else {
         pred <- predict(m, cbind(newdata, eff = 1000), type = "response")
@@ -378,7 +378,7 @@ dev.off()
 
 #library(sf)
 #library(rmapshaper)
-#x <- st_read("results/rasters/Glaucomys_volans_range_small.gpkg", layer = "climat (small)") |>
+#x <- st_read("results/rasters/Glaucomys_volans_range_small.gpkg", layer = "climatX2 (habitatQC)") |>
 #  st_transform(4326) |>
 #  ms_simplify(0.001) |>
 #  st_write("results/rasters/Glaucomys_volans.geojson", append = FALSE)

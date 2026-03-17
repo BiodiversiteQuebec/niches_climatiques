@@ -28,7 +28,7 @@ file_pol_proj <- gsub(".tif", ".gpkg", file_range_proj)
 
 
 if(is.character(models[[i]])){
-  if(!grepl("gam", names(models)[i])){
+  if(!grepl("climatGAM", names(models)[i])){
     predictions <- mask(predict(m, p[[echelle]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))
     predictions_proj <- lapply(scenarios, function(s) {mask(predict(m, p_proj[[echelle]][[s]][[vars]], args = c("outputformat=raw", "replicatetype=bootstrap")), vect(region))})
     names(predictions_proj) <- scenarios
@@ -138,13 +138,13 @@ aa <- predvalues[sample(which(absence == 1 & presence == 0), usen)]
 
 e <- evaluate2(p = pp, a = aa)
 
-#if(!names(models)[i] %in% c("climat", "gam")){ ### if not a climate model, use % and not spec_sens
+#if(!names(models)[i] %in% c("climatX2", "climatGAM")){ ### if not a climate model, use % and not spec_sens
 #  val <- dismo::threshold(e)[['spec_sens']]
 #}
 
 val <- dismo::threshold(e)[['spec_sens']]
 
-if(names(models)[i] %in% c("climat", "gam")){ ### if a climate model, keep % in QC
+if(names(models)[i] %in% c("climatX2", "climatGAM")){ ### if a climate model, keep % in QC
   if(valqc < val){
     val <- valqc
     sprintf("Threshold adjusted for %s Québec", thresholdqc)
@@ -265,9 +265,9 @@ if(FALSE){
 
 
 #ppp <- predictions
-#names(ppp) <- "climat + habitat"
+#names(ppp) <- "climatX2 + habitatNA"
 #ppp_proj <- predictions_proj
-#names(ppp_proj) <- "climat (habitat)"
+#names(ppp_proj) <- "climatX2 (habitatNA)"
 
 #writeRaster(ppp, file.path("results/rasters", paste0(gsub(" ", "_", sp), "_test.tif")), overwrite = TRUE)
 

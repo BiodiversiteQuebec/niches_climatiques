@@ -3,9 +3,9 @@
 
 cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, names(models)[i], "models.r", sep = " - "), "\n"))
 
-echelle <- c("large", "small")[as.integer(grepl("small", names(models)[i])) + 1]
+echelle <- c("large", "small")[as.integer(grepl("QC", names(models)[i])) + 1]
 
-if(names(models)[i] %in% c("climat", "gam")){
+if(names(models)[i] %in% c("climatX2", "climatGAM")){
   dataunc <- "climate"
 } else {
   dataunc <- "habitat"
@@ -17,15 +17,15 @@ if(is.character(models[[i]])){
     vars <- models[[i]]
     vars <- intersect(vars, species_vars[[sp]])
     vars <- intersect(names(p[[echelle]]), vars)
-    if(grepl("climat|gam", names(models)[i])){
+    if(grepl("climatX2|climatGAM", names(models)[i])){
         vars <- c(vars, climate_vars)
     }
     
     print(paste("Variables used:", paste(vars, collapse = " ")))
 
-    if(!grepl("gam", names(models)[i])){
+    if(!grepl("climatGAM", names(models)[i])){
 
-        if(names(models)[i] == "climat"){
+        if(names(models)[i] == "climatX2"){
             arg <- c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4", "betaMultiplier=0")
         } else {
             arg <- c("linear", "quadratic", "noproduct", "nohinge", "nothreshold", "noautofeature", "replicatetype=bootstrap", "replicates=1", "threads=4")
