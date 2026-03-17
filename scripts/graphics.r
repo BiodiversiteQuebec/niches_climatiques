@@ -115,8 +115,64 @@ lapply(lf, function(xx){
 graphics.off()
 
 
+#sp <- "Galucomys volans"
+#path_raster
+
+#lf <- list.files(path_raster, pattern = "range", full = TRUE)
+
+#cp Pseudacris_triseriata_range_small.gpkg merged.gpkg && for f in Pseuda*.gpkg; do ogr2ogr -f GPKG -update merged.gpkg "$f"; done
+
+
+#for species in Pseudacris_triseriata Aquila_chrysaetos Bombycilla_garrulus; do
+#    cp ${species}_range_small.gpkg ${species}_merged.gpkg
+#    for f in ${species}*.gpkg; do ogr2ogr -f GPKG -update ${species}_merged.gpkg "$f"; done
+#done
+
+#species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
 
 if(FALSE){
+  species_list <- gsub(" ", "_", species)[11]
+  for (spe in species_list) {
+    spe <- file.path(path_raster, spe)
+
+    cmd <- paste0(
+      "cp ", spe, "_range_large.gpkg ", path_raster, "/merged.gpkg && ",
+      #"for f in ", spe, "*.gpkg; do ",
+      "for f in $(ls ", spe, "*.gpkg | grep -v observation); do ",
+      "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/merged.gpkg \"$f\"; done && ",
+      "mv ", path_raster, "/merged.gpkg ", spe, "_all.gpkg"
+    )
+    #cat(cmd)
+    system(cmd)
+  }
+}
+
+
+
+
+if(FALSE){
+
+    mo <- "climat"
+    sc <- "ssp370"
+    ye <- c("2030", "2060", "2090")
+    sc_ye <- paste(sc, ye, sep = "_")
+    cases <- expand.grid(mo, sc_ye) |>
+      apply(1, paste, collapse = " ")
+
+    layers <- st_layers("/scratch/frousseu/Glaucomys_volans_range_proj_large.gpkg")$name
+
+    cols <- rev(c("grey20", "grey30", "grey40", "grey50"))
+    png("plot.png", width = 10, height = 10, units = "in", res = 300)
+    par(mar = c(0, 0, 0, 0))
+    plot(st_geometry(na))
+    plot(st_geometry(st_read("/scratch/frousseu/Pseudacris_triseriata_range_large.gpkg", layer = mo)), col = cols[1], border = NA, add = TRUE)
+    lapply(seq_along(cases), function(i){
+      polran <- st_read("/scratch/frousseu/Pseudacris_triseriata_range_proj_large.gpkg", layer = cases[i])
+      plot(st_geometry(polran), col = cols[i+1], border = NA, add = TRUE)
+    })
+    dev.off()
+    system("code plot.png")
+
 
   sp <- gsub(" ", "_", species[6])
 

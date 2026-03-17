@@ -138,7 +138,7 @@ png(topng(gsub("_range", "_range_diff", file_range)), units = "in", height = 6, 
 par(mar = c(0, 0, 0, 0))
 minus <- st_difference(polran, polran_proj)
 plus <- st_difference(polran_proj, polran)
-equal <- st_intersection(polran_proj, polran)
+equal <- st_intersection(polran_proj, polran) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union()
 plot_background()
 cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
 plot(st_geometry(minus), col = cols[1], border = NA, add = TRUE)
@@ -148,7 +148,6 @@ plot_foreground(echelle = echelle)
 legend("topright", inset = c(0.1, 0.1), legend = c("Perte", "Gain", "Stable")[c(2, 3, 1)], pch = 15, pt.cex = 2, col = cols[c(2, 3, 1)], bty = "n", xjust = 1, xpd = TRUE)
 add_scenario()
 dev.off()
-
 
 get_frname <- function(v){
   frnames <- c(desc_small$fr, desc_large$fr)

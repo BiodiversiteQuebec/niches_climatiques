@@ -201,6 +201,11 @@ plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = desc_large$fr[m
 dev.off()
 
 
+desc_small$scale <- "small"
+desc_large$scale <- "large"
+
+write.csv(rbind(desc_large, desc_small), "variables.csv")
+
 
 if(FALSE){
     url <- "/vsicurl/https://object-arbutus.cloud.computecanada.ca"
