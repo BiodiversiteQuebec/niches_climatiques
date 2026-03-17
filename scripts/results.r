@@ -335,7 +335,7 @@ sdm <- list.files("results/rasters", pattern = "_sdm_large", full = TRUE)
 
 l <- lapply(sdm, function(i){
   print(i)
-  model <- "climat"
+  model <- "climatX2"
   r2 <- rast(gsub("sdm", "sdm_proj", i))[[model]]
   r1 <- rast(i)[[model]]  
   ma <- global(r1, max, na.rm = TRUE)[1, 1]

@@ -28,7 +28,7 @@ models <- list(
   "climatX2 + habitatNA" = c(climate_vars, large_vars),
   "climatX2 (habitatNA)" = c(1, 3), 
   "climatGAM (habitatNA)" = c(2, 3),
-  "climatX2 (habtatQC)" = c(1, 4),
+  "climatX2 (habitatQC)" = c(1, 4),
   "climatGAM (habitatQC)" = c(2, 4)
 )
 
@@ -37,11 +37,11 @@ model_names <- list(
   "climatGAM" = "climatGAM",
   "habitatNA" = "habitatNA",
   "habitatQC" = "habitatQC",
-  "habitatNA + climatX2" = "habitatNA + climatX2",
-  "habitatNA (climatX2)" = "habitatNA (climatX2)", 
-  "habitatNA (climatGAM)" = "habitatNA (climatGAM)",
-  "habitatQC (climatX2)" = "habitatQC (climatX2)",
-  "habitatQC (climatGAM)" = "habitatQC (climatGAM)"
+  "climatX2 + habitatNA" = "climatX2 + habitatNA",
+  "climatX2 (habitatNA)" = "climatX2 (habitatNA)", 
+  "climatGAM (habitatNA)" = "climatGAM (habitatNA)",
+  "climatX2 (habitatQC)" = "climatX2 (habitatQC)",
+  "climatGAM (habitatQC)" = "climatGAM (habitatQC)"
 )
 
 models <- models[run_model]

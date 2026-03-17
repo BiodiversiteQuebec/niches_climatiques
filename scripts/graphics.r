@@ -1,4 +1,6 @@
 
+cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, "graphics.r", sep = " - "), "\n"))
+
 #source("scripts/prelim.r")
 
 rm(predictions, predictions_proj)
@@ -83,7 +85,7 @@ lapply(lf, function(i){
 
 
 #######################################################################
-### Compare projections models for climate only #######################
+### Compare projections sdm for climate only ##########################
 lf <- gsub("_sdm_proj_small.tif", "_sdm_proj_large.tif", file_sdm_proj)
 
 display_model <- "climatGAM (habitatQC)"
@@ -112,6 +114,49 @@ lapply(lf, function(xx){
     dev.off()
 })
 
+
+#######################################################################
+### Compare projections range for climate only ########################
+lf <- gsub("_range_proj_small.tif", "_range_proj_large.tif", file_range_proj)
+
+display_model <- "climatGAM (habitatQC)"
+if(grepl("QC", display_model)){
+  lf <- gsub("large", "small", lf)
+}
+display_name <- model_names[[display_model]]
+selected <- paste(display_model, scenarios)
+selected <- c(display_model, selected)
+display_names <- paste0(display_name, "\n", c("actuel", scenarios))
+
+lapply(lf, function(xx){
+    #print(paste("fn", fn))
+    r1 <- rast(xx)#[[1:6]]
+    r2 <- rast(gsub("_large", "_small", xx))[[1]]
+    r0 <- rast(gsub("_proj", "", xx)) |> project(r2)
+    r3 <- project(r1, r2)
+    r4 <- c(r0, r3)#, r2)
+    r5 <- crop(r4, qc, mask = TRUE)
+    r5 <- r5[[names(r5) %in% selected]]
+    nc <- n2mfrow(nlyr(r5), asp = 3/1)
+    fn <- gsub("_range_proj_large.tif|_range_proj_small.tif", "_range_proj_compare.png", gsub(path_raster, "results/graphics", xx))
+    png(fn, units = "in", height = nc[1] * 5, width = nc[2] * 3.5, res = 300)
+    plot(r5, axes = FALSE, add = FALSE, plg = plg, col = c(sdm_cols[1], range_cols), legend = FALSE, mar = c(0, 0, 3, 0), nc = nc[2], fun = function(){plot_foreground(observations = FALSE, echelle = "small")}, main = display_names)
+    #plot_foreground(observation = FALSE)
+    dev.off()
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 graphics.off()
 
 
@@ -131,16 +176,16 @@ graphics.off()
 #species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
 
 if(FALSE){
-  species_list <- gsub(" ", "_", species)[11]
+  species_list <- sp #gsub(" ", "_", species)[11]
   for (spe in species_list) {
     spe <- file.path(path_raster, spe)
-
+    temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
     cmd <- paste0(
-      "cp ", spe, "_range_large.gpkg ", path_raster, "/merged.gpkg && ",
+      "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
       #"for f in ", spe, "*.gpkg; do ",
-      "for f in $(ls ", spe, "*.gpkg | grep -v observation); do ",
-      "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/merged.gpkg \"$f\"; done && ",
-      "mv ", path_raster, "/merged.gpkg ", spe, "_all.gpkg"
+      "for f in $(ls ", spe, "*.gpkg | grep -v observation | grep -v _all.gpkg); do ",
+      "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
+      "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
     )
     #cat(cmd)
     system(cmd)
