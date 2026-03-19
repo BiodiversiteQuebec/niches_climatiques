@@ -1,0 +1,46 @@
+project:
+  type: book
+  output-dir: ../docs
+  resources:
+    - results/
+
+execute:
+  echo: false
+  cache: true
+
+prefer-html: true  
+
+book:
+  title: "Niches climatiques / méthodologie"
+  author: "François Rousseu"
+  date: today
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - occurrences.qmd
+    - variables.qmd
+    - espèces.qmd
+    - modélisation.qmd
+    - scénarios.qmd
+    - résultats.qmd
+    - projections.qmd
+    - references.qmd
+    
+
+bibliography: references.bib
+lang: fr
+
+format:
+  html:
+    theme: cosmo
+    grid:
+      body-width: 900px      # default: 900px
+      sidebar-width: 300px    # default: 250px
+      margin-width: 300px     # default: 300px (right TOC)    
+    fontsize: 1.1em  
+    toc-title: "Sections"
+  #pdf:
+  #  documentclass: scrreprt
+  #  prefer-html: true 
+
+

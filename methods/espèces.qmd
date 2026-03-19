@@ -1,0 +1,67 @@
+# Espèces
+
+## Aires de répartition
+
+## Filtrage des données
+
+## Variables par espèces
+
+Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat. Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
+ 
+```{r}
+suppressWarnings(source("_setup.R"))
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+
+species_vars <- list(
+`Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
+`Hemidactylium scutatum` = c("tourbiere", "marais", "marecage", "organique", "forest", "twi", "earthenv_geomflat", "flat"), 
+`Gyrinophilus porphyriticus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams", "southstlawrence"), 
+`Desmognathus ochrophaeus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams", "southstlawrence"), 
+`Emydoidea blandingii` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "distance_to_rivers"),
+`Glyptemys insculpta` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "sand", "distance_to_streams", "distance_to_rivers", "meubles"),
+`Nerodia sipedon` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "distance_to_openwater"),
+`Lampropeltis triangulum` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde"), 
+`Aquila chrysaetos` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "roche", "distance_to_cliffs"), 
+`Catharus bicknelli` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness"), 
+`Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
+`Coturnicops noveboracensis` = c("earthenv_geomflat", "flat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique", "logdistance_to_coaststlawrence"), 
+`Ixobrychus exilis` = c("earthenv_geomflat", "flat", "wetland", "marais", "eau_peu_profonde", "glaciomarin", "glaciolacustre", "alluvion"), 
+`Glaucomys volans` = c("forest")
+)
+
+species_vars <- lapply(species_vars, function(i){c(i, "urban", "cropland")})
+
+sv <- data.frame(species = names(species_vars), variables = sapply(species_vars, paste, collapse = ", "))
+rownames(sv) <- 1:nrow(sv)
+#kable(sv, format = "html", table.attr = "class='table'") |>
+#  kable_styling(full_width = FALSE) |>
+#  row_spec(1:nrow(sv), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
+gt(sv)
+
+
+```
+
+## Périodes de nidification (oiseaux)
+
+Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées. Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
+
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+
+bp <- list(
+    `Aquila chrysaetos` = c("06-07", "08-23"), 
+    `Catharus bicknelli` = c("06-07", "07-12"), 
+    `Setophaga cerulea` = c("05-24", "07-12"), 
+    `Coturnicops noveboracensis` = c("06-07", "08-24"), 
+    `Ixobrychus exilis` = c("06-07", "07-19")
+)
+
+x <- data.frame(Espèces = names(bp), Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
+rownames(x) <- 1:nrow(x)
+#kable(x, format = "html", table.attr = "class='table'") |>
+#  kable_styling(full_width = FALSE) |>
+#  row_spec(1:nrow(x), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
+gt(x)
+```

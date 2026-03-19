@@ -1,0 +1,12 @@
+# Scénarios climatiques
+
+## Choix des modèles
+
+Moyenne des différents modèles.
+
+## Choix des scénarios
+
+Optimiste, réaliste, pessimiste.
+
+Court, moyen, long terme.
+

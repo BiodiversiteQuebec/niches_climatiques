@@ -1,0 +1,13 @@
+# Résultats
+
+## Effet des variables 
+
+Pour chaque modèle, les effets marginaux des différentes variables considérées ont été calculés en fixant les autres variables à leur valeurs moyennes. Afin de visualiser les données par rapport à l'effet des variables, deux histogrammes de densité ont été ajoutés aux graphiques. Un premier a été employé pour illustrer la distribution de l'ensemble des points utilisés (observations et pseudo-absences) par rapport aux variations de la variable ciblée et un second pour visualiser l'abondance relative de l'espèce par rapport à la variable ciblée et à l'ensemble des points utilisés.
+
+la niche a été faite au niveau NA pour éviter la niche truncation (Guisan et al 2025)
+
+## Résultats détaillés
+
+Les résultats détaillés sont présentés par groupes taxonmiques ici: [salamandres](results/salamandres.html), [rainette](https://biodiversitequebec.github.io/niches_climatiques/html/rainette.html), [tortues](https://biodiversitequebec.github.io/niches_climatiques/html/tortues.html), [couleuvres](https://biodiversitequebec.github.io/niches_climatiques/html/couleuvres.html), [oiseaux](https://biodiversitequebec.github.io/niches_climatiques/html/oiseaux.html) et [polatouche](https://biodiversitequebec.github.io/niches_climatiques/html/polatouche.html)
+
+<!-- <iframe src="https://biodiversitequebec.github.io/niches_climatiques/html/salamandres.html" width="100%" height="300px" style="border:1px solid #eee;"></iframe> -->

@@ -1,0 +1,6 @@
+# Occurrences
+
+Les données utilisées pour le Québec proviennent de la base de données Atlas de Biodiversité Québec. Ces données incluent notamment les données du CDPNQ pour les vertébrés, les données de BORAQ pour les amphibiens et reptiles et les données eBird, EPOQ et de l'Atlas des oiseaux nicheurs.  
+
+Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) et eBird ont été utilisées. 
+
