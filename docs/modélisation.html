@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Modélisation – Niches climatiques / méthodologie</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./scénarios.html" rel="next">
+<link href="./espèces.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-ecc834a36a92aa50976f59b66679dce2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./modélisation.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modélisation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Recherche" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Niches climatiques / méthodologie</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Contexte</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./occurrences.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Occurrences</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./espèces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Espèces</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./modélisation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modélisation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scénarios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Scénarios climatiques</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./résultats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Résultats</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Téléchargement</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Références</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sections</h2>
+   
+  <ul>
+  <li><a href="#modèles-de-climat" id="toc-modèles-de-climat" class="nav-link active" data-scroll-target="#modèles-de-climat"><span class="header-section-number">5.0.1</span> Modèles de climat</a></li>
+  <li><a href="#modèles-dhabitat" id="toc-modèles-dhabitat" class="nav-link" data-scroll-target="#modèles-dhabitat"><span class="header-section-number">5.0.2</span> Modèles d’habitat</a></li>
+  <li><a href="#modèles-de-climat-et-habitat" id="toc-modèles-de-climat-et-habitat" class="nav-link" data-scroll-target="#modèles-de-climat-et-habitat"><span class="header-section-number">5.0.3</span> Modèles de climat et habitat</a></li>
+  <li><a href="#modèles-couplés" id="toc-modèles-couplés" class="nav-link" data-scroll-target="#modèles-couplés"><span class="header-section-number">5.0.4</span> Modèles couplés</a></li>
+  <li><a href="#paramétrisation-des-modèles" id="toc-paramétrisation-des-modèles" class="nav-link" data-scroll-target="#paramétrisation-des-modèles"><span class="header-section-number">5.1</span> Paramétrisation des modèles</a></li>
+  <li><a href="#pseudo-absences" id="toc-pseudo-absences" class="nav-link" data-scroll-target="#pseudo-absences"><span class="header-section-number">5.2</span> Pseudo-absences</a></li>
+  <li><a href="#filtrage-des-données" id="toc-filtrage-des-données" class="nav-link" data-scroll-target="#filtrage-des-données"><span class="header-section-number">5.3</span> Filtrage des données</a></li>
+  <li><a href="#binarisation" id="toc-binarisation" class="nav-link" data-scroll-target="#binarisation"><span class="header-section-number">5.4</span> Binarisation</a></li>
+  <li><a href="#extras" id="toc-extras" class="nav-link" data-scroll-target="#extras"><span class="header-section-number">5.5</span> Extras</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modélisation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>L’approche méthodologique utilisée repose sur plusieurs considérations et contraintes:</p>
+<ul>
+<li>intégration de variables d’habitats stables par rapport aux changements climatiques</li>
+<li>limitation de la complexité des modèles</li>
+<li>disponibilité des variables au niveau nord américain ou et québécois</li>
+<li>disponibilité de données d’occurrences précises au niveau nord américain</li>
+</ul>
+<p>Les choix méthodologiques reflètent ces contraintes.</p>
+<p>Premièrement, des variables non climatiques ont également été intégrées afin de donner plus de réalisme aux aires de répartition projetées. En effet, la distribution des espèces est influencée par beaucoup d’autres facteurs que seul les effets climatiques et il convient donc de tenir compte de ces autres facteurs pour modéliser les aires de distribution projetées. Une approche uniquement basée sur les niches climatiques risquerait de mal représenter les distributions futures (<span class="citation" data-cites="liu_selection_2016">Liu, Newell, et White (<a href="references.html#ref-liu_selection_2016" role="doc-biblioref">2016</a>)</span>).</p>
+<p>Nous avons également limité la complexité des modèles utilisés et notamment des relations permises entre les variables et la présence des espèces. En effet, certaines approches d’aprentissage machine communément utilisée ont été évités, car ces méthodes sont généralement très flexibles par rapport aux relations entre les variables et la présence des espèces. Dans un contexte de projections futures, il a été considéré qu’il était préférable de se limiter à des relations simples comme des relations linéaires ou quadratiques pour décrire les effets des variables sur le présence des espèces.</p>
+<p>Afin de comparer différentes approches de modélisation, nous avons effectués plusieurs modèles. Ces modèles peuvent être regroupés en 4 groupes:</p>
+<ul>
+<li>modèles basés sur le climat</li>
+<li>modèles basés sur l’habitat</li>
+<li>modèles combinant le climat et l’habitat au sein d’un même modèle</li>
+<li>modèles couplant un modèle de climat à un modèle d’habitat</li>
+</ul>
+<p>Pour les modèles incluant des variables d’habitat, nous avons également utilisé deux échelles de modélisation:</p>
+<ul>
+<li>échelle globale en incluant des variables d’habitats mesurées à l’échelle nord américaine</li>
+<li>échelle locale en incuant des variables d’habitats mesurée à l’échelle du Québec</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="vgabqnfbnn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vgabqnfbnn table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vgabqnfbnn thead, #vgabqnfbnn tbody, #vgabqnfbnn tfoot, #vgabqnfbnn tr, #vgabqnfbnn td, #vgabqnfbnn th {
+  border-style: none;
+}
+
+#vgabqnfbnn p {
+  margin: 0;
+  padding: 0;
+}
+
+#vgabqnfbnn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vgabqnfbnn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vgabqnfbnn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vgabqnfbnn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vgabqnfbnn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vgabqnfbnn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vgabqnfbnn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vgabqnfbnn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vgabqnfbnn .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vgabqnfbnn .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vgabqnfbnn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vgabqnfbnn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vgabqnfbnn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vgabqnfbnn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vgabqnfbnn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vgabqnfbnn .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vgabqnfbnn .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vgabqnfbnn .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vgabqnfbnn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vgabqnfbnn .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vgabqnfbnn .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vgabqnfbnn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vgabqnfbnn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vgabqnfbnn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vgabqnfbnn .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vgabqnfbnn .gt_left {
+  text-align: left;
+}
+
+#vgabqnfbnn .gt_center {
+  text-align: center;
+}
+
+#vgabqnfbnn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vgabqnfbnn .gt_font_normal {
+  font-weight: normal;
+}
+
+#vgabqnfbnn .gt_font_bold {
+  font-weight: bold;
+}
+
+#vgabqnfbnn .gt_font_italic {
+  font-style: italic;
+}
+
+#vgabqnfbnn .gt_super {
+  font-size: 65%;
+}
+
+#vgabqnfbnn .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vgabqnfbnn .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vgabqnfbnn .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vgabqnfbnn .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vgabqnfbnn .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vgabqnfbnn .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vgabqnfbnn .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#vgabqnfbnn .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#vgabqnfbnn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="Type" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold;" scope="col">Type</th>
+<th id="Nom" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold;" scope="col">Nom</th>
+<th id="aÉchelle" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold;" scope="col">Échelle</th>
+<th id="Description" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold;" scope="col">Description</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Type">Climat</td>
+<td class="gt_row gt_left" headers="Nom">climatX2</td>
+<td class="gt_row gt_left" headers="Échelle">NA</td>
+<td class="gt_row gt_left" headers="Description">Effet quadratique de la température moyenne annuelle</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Type">Climat</td>
+<td class="gt_row gt_left" headers="Nom">climatGAM</td>
+<td class="gt_row gt_left" headers="Échelle">NA</td>
+<td class="gt_row gt_left" headers="Description">Effet GAM contraint de la température moyenne annuelle</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Type">Habitat</td>
+<td class="gt_row gt_left" headers="Nom">habitatNA</td>
+<td class="gt_row gt_left" headers="Échelle">NA</td>
+<td class="gt_row gt_left" headers="Description">Variables d'habitat nord-américaine</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Type">Habitat</td>
+<td class="gt_row gt_left" headers="Nom">habitatQC</td>
+<td class="gt_row gt_left" headers="Échelle">QC</td>
+<td class="gt_row gt_left" headers="Description">Variables d'habitat Québécoise</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Type">Climat + habitat</td>
+<td class="gt_row gt_left" headers="Nom">climatX2 + habitatNA</td>
+<td class="gt_row gt_left" headers="Échelle">NA</td>
+<td class="gt_row gt_left" headers="Description">Variable de climat et d'habitat dans un modèle modèle évalué à l'échelle Nord Américaine</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Type">Couplés</td>
+<td class="gt_row gt_left" headers="Nom">climatX2 (habitatNA)</td>
+<td class="gt_row gt_left" headers="Échelle">NA</td>
+<td class="gt_row gt_left" headers="Description">Modèle d'habitat à l'échelle nord-américaine coupé par le modèle de climat à effet quadratique</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Type">Couplés</td>
+<td class="gt_row gt_left" headers="Nom">climatGAM (habitatNA)</td>
+<td class="gt_row gt_left" headers="Échelle">NA</td>
+<td class="gt_row gt_left" headers="Description">Modèle d'habitat à l'échelle nord-américaine coupé par le modèle de climat à effet GAM</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Type">Couplés</td>
+<td class="gt_row gt_left" headers="Nom">climatX2 (habitatQC)</td>
+<td class="gt_row gt_left" headers="Échelle">QC</td>
+<td class="gt_row gt_left" headers="Description">Modèle d'habitat à l'échelle québécois coupé par le modèle de climat à effet quadratique</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Type">Couplés</td>
+<td class="gt_row gt_left" headers="Nom">climatGAM (habitatQC)</td>
+<td class="gt_row gt_left" headers="Échelle">QC</td>
+<td class="gt_row gt_left" headers="Description">Modèle d'habitat à l'échelle québécois coupé par le modèle de climat à effet quadratique</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>Résumé des modèles effectués</p>
+</div>
+</div>
+<section id="modèles-de-climat" class="level3" data-number="5.0.1">
+<h3 data-number="5.0.1" class="anchored" data-anchor-id="modèles-de-climat"><span class="header-section-number">5.0.1</span> Modèles de climat</h3>
+<p>Tous les modèles avec une composante climat ont été effectuées à l’échelle nord-américaine afin de couvrir la majorité de l’aire de distribution des espèces et ainsi éviter le problème de troncation de la niche <span class="citation" data-cites="chevalier_accounting_2022">Guisan et al. (<a href="references.html#ref-guisan_spatially_2025" role="doc-biblioref">2025</a>)</span>. En effet, le Québec représente une petite partie de l’aire de distribution de la majorité des espèces modélisées et il serait hasardeux d’établir les relations entre le climat et la présence des espèces sur une portion réduite des valeurs climatiques auxquelles ces espèces sont soumises sur le territoire québécois.</p>
+<p>Deux modèles climatiques ont été effectués. Le premier est un modèle basé sur l’algorithme Maxent. Pour ce modèle, seuls des effets quadratiques de la température moyenne annuelle ont été utilisés (<em>e.g.</em> <span class="math inline">\(x + x^2\)</span>). Afin de donner plus de flexibilité à la relation entre le climat et la présence de l’espèce, des modèles additifs à formes contraintes ont également été utilisés (<span class="citation" data-cites="pya_shape_2015">Pya et Wood (<a href="references.html#ref-pya_shape_2015" role="doc-biblioref">2015</a>)</span>, <span class="citation" data-cites="citores_modelling_2020">Citores et al. (<a href="references.html#ref-citores_modelling_2020" role="doc-biblioref">2020</a>)</span>). Plus spécifiquement, des formes strictement concaves sont permises par une base “cv”.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'kableExtra'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    group_rows</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: mgcv</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: nlme</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'nlme'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    collapse</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is mgcv 1.9-3. For overview type 'help("mgcv-package")'.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is scam 1.2-18.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modélisation_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Effets climatiques quadratiques (climatX2) ou additifs contraint (climatGAM)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="modèles-dhabitat" class="level3" data-number="5.0.2">
+<h3 data-number="5.0.2" class="anchored" data-anchor-id="modèles-dhabitat"><span class="header-section-number">5.0.2</span> Modèles d’habitat</h3>
+<p>Ces modèles ne sont pas d’intérêt en soi, car ils ne tiennent pas comptent de la niche climatique. Ils sont plutôt destinés à être couplés avec les modèles climatiques. Le modèle à l’échelle du Québec comporte 2 avantages:</p>
+<ul>
+<li><p>il permet de prendre en compte certaines variables d’habitat qui ne sont facilement disponibles que pour le territoire québécois (e.g.&nbsp;<a href="https://sigeom.mines.gouv.qc.ca/">SIGÉOM</a>, <a href="https://www.donneesquebec.ca/recherche/dataset/carte-ecoforestiere-avec-perturbations">Cartes écoforestières</a>, <a href="https://www.donneesquebec.ca/recherche/fr/dataset/produits-derives-de-base-du-lidar">Produits dérivés du lidar</a>, <a href="https://www.donneesquebec.ca/recherche/dataset/grhq">Géobase du réseau hydrographique du Québec (GRHQ)</a>, etc.)</p></li>
+<li><p>il permet d’utiliser une résolution plus élevée que celle utiliée à l’échelle nord-américaine</p></li>
+<li><p>il permet d’obtenir un modèle d’habitat basé uniquement sur la réalité locale propre au Québec, i.e.&nbsp;que les relations entre les différentes variables et la présence des espèces dans des régions éloignées du Québec n’auront pas d’influence sur ce qui est prédit au Québec</p></li>
+</ul>
+</section>
+<section id="modèles-de-climat-et-habitat" class="level3" data-number="5.0.3">
+<h3 data-number="5.0.3" class="anchored" data-anchor-id="modèles-de-climat-et-habitat"><span class="header-section-number">5.0.3</span> Modèles de climat et habitat</h3>
+<p>Ce modèle est composé uniquement des données à l’échelle de l’Amérique du Nord. Il comporte à la fois les variables climatiques et d’habitat au sein d’un même modèle. Il s’agit de l’approche standard qui est généralement utilisée pour modéliser la distribution des espèces. Ce modèle ne peut être évalué à l’échelle du Québec, car car la niche climatique de l’espèce ne peut être établie qu’à l’échelle nord-américaine.</p>
+</section>
+<section id="modèles-couplés" class="level3" data-number="5.0.4">
+<h3 data-number="5.0.4" class="anchored" data-anchor-id="modèles-couplés"><span class="header-section-number">5.0.4</span> Modèles couplés</h3>
+<p>L’idée à la base des modèles couplés est que les facteurs influençant la distribution des espèces dépendent de l’échelle à laquelle on s’intéresse. À grande échelle, les espèces ont généralement une région où les conditions climatiques sont favorables à leur présence. À plus fine échelle, les variables locales d’habitats (ou de microclimats) comme le type de couverture du sol ont probablement un plus grand impact sur la distribution des espèces (<span class="citation" data-cites="pearson_predicting_2003">Pearson et Dawson (<a href="references.html#ref-pearson_predicting_2003" role="doc-biblioref">2003</a>)</span>) et seuls les habitats favorables à la présence de l’espèce peuvent être occupés. Les avantages d’un telle approche sont:</p>
+<ul>
+<li><p>permet de coupler des modèles effectués à différentes échelles (<em>e.g.</em> un modèle climatique à grande échelle couplé à un modèle d’habitat à plus petit échelle)</p></li>
+<li><p>permet d’isoler l’effet des variables climatiques de celui des variables d’habitats dans un contexte où les deux types de variables sont potentiellement spatialement corrélées et attribuer les variations en probabilité de présence ou d’abondance à grande échelle aux variables climatiques</p></li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `ne_50m_lakes' from data source 
+  `/home/frousseu/Documents/github/niches_climatiques/methods/data/ne_50m_lakes.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 412 features and 39 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: -165.8985 ymin: -50.62002 xmax: 176.0827 ymax: 81.94033
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   ymin 
+2012342 </code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modélisation_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Modèle de climat à grande échelle rapporté au Québec</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modélisation_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Modèle de climat à grande échelle combiné à un modèle d’habitat</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="paramétrisation-des-modèles" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="paramétrisation-des-modèles"><span class="header-section-number">5.1</span> Paramétrisation des modèles</h2>
+<p>Tous les modèles sauf le modèle de climat avec effets additifs contrait ont été effectués avec Maxent (<span class="citation" data-cites="phillips_maximum_2006">Phillips, Anderson, et Schapire (<a href="references.html#ref-phillips_maximum_2006" role="doc-biblioref">2006</a>)</span>), une approche adaptée aux données opportunistes où seules les présences sont notées et où les absences ne sont pas répertoriées.</p>
+<p>Le package <a href="https://CRAN.R-project.org/package=predicts">predicts</a> (<span class="citation" data-cites="hijmans_predicts_2025">Hijmans (<a href="references.html#ref-hijmans_predicts_2025" role="doc-biblioref">2025</a>)</span>) a été utilisé pour les modèles effectués avec <em>Maxent</em>. Seuls les effets linéaires et quadratiques ont été utilisés. Pour les modèles de climat (<code>climatX2</code>), le facteur de pénalisation a été fixé à 0 (<em>betaMultiplier = 0</em>) afin de ne pas limiter l’ampleur de l’effet de la température. La valeur par défaut a été utilisée pour tous les autres modèles.</p>
+<p>Les modèles lissés (<code>climatGAM</code>) ont été estimés avec le package <a href="https://CRAN.R-project.org/package=scam">scam</a> (<span class="citation" data-cites="pya_shape_2015">Pya et Wood (<a href="references.html#ref-pya_shape_2015" role="doc-biblioref">2015</a>)</span>). Pour chaque cellule, nous avons considéré que l’espèce était présente si au moins une observation de l’espèce a été effectuée. La variable réponse modélisée était la présence ou non de l’espèce en utilisant une distribution binomiale (<code>family = "binomial"</code>). Seules les cellules où au moins une observation de l’espèce ou du groupe cible a été effectuée ont été utilisées. Un lissage contraint concave a été utilisé (<code>bs = "cv"</code>) avec une dimension de 35 (<code>k = 35</code>) et une pénalité d’ordre 2 (<code>m = 2</code>). Pour des raisons computationelles, la résolution de la grille climatique a été préalablement réduite d’un facteur 2 (<em>i.e.</em> résolution de 1 km).</p>
+<p>Les modèles à l’échelle de l’Amérique du Nord ont été effectué à une résolution de 500 m, alors que les modèles à l’échelle du Québec ont été effectué à une résolution de 200 m.</p>
+</section>
+<section id="pseudo-absences" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="pseudo-absences"><span class="header-section-number">5.2</span> Pseudo-absences</h2>
+<p>L’effort a été pris en compte en prenant l’ensemble des observations d’un groupe cible (<em>target group</em>) comme points de pseudo-absences (<span class="citation" data-cites="phillips_sample_2009">Phillips et al. (<a href="references.html#ref-phillips_sample_2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="barber_targetgroup_2022">Barber et al. (<a href="references.html#ref-barber_targetgroup_2022" role="doc-biblioref">2022</a>)</span>). Par exemple, l’ensemble des observations de reptiles, d’amphibiens ou de tortues ont été utilisés comme groupe cible pour les espèces de ces groupes et l’ensemble des observations de mammifères ont été utilisées pour le Petit polatouche. Les observations des jeux de données des grands mammifères ont toutefois été éliminées. Dans le cas des oiseaux et des données eBird, les pseudo-absences ont été générées à partir des identifiants des événements d’échantillonnage. En effet, la majorité des données eBird sont récoltées selon une approche d’échantillonnage où l’ensemble des individus observés sont notés. Pour les observations de eBird récoltées de façon opportuniste et pour le reste des observations d’oiseaux, l’ensemble des observations a été utilisé. Le jeu de données concernant le suivi télémétrique des fous de Bassan a toutefois été éliminée.</p>
+<p>Afin d’atténuer les problèmes de prédictions hors des aires de distribution connues, des pseudo-absences ont également été ajoutées à l’extérieur d’une zone tampon de 250 km autour des observations de l’espèce ciblée. Considérant que la plupart des espèces modélisées sont relativement bien connues, cette approche présume qu’il est peu probable qu’il existe des populations inconnues à une distance de plus de 250 km des occurrences connues. Cette valeur de 250km pourra être réajustée au besoin en fonction des espèces et des commentaires des experts.</p>
+</section>
+<section id="filtrage-des-données" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="filtrage-des-données"><span class="header-section-number">5.3</span> Filtrage des données</h2>
+<p>Pour toutes les espèces, les occurrences (incluant les occurrences des groupes cibles) dont la précision des coordonées est inconnue ou supérieures à la résolution des modèles ont été éliminées, sauf dans le cas des oiseaux et des modèles de climat.</p>
+<p>Pour les oiseaux, la majorité des observations proviennent de la plateforme eBird et ne possèdent pas d’information sur la précision spatiale de l’observation. Dans la plupart des cas, les observations sont associées à des trajets d’une longueur variable et sont donc dépourvues de précision spatiale. Nous avons donc conserver l’entièreté des observations d’oiseaux sans précision.</p>
+<p>Pour les espèces autres que les oiseaux, une grande partie des observations trouvées sur GBIF hors du Québec proviennent de la plateforme iNaturalist. Dans bien des cas, les espèces modélisées ont aussi un statut précaire dans certaines provinces et dans certains états et leur observation sont donc masquées par la plateforme. La précision spatiale des observations masquées est de l’ordre de ~ 27 km et ces observations seraient en principe éliminées des modèles à l’échelle de l’Amérique du Nord. Toutefois, cela fait en sorte que les observations de certaines provinces ou de certains états seraient entièrement éliminées de l’analyse, ce qui rend beaucoup plus difficile, voire impossible, l’estimation juste de la relation entre le climat et la présence de l’espèce. Étant donné que les modèles de Ouranos utilisés ont une résolution grossière (10 km), nous avons conservé toutes les observations indépendemment de leur précision pour les modèles de climat. Le seuil de 500 m a toutefois été respecté pour les modèles à l’échelle nord américaine incluant l’habitat.</p>
+</section>
+<section id="binarisation" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="binarisation"><span class="header-section-number">5.4</span> Binarisation</h2>
+<p>La binarisation des modèles de distribution d’espèces en vue d’obtenir des aires de réparition est une étape cruciale de la présente étude et peut avoir un impact très important sur les aires actuelles et projetées estimées (<span class="citation" data-cites="liu_selecting_2005">Liu et al. (<a href="references.html#ref-liu_selecting_2005" role="doc-biblioref">2005</a>)</span>, <span class="citation" data-cites="nenzen_choice_2011">Nenzén et Araújo (<a href="references.html#ref-nenzen_choice_2011" role="doc-biblioref">2011</a>)</span>, <span class="citation" data-cites="liu_selection_2016">Liu, Newell, et White (<a href="references.html#ref-liu_selection_2016" role="doc-biblioref">2016</a>)</span>).</p>
+</section>
+<section id="extras" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="extras"><span class="header-section-number">5.5</span> Extras</h2>
+<p>à grande échelle, facteurs climatique, mais à une échelle plus réduite, facteur de couverture du sol <span class="citation" data-cites="pearson_predicting_2003">(<a href="references.html#ref-pearson_predicting_2003" role="doc-biblioref">Pearson et Dawson 2003</a>)</span> landcover element principal influencant la présence de l,espèce à plus fine échelle</p>
+<p><span class="citation" data-cites="adde_projecting_2024">(<a href="references.html#ref-adde_projecting_2024" role="doc-biblioref">Adde et al. 2024</a>)</span>, Suisse, 12 taxonomic groups</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-adde_projecting_2024" class="csl-entry" role="listitem">
+Adde, Antoine, Nathan Külling, Pierre-Louis Rey, Fabian Fopp, Philipp Brun, Olivier Broennimann, Anthony Lehmann, et al. 2024. <span>«&nbsp;Projecting Untruncated Climate Change Effects on Species’ Climate Suitability: Insights From an Alpine Country&nbsp;»</span>. <em>Global Change Biology</em> 30 (11): e17557. https://doi.org/<a href="https://doi.org/10.1111/gcb.17557">https://doi.org/10.1111/gcb.17557</a>.
+</div>
+<div id="ref-barber_targetgroup_2022" class="csl-entry" role="listitem">
+Barber, Robert A., Stuart G. Ball, Roger K. A. Morris, et Francis Gilbert. 2022. <span>«&nbsp;Target‐group Backgrounds Prove Effective at Correcting Sampling Bias in Maxent Models&nbsp;»</span>. Édité par Boris Leroy. <em>Diversity and Distributions</em> 28 (1): 128‑41. <a href="https://doi.org/10.1111/ddi.13442">https://doi.org/10.1111/ddi.13442</a>.
+</div>
+<div id="ref-chevalier_accounting_2022" class="csl-entry" role="listitem">
+Chevalier, Mathieu, Alejandra Zarzo-Arias, Jérôme Guélat, Rubén G. Mateo, et Antoine Guisan. 2022. <span>«&nbsp;Accounting for niche truncation to improve spatial and temporal predictions of species distributions&nbsp;»</span>. <em>Frontiers in Ecology and Evolution</em> 10 (août). <a href="https://doi.org/10.3389/fevo.2022.944116">https://doi.org/10.3389/fevo.2022.944116</a>.
+</div>
+<div id="ref-citores_modelling_2020" class="csl-entry" role="listitem">
+Citores, L., L. Ibaibarriaga, D.-J. Lee, M. J. Brewer, M. Santos, et G. Chust. 2020. <span>«&nbsp;Modelling Species Presence–Absence in the Ecological Niche Theory Framework Using Shape-Constrained Generalized Additive Models&nbsp;»</span>. <em>Ecological Modelling</em> 418 (février): 108926. <a href="https://doi.org/10.1016/j.ecolmodel.2019.108926">https://doi.org/10.1016/j.ecolmodel.2019.108926</a>.
+</div>
+<div id="ref-guisan_spatially_2025" class="csl-entry" role="listitem">
+Guisan, Antoine, Mathieu Chevalier, Antoine Adde, Alejandra Zarzo-Arias, Teresa Goicolea, Olivier Broennimann, Blaise Petitpierre, et al. 2025. <span>«&nbsp;Spatially Nested Species Distribution Models (N-<span>SDM</span>): An Effective Tool to Overcome Niche Truncation for More Robust Inference and Projections&nbsp;»</span>. <em>Journal of Ecology</em> 113 (7): 1588‑1605. <a href="https://doi.org/10.1111/1365-2745.70063">https://doi.org/10.1111/1365-2745.70063</a>.
+</div>
+<div id="ref-hijmans_predicts_2025" class="csl-entry" role="listitem">
+Hijmans, Robert J. 2025. <em>predicts: Spatial Prediction Tools</em>. <a href="https://doi.org/10.32614/CRAN.package.predicts">https://doi.org/10.32614/CRAN.package.predicts</a>.
+</div>
+<div id="ref-liu_selecting_2005" class="csl-entry" role="listitem">
+Liu, Canran, Pam M. Berry, Terence P. Dawson, et Richard G. Pearson. 2005. <span>«&nbsp;Selecting Thresholds of Occurrence in the Prediction of Species Distributions&nbsp;»</span>. <em>Ecography</em> 28 (3): 385‑93. <a href="https://www.jstor.org/stable/3683850">https://www.jstor.org/stable/3683850</a>.
+</div>
+<div id="ref-liu_selection_2016" class="csl-entry" role="listitem">
+Liu, Canran, Graeme Newell, et Matt White. 2016. <span>«&nbsp;On the Selection of Thresholds for Predicting Species Occurrence with Presence-Only Data&nbsp;»</span>. <em>Ecology and Evolution</em> 6 (1): 337‑48. <a href="https://doi.org/10.1002/ece3.1878">https://doi.org/10.1002/ece3.1878</a>.
+</div>
+<div id="ref-nenzen_choice_2011" class="csl-entry" role="listitem">
+Nenzén, H. K., et M. B. Araújo. 2011. <span>«&nbsp;Choice of Threshold Alters Projections of Species Range Shifts Under Climate Change&nbsp;»</span>. <em>Ecological Modelling</em> 222 (18): 3346‑54. <a href="https://doi.org/10.1016/j.ecolmodel.2011.07.011">https://doi.org/10.1016/j.ecolmodel.2011.07.011</a>.
+</div>
+<div id="ref-pearson_predicting_2003" class="csl-entry" role="listitem">
+Pearson, Richard G., et Terence P. Dawson. 2003. <span>«&nbsp;Predicting the impacts of climate change on the distribution of species: are bioclimate envelope models useful?&nbsp;»</span> <em>Global Ecology and Biogeography</em> 12 (5): 361‑71. https://doi.org/<a href="https://doi.org/10.1046/j.1466-822X.2003.00042.x">https://doi.org/10.1046/j.1466-822X.2003.00042.x</a>.
+</div>
+<div id="ref-phillips_maximum_2006" class="csl-entry" role="listitem">
+Phillips, Steven J., Robert P. Anderson, et Robert E. Schapire. 2006. <span>«&nbsp;Maximum entropy modeling of species geographic distributions&nbsp;»</span>. <em>Ecological Modelling</em> 190 (3): 231‑59. https://doi.org/<a href="https://doi.org/10.1016/j.ecolmodel.2005.03.026">https://doi.org/10.1016/j.ecolmodel.2005.03.026</a>.
+</div>
+<div id="ref-phillips_sample_2009" class="csl-entry" role="listitem">
+Phillips, Steven J., Miroslav Dudík, Jane Elith, Catherine H. Graham, Anthony Lehmann, John Leathwick, et Simon Ferrier. 2009. <span>«&nbsp;Sample Selection Bias and Presence-Only Distribution Models: Implications for Background and Pseudo-Absence Data&nbsp;»</span>. <em>Ecological Applications</em> 19 (1): 181‑97. <a href="https://doi.org/10.1890/07-2153.1">https://doi.org/10.1890/07-2153.1</a>.
+</div>
+<div id="ref-pya_shape_2015" class="csl-entry" role="listitem">
+Pya, Natalya, et Simon N. Wood. 2015. <span>«&nbsp;Shape Constrained Additive Models&nbsp;»</span>. <em>Statistics and Computing</em> 25 (3): 543‑59. <a href="https://doi.org/10.1007/s11222-013-9448-7">https://doi.org/10.1007/s11222-013-9448-7</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./espèces.html" class="pagination-link" aria-label="Espèces">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Espèces</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./scénarios.html" class="pagination-link" aria-label="Scénarios climatiques">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Scénarios climatiques</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

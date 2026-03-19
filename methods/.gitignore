@@ -1,0 +1,4 @@
+/.quarto/
+.quarto/
+*_cache/
+*_files/

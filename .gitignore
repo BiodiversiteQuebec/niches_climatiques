@@ -8,4 +8,6 @@
 !*scripts/jobs
 !*web
 !*html
+!*docs
+!*methods
 !.gitignore
