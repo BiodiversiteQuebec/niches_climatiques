@@ -192,11 +192,11 @@
   {
     "objectID": "résultats.html",
     "href": "résultats.html",
-    "title": "7  Résultats",
+    "title": "7  Résultats et téléchargements",
     "section": "",
     "text": "7.1 Effet des variables\nPour chaque modèle, les effets marginaux des différentes variables considérées ont été calculés en fixant les autres variables à leur valeurs moyennes. Afin de visualiser les données par rapport à l’effet des variables, deux histogrammes de densité ont été ajoutés aux graphiques. Un premier a été employé pour illustrer la distribution de l’ensemble des points utilisés (observations et pseudo-absences) par rapport aux variations de la variable ciblée et un second pour visualiser l’abondance relative de l’espèce par rapport à la variable ciblée et à l’ensemble des points utilisés.\nla niche a été faite au niveau NA pour éviter la niche truncation (Guisan et al 2025)",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Résultats</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Résultats et téléchargements</span>"
     ]
   },
   {
@@ -237,6 +237,36 @@
     "text": "Adde, Antoine, Nathan Külling, Pierre-Louis Rey, Fabian Fopp, Philipp\nBrun, Olivier Broennimann, Anthony Lehmann, et al. 2024.\n“Projecting Untruncated Climate Change Effects on Species’ Climate\nSuitability: Insights from an Alpine Country.” Global Change\nBiology 30 (11): e17557. https://doi.org/https://doi.org/10.1111/gcb.17557.\n\n\nBarber, Robert A., Stuart G. Ball, Roger K. A. Morris, and Francis\nGilbert. 2022. “Target‐group Backgrounds Prove Effective at\nCorrecting Sampling Bias in Maxent Models.” Edited by Boris\nLeroy. Diversity and Distributions 28 (1): 128–41. https://doi.org/10.1111/ddi.13442.\n\n\nChevalier, Mathieu, Alejandra Zarzo-Arias, Jérôme Guélat, Rubén G.\nMateo, and Antoine Guisan. 2022. “Accounting for Niche Truncation\nto Improve Spatial and Temporal Predictions of Species\nDistributions.” Frontiers in Ecology and Evolution 10\n(August). https://doi.org/10.3389/fevo.2022.944116.\n\n\nCitores, L., L. Ibaibarriaga, D.-J. Lee, M. J. Brewer, M. Santos, and G.\nChust. 2020. “Modelling Species Presence–Absence in the Ecological\nNiche Theory Framework Using Shape-Constrained Generalized Additive\nModels.” Ecological Modelling 418 (February): 108926. https://doi.org/10.1016/j.ecolmodel.2019.108926.\n\n\nFink, D., T. Auer, A. Johnston, M. Strimas-Mackey, S. Ligocki, O.\nRobinson, L. Jaromczyk W. Hochachka, et al. 2024. “eBird Status\nand Trends, Data Version: 2023; Released: 2025.” https://doi.org/10.2173/WZTW8903.\n\n\nHijmans, Robert J. 2025. Predicts: Spatial Prediction Tools. https://doi.org/10.32614/CRAN.package.predicts.\n\n\nLiu, Canran, Pam M. Berry, Terence P. Dawson, and Richard G. Pearson.\n2005. “Selecting Thresholds of Occurrence in the Prediction of\nSpecies Distributions.” Ecography 28 (3): 385–93. https://www.jstor.org/stable/3683850.\n\n\nLiu, Canran, Graeme Newell, and Matt White. 2016. “On the\nSelection of Thresholds for Predicting Species Occurrence with\nPresence-Only Data.” Ecology and Evolution 6 (1):\n337–48. https://doi.org/10.1002/ece3.1878.\n\n\nNenzén, H. K., and M. B. Araújo. 2011. “Choice of Threshold Alters\nProjections of Species Range Shifts Under Climate Change.”\nEcological Modelling 222 (18): 3346–54. https://doi.org/10.1016/j.ecolmodel.2011.07.011.\n\n\nPearson, Richard G., and Terence P. Dawson. 2003. “Predicting the\nImpacts of Climate Change on the Distribution of Species: Are Bioclimate\nEnvelope Models Useful?” Global Ecology and Biogeography\n12 (5): 361–71. https://doi.org/https://doi.org/10.1046/j.1466-822X.2003.00042.x.\n\n\nPhillips, Steven J., Robert P. Anderson, and Robert E. Schapire. 2006.\n“Maximum Entropy Modeling of Species Geographic\nDistributions.” Ecological Modelling 190 (3): 231–59.\nhttps://doi.org/https://doi.org/10.1016/j.ecolmodel.2005.03.026.\n\n\nPhillips, Steven J., Miroslav Dudík, Jane Elith, Catherine H. Graham,\nAnthony Lehmann, John Leathwick, and Simon Ferrier. 2009. “Sample\nSelection Bias and Presence-Only Distribution Models: Implications for\nBackground and Pseudo-Absence Data.” Ecological\nApplications 19 (1): 181–97. https://doi.org/10.1890/07-2153.1.\n\n\nPya, Natalya, and Simon N. Wood. 2015. “Shape Constrained Additive\nModels.” Statistics and Computing 25 (3): 543–59. https://doi.org/10.1007/s11222-013-9448-7.",
     "crumbs": [
       "Références"
+    ]
+  },
+  {
+    "objectID": "résultats.html#aires-de-répartition-gpkg",
+    "href": "résultats.html#aires-de-répartition-gpkg",
+    "title": "7  Résultats",
+    "section": "7.3 Aires de répartition / GPKG",
+    "text": "7.3 Aires de répartition / GPKG\nRainette faux-grillon de l’Ouest: résultats, GPKG\nSalamandre à quatre orteils: résultats, GPKG\nSalamandre pourpre: Salamandre pourpre, GPKG\nSalamandre sombre des montagnes: Salamandre sombre des montagnes, GPKG\nTortue mouchetée: Tortue mouchetée, GPKG\nTortue des bois: Tortue des bois, GPKG\nCouleuvre d’eau: Couleuvre d’eau, GPKG\nCouleuvre tachetée: résultats, GPKG\nAigle royal: résultats, GPKG\nGrive de Bicknell: résultats, GPKG\nParuline azurée: résultats, GPKG\nRâle jaune: résultats, GPKG\nPetit Blongios: résultats, GPKG\nPetit Polatouche: résultats, GPKG",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Résultats</span>"
+    ]
+  },
+  {
+    "objectID": "résultats.html#modèles-de-distribution-tiff",
+    "href": "résultats.html#modèles-de-distribution-tiff",
+    "title": "7  Résultats",
+    "section": "7.3 Modèles de distribution / TIFF",
+    "text": "7.3 Modèles de distribution / TIFF",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Résultats</span>"
+    ]
+  },
+  {
+    "objectID": "résultats.html#résultats-détaillés-et-téléchargements",
+    "href": "résultats.html#résultats-détaillés-et-téléchargements",
+    "title": "7  Résultats et téléchargements",
+    "section": "7.2 Résultats détaillés et téléchargements",
+    "text": "7.2 Résultats détaillés et téléchargements\n\nLes résultats détaillés sont présentés par groupes taxonmiques ici: salamandres, rainette, tortues, couleuvres, oiseaux et polatouche et les liens de téléchargement sont listés plus bas.\nRainette faux-grillon de l’Ouest: résultats, GPKG\nSalamandre à quatre orteils: résultats, GPKG\nSalamandre pourpre: résultats, GPKG\nSalamandre sombre des montagnes: résultats, GPKG\nTortue mouchetée: résultats, GPKG\nTortue des bois: résultats, GPKG\nCouleuvre d’eau: résultats, GPKG\nCouleuvre tachetée: résultats, GPKG\nAigle royal: résultats, GPKG\nGrive de Bicknell: résultats, GPKG\nParuline azurée: résultats, GPKG\nRâle jaune: résultats, GPKG\nPetit Blongios: résultats, GPKG\nPetit Polatouche: résultats, GPKG",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Résultats et téléchargements</span>"
     ]
   }
 ]

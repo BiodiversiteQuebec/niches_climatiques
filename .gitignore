@@ -23,3 +23,7 @@
 !methods/results/
 !methods/results/**
 !.gitignore
+.tex
+.log
+.out
+.pdf
