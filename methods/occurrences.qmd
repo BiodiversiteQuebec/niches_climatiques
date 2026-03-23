@@ -1,6 +1,76 @@
 # Occurrences
 
-Les données utilisées pour le Québec proviennent de la base de données Atlas de Biodiversité Québec. Ces données incluent notamment les données du CDPNQ pour les vertébrés, les données de BORAQ pour les amphibiens et reptiles et les données eBird, EPOQ et de l'Atlas des oiseaux nicheurs.  
+Les données utilisées pour le Québec proviennent de la base de données Atlas de Biodiversité Québec (version _parquet_ 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque de données sur les amphibiens et reptiles du Québec (BORAQ), les données eBird (), EPOQ () et de l'Atlas des oiseaux nicheurs () et les données de l'Atlas des micromammifères et des chiroptères du Québec (MMACH). 
 
-Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) et eBird ont été utilisées. 
+Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) et eBird () ont été utilisées. 
+
+## Filtres
+
+Une inspection préalable des observations a été effectuée en amont de la modélisation afin d'identifier et éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utiliée pour circonscrire les observations appartenant à la rainette faux-grillon de l'Ouest telle qu'entendue au Québec (@equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019). Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (_Pseudacris maculata_) et de la rainette faux-grillon de l'Ouest telles que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (@fig-pseuda). 
+
+```{r} 
+#| label: fig-pseuda 
+#| fig-cap: "Aire de répartition utilisée pour circonscrire les observations de la rainette faux-grillon de l'Ouest (_Pseudacris triseriata_)"
+
+#| label: pseuda 
+
+library(sf)
+library(terra)
+library(rmapshaper)
+library(dplyr)
+
+epsg <- 6624 #32618
+
+# Downloads polygons using package geodata
+#can <- gadm("CAN", level = 1, path = "data") |> st_as_sf()
+#usa <- gadm("USA", level = 1, path = "data") |> st_as_sf()
+can <- readRDS("data/gadm/gadm41_CAN_2_pk.rds") |> st_as_sf()
+usa <- readRDS("data/gadm/gadm41_USA_2_pk.rds") |> st_as_sf()
+na <- rbind(can, usa)
+na <- st_transform(na, epsg)
+na <- na[!na$NAME_1 %in% c("Hawaii"), ]
+na <- na[!na$NAME_2 %in% c("Aleutians West", "Aleutians East"), ]
+na <- na |>
+  group_by(NAME_1) |>
+  summarise(geometry = st_union(geometry)) |>
+  as.data.frame() |>
+  st_as_sf(sf_column_name = "geometry") |>
+  ms_simplify(0.01)
+
+lakes <- st_read("data/ne_50m_lakes.shp", quiet = TRUE) |> st_transform(epsg)
+
+# wget -O Pseudacris_triseriata.kml https://www.inaturalist.org/taxa/24267/range.kml"
+# wget -O Pseudacris_maculata.kml https://www.inaturalist.org/taxa/24255/range.kml
+ 
+# Pseudacris_triseriata.kml # should probably download the current file
+pt <- st_read("https://www.inaturalist.org/taxa/24267/range.kml", quiet = TRUE) |>
+  ms_explode()
+
+# Pseudacris_maculata.kml 
+pm <- st_read("https://www.inaturalist.org/taxa/24255/range.kml", quiet = TRUE) |>
+  ms_explode()
+
+aire <- st_read("data/vertébrés.gpkg", quiet = TRUE) |> 
+  filter(species == "Pseudacris triseriata")
+  
+pm <- pm[-which.max(st_area(pm)), ]
+
+x <- rbind(pt, pm) |>
+  st_buffer(10000) |>
+  st_union() |>
+  st_as_sf() |>
+  st_transform(epsg)
+
+par(mar = c(0, 0, 2, 0))
+cols <- c(adjustcolor("black", 0.10), adjustcolor("forestgreen", 0.25), adjustcolor("forestgreen", 0.25))
+plot(st_geometry(x), col = "white", border = NA)
+plot(st_geometry(na), col = "grey90", border = "black", lwd = 0.1, add = TRUE)
+plot(st_geometry(x), col = adjustcolor("black", 0.10), border = NA, add = TRUE)
+plot(st_geometry(aire), col = adjustcolor("forestgreen", 0.5), border = NA, add = TRUE)
+#plot(st_geometry(st_buffer(aire, 50000)), col = adjustcolor("forestgreen", 0.25), border = NA, add = TRUE)
+plot(st_geometry(lakes), col = "white", border = "black", lwd = 0.1, add = TRUE)
+legend("bottomright", inset = c(0, 0), pch = 15, col = c("grey70", adjustcolor("forestgreen", 0.75)), legend = c("Aire iNaturalist", "Aire MELCCFP"), ncol = 1,  bty = "n", cex = 1.25, xpd = TRUE)
+
+```
+
 

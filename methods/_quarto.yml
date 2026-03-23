@@ -7,6 +7,8 @@ project:
 execute:
   echo: false
   cache: true
+  message: false
+  warning: false
 
 prefer-html: true  
 
@@ -29,6 +31,9 @@ book:
 bibliography: references.bib
 lang: fr
 
+language:
+  crossref-tbl-title: "Tableau"
+
 format:
   html:
     theme: cosmo
@@ -41,5 +46,19 @@ format:
   #pdf:
   #  documentclass: scrreprt
   #  prefer-html: true 
+  #  pdf-engine: xelatex
+  #  link-citations: true
+  #  dev: cairo_pdf
+  #  include-in-header:
+  #    text: |
+  #      \usepackage{longtable}
+  #      \usepackage{booktabs}
+  #      \usepackage{caption}
+  #      \usepackage{colortbl}
+  #      \usepackage{array}    
+  #      \usepackage{fontspec}
+  #      \newfontfamily{\symbolfont}{Symbola}
+  #      \newcommand{\usym}[1]{{\symbolfont #1}}
+        
 
 

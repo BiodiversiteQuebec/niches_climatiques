@@ -18,7 +18,7 @@ Premièrement, des variables non climatiques ont également été intégrées af
 
 Nous avons également limité la complexité des modèles utilisés et notamment des relations permises entre les variables et la présence des espèces. En effet, certaines approches d'aprentissage machine communément utilisée ont été évités, car ces méthodes sont généralement très flexibles par rapport aux relations entre les variables et la présence des espèces. Dans un contexte de projections futures, il a été considéré qu'il était préférable de se limiter à des relations simples comme des relations linéaires ou quadratiques pour décrire les effets des variables sur le présence des espèces.
 
-Afin de comparer différentes approches de modélisation, nous avons effectués plusieurs modèles. Ces modèles peuvent être regroupés en 4 groupes:
+Afin de comparer différentes approches de modélisation, nous avons effectués plusieurs modèles (@tbl-models). Ces modèles peuvent être regroupés en 4 groupes:
 
 - modèles basés sur le climat
 - modèles basés sur l'habitat
@@ -30,7 +30,9 @@ Pour les modèles incluant des variables d'habitat, nous avons également utilis
 - échelle globale en incluant des variables d'habitats mesurées à l'échelle nord américaine
 - échelle locale en incuant des variables d'habitats mesurée à l'échelle du Québec
 
-```{r fig.cap = "Résumé des modèles effectués"}
+```{r}
+#| label: tbl-models
+#| tbl-cap: "Résumé des modèles effectués"
 
 library(gt)
 
@@ -54,15 +56,22 @@ models <- list(
 gt(models) |>
   cols_align("left") |>
   cols_width(
-    Type ~ px(150),
-    Nom ~ px(250),
-    Échelle ~ px(70),
-    Description ~ px(300)
+    Type ~ pct(20),
+    Nom ~ pct(25),
+    Échelle ~ pct(15),
+    Description ~ pct(40)
   ) |>
   tab_style(
     style = cell_text(weight = "bold", align = "center"),
     locations = cells_column_labels()
-  )
+  ) |>
+  tab_options(
+    table.font.size = px(10)
+  ) #|>
+  #tab_style(
+  #  style = cell_text(v_align = "middle"),
+  #  locations = cells_body(rows = everything())
+  #)
 
 ```
 
@@ -70,14 +79,18 @@ gt(models) |>
 
 Tous les modèles avec une composante climat ont été effectuées à l'échelle nord-américaine afin de couvrir la majorité de l'aire de distribution des espèces et ainsi éviter le problème de troncation de la niche [@chevalier_accounting_2022, @guisan_spatially_2025]. En effet, le Québec représente une petite partie de l'aire de distribution de la majorité des espèces modélisées et il serait hasardeux d'établir les relations entre le climat et la présence des espèces sur une portion réduite des valeurs climatiques auxquelles ces espèces sont soumises sur le territoire québécois.
 
-Deux modèles climatiques ont été effectués. Le premier est un modèle basé sur l'algorithme Maxent. Pour ce modèle, seuls des effets quadratiques de la température moyenne annuelle ont été utilisés (_e.g._ $x + x^2$). Afin de donner plus de flexibilité à la relation entre le climat et la présence de l'espèce, des modèles additifs à formes contraintes ont également été utilisés (@pya_shape_2015, @citores_modelling_2020). Plus spécifiquement, des formes strictement concaves sont permises par une base "cv".  
+Deux modèles climatiques ont été effectués. Le premier est un modèle basé sur l'algorithme Maxent. Pour ce modèle, seuls des effets quadratiques de la température moyenne annuelle ont été utilisés (_e.g._ $x + x^2$). Afin de donner plus de flexibilité à la relation entre le climat et la présence de l'espèce, des modèles additifs à formes contraintes ont également été utilisés (@pya_shape_2015, @citores_modelling_2020). Plus spécifiquement, des formes strictement concaves sont permises par une base "cv" (@fig-climate-models).  
 
 ```{r}
 source("_setup.R")
 ```
 
 
-```{r out.width = "100%", fig.height = 3, fig.width = 8, fig.cap = "Effets climatiques quadratiques (climatX2) ou additifs contraint (climatGAM)"}
+```{r}
+#| label: fig-climate-models
+#| fig-height: 3
+#| fig-width: 8
+#| fig-cap: "Effets climatiques quadratiques (climatX2) ou additifs contraint (climatGAM)"
 
 # Define x range
 x <- seq(-25, 25, length.out = 1000)
@@ -142,14 +155,18 @@ Ce modèle est composé uniquement des données à l'échelle de l'Amérique du 
 
 ### Modèles couplés
 
-L'idée à la base des modèles couplés est que les facteurs influençant la distribution des espèces dépendent de l'échelle à laquelle on s'intéresse. À grande échelle, les espèces ont généralement une région où les conditions climatiques sont favorables à leur présence. À plus fine échelle, les variables locales d'habitats (ou de microclimats) comme le type de couverture du sol ont probablement un plus grand impact sur la distribution des espèces (@pearson_predicting_2003) et seuls les habitats favorables à la présence de l'espèce peuvent être occupés. Les avantages d'un telle approche sont:
+L'idée à la base des modèles couplés (@fig-climate-extract, @fig-combine) est que les facteurs influençant la distribution des espèces dépendent de l'échelle à laquelle on s'intéresse. À grande échelle, les espèces ont généralement une région où les conditions climatiques sont favorables à leur présence. À plus fine échelle, les variables locales d'habitats (ou de microclimats) comme le type de couverture du sol ont probablement un plus grand impact sur la distribution des espèces (@pearson_predicting_2003) et seuls les habitats favorables à la présence de l'espèce peuvent être occupés. Les avantages d'un telle approche sont:
 
   - permet de coupler des modèles effectués à différentes échelles (_e.g._ un modèle climatique à grande échelle couplé à un modèle d'habitat à plus petit échelle)
   
   - permet d'isoler l'effet des variables climatiques de celui des variables d'habitats dans un contexte où les deux types de variables sont potentiellement spatialement corrélées et attribuer les variations en probabilité de présence ou d'abondance à grande échelle aux variables climatiques 
 
 
-```{r message = FALSE, warning = FALSE, fig.height = 2, out.width = "100%", fig.cap = "Modèle de climat à grande échelle rapporté au Québec"}
+```{r}
+#| label: fig-climate-extract
+#| fig-height: 2 
+#| out-width: "100%"
+#| fig-cap: "Modèle de climat à grande échelle rapporté au Québec"
 
 library(terra) 
 library(sf)
@@ -206,7 +223,7 @@ region <- st_union(region) |> st_as_sf()
 
 # lakes
 #lakes<-ne_download(scale="medium",type="lakes",destdir="data",category="physical",returnclass="sf") |> st_transform(epsg)
-lakes <- st_read("data/ne_50m_lakes.shp") |> st_transform(epsg)
+lakes <- st_read("data/ne_50m_lakes.shp", quiet = TRUE) |> st_transform(epsg)
 lakes <- st_filter(lakes, region)
 
 add_background <- function(){
@@ -217,9 +234,6 @@ sdm_cols <- coloScale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen
 options(terra.pal = rev(terrain.colors(200)))
 options(terra.pal = sdm_cols)
 
-
-
-st_bbox(qc)[2] + 0.9 * diff(st_bbox(qc)[c(2, 4)])
 
 #plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
 #sdm_cols <- terrain.colors(200)
@@ -233,6 +247,7 @@ fplg <- function(s, x = 0.85, at = NULL){
   }
 }
 
+
 range_cols <- adjustcolor("forestgreen", 0.75)
 
 r1 <- rast("/home/frousseu/Downloads/Setophaga_cerulea_sdm_large.tif")$climat
@@ -243,29 +258,41 @@ r4 <- crop(rast("/home/frousseu/Downloads/Setophaga_cerulea_sdm_large.tif")$habi
 r4 <- r4 / global(r4, "max", na.rm = TRUE)[1, 1]  
 
 
+plot_title <- function(text, x_pct = 0.65, y_pct = 0.95, ...) {
+  usr <- terra:::get.clip() #par("usr") # also check terra::add_mtext()
+  x <- usr[1] + x_pct * (usr[2] - usr[1])
+  y <- usr[3] + y_pct * (usr[4] - usr[3])
+  text(x, y, labels = text, adj = c(0.5, 0.5), ...)
+}
+
+
 m <- matrix(c(1, 1, 1, 2, 3, 3, 3, 4, 5, 5, 5), nrow = 1)
 layout(m)
-par(oma = c(0, 2, 0, 2))
-plot(r1, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r1, x = 0.9, at = 0:1), main = "Climat global"); plot(st_geometry(qc), lwd = 1, border = "darkorange1", add = TRUE); plot(st_geometry(na), lwd = 0.1, border = "grey70", add = TRUE);add_background();
+# par(oma = c(0, 2, 0, 2))
+plot(r1, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r1, x = 0.9, at = 0:1), main = "", fun = function(){points(par("usr")[1], par("usr")[2], pch = 16, cex = 2, col = "red")}); plot(st_geometry(qc), lwd = 1, border = "darkorange1", add = TRUE); plot(st_geometry(na), lwd = 0.1, border = "grey70", add = TRUE);add_background();plot_title("Climat global")
+par(mar = c(0, 0, 0, 0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "\U2192", font = 2, cex = 2.5, col = "grey30")
+plot(r2, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = c(0, round(global(r2, "max", na.rm = TRUE)[1, 1], 3))), main = "", range = 0:1); plot(st_geometry(qc), lwd = 0.5, border = "darkorange1", add = TRUE);add_background();plot_title("Climat local")
 par(mar = c(0, 0, 0, 0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "\U1F846", font = 2, cex = 2.5, col = "grey30")
-plot(r2, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = c(0, round(global(r2, "max", na.rm = TRUE)[1, 1], 3))), main = "Climat local", range = 0:1); plot(st_geometry(qc), lwd = 0.5, border = "darkorange1", add = TRUE);add_background()
-par(mar = c(0, 0, 0, 0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "\U1F846", font = 2, cex = 2.5, col = "grey30")
-plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = 0:1), main = expression(bolditalic("Rescaled")));add_background()
+plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = 0:1), main = "");add_background();plot_title("Normalisé")
 
 ```
 
 
 
-```{r message = FALSE, warning = FALSE, fig.height = 2, out.width = "100%", fig.cap = "Modèle de climat à grande échelle combiné à un modèle d'habitat"}
+```{r}
+#| label: fig-combine
+#| fig-height: 2 
+#| out-width: "100%"
+#| fig-cap: "Modèle de climat à grande échelle combiné à un modèle d'habitat"
 
 m <- matrix(c(1, 1, 1, 2, 3, 3, 3, 4, 5, 5, 5), nrow = 1)
 layout(m)
 par(oma = c(0, 2, 0, 2))
-plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r3, at = 0:1), main = "Climat");add_background()
+plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r3, at = 0:1), main = "");add_background();plot_title("Climat")
 par(mar = c(0,0,0,0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "X", font = 2, cex = 2.5, col = "grey30")
-plot(r4, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r3, at = 0:1), main = "Habitat");add_background()
+plot(r4, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(r3, at = 0:1), main = "");add_background();plot_title("Habitat")
 par(mar = c(0,0,0,0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = ""); text(1, 1, "=", font = 2, cex = 5, col = "grey30")
-plot(r3 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), axes = FALSE, main = "Combiné");add_background()
+plot(r3 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), axes = FALSE, main = "");add_background();plot_title("Couplé")
 
 ```
 

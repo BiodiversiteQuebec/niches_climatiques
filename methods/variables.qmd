@@ -58,17 +58,19 @@ used <- unique(c(large_vars, small_vars, use_small))
 
 v$used <- ifelse((v$variable %in% used) | (v$collection == "chelsa-clim"), 1, 0)
 
-if(FALSE){
-kable(v[, 1:5], format = "html", table.attr = "class='table'") |>
-  kable_styling(full_width = FALSE) |>
-  row_spec(1:nrow(v), extra_css = "line-height: 0.75; padding-top:5px; padding-bottom:5px;") |>
-  row_spec(
-    which(v$used != 1),
-    extra_css = "text-decoration: line-through;"
-  )
-}
+#if(knitr::is_latex_output()){
+#kable(v[, 1:5], format = "latex", table.attr = "class='table'") |>
+#  kable_styling(full_width = FALSE) |>
+#  row_spec(1:nrow(v), extra_css = "line-height: 0.75; padding-top:5px; padding-bottom:5px;") |>
+#  row_spec(
+#    which(v$used != 1),
+#    extra_css = "text-decoration: line-through;"
+#  )
+#} else {
+#  gt(v[,1:5])
+#}
 
-gt(v[,1:5])
+
 
 ```
 
@@ -86,45 +88,77 @@ coll <- "ouranos_climate_projections"
 
 get_collection_info <- function(coll, stac) {
   extract_urls <- function(text) {
-    regmatches(text, gregexpr("https://[^\\s\\]\\)]+", text, perl = TRUE))[[1]]
+    regmatches(text, gregexpr("https://[^\\s\\]\\)]+", text, perl = TRUE))[[1]] |>
+      sub("(\\.zip|\\.)$", "", x = _)
   }
   x<-stac |>
     collections(collection_id = coll) |>
     get_request() |>
     (\(x) list(
-      title          = x$title,
-      variables      = tolower(paste(unique(gsub(" \\d{4}.*", "", v$fr[which(v$collection == x$id)])), collapse = ", ")),
-      description    = if(is.null(x[["description:fr"]])){x$description}else{x[["description:fr"]]},
+      Collection = x$title,
+      Variables = tolower(unique(gsub(" \\d{4}.*", "", v$fr[which(v$collection == x$id)]))),
+      Description = if(is.null(x[["description:fr"]])){x$description}else{x[["description:fr"]]}#,
       #description_fr = x[["description:fr"]],
-      license        = x$license,
-      url            = extract_urls(x$description)
+      #license        = x$license,
+      #url            = extract_urls(x$description)
     ))()
 }
 
 vc <- lapply(unique(qc$collection), function(i){
   x <- get_collection_info(i, io)
-  x$url <- paste(x$url, collapse = "\n")
+  x$url <- x$url[1] #paste(x$url, collapse = "\n")
+  g <- grep("sigeom", x$url)
+  if(any(g)){
+    x$url[g] <- "https://sigeom.mines.gouv.qc.ca" 
+  }
   x
 }) |>
   do.call("rbind", args = _) |>
-  as.data.frame()
+  as.data.frame() |>
+  unnest(cols = everything()) |>
+  group_by(Collection, Description)
 
-gt(vc) |>
-  fmt_url(url) |>
-  cols_align("left") |>
-  cols_width(
-    title ~ px(100),
-    variables ~ px(400),
-    description ~ px(300),
-    license ~ px(70),
-    url ~ px(130)
-  ) |>
-  tab_style(
-    style = cell_text(weight = "bold", align = "center"),
-    locations = cells_column_labels()
-  )# |>
-  #as_raw_html()# |>
-  #fmt_markdown(columns = variables)
+#if(knitr::is_latex_output()){
+#  kable(vc)
+#} else {
+  gt(vc) |>
+    #fmt_url(url) |>
+    cols_align("left") |>
+    cols_width(
+      Collection ~ pct(25),
+      Variables ~ pct(25),
+      Description ~ pct(50)
+    #  #license ~ px(70),
+    #  #url ~ px(130)
+    ) |>
+    tab_style(
+      style = cell_text(weight = "bold", align = "center"),
+      locations = cells_column_labels()
+    ) |>
+    tab_style(
+      style = cell_text(size = px(9)),
+      locations = cells_body(columns = c("Description"))
+    ) |>
+    tab_options(
+      table.font.size     = px(10),
+      latex.use_longtable = TRUE,
+      latex.header_repeat = TRUE
+    )# |>
+    #as_raw_html()# |>
+    #fmt_markdown(columns = variables)
+#}
+
+width <- if(knitr::is_latex_output()){c('2in', '2in', '2in')}else{c('100em', '100em', '100em')}
+
+#kable(vc[, c(2, 1, 3)]) |>
+#  column_spec(1, width = "2in") |>
+#  column_spec(2, width = "2in") |>
+#  column_spec(3, width = "2in") |>
+#  kable_styling(font_size = 6) |>
+#  #column_spec(1:3, width = ) |>
+#  collapse_rows(columns = 2:3, valign = "middle")
+  
+
 
 ```
 

@@ -6,13 +6,15 @@
 
 ## Variables par espèces
 
-Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat. Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
+Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
  
 ```{r}
 suppressWarnings(source("_setup.R"))
 ```
 
-```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
+```{r}
+#| label: tbl-species-vars
+#| tbl-cap: "Variables d'habitat utilisées pour chaque espèce"
 
 species_vars <- list(
 `Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
@@ -33,22 +35,32 @@ species_vars <- list(
 
 species_vars <- lapply(species_vars, function(i){c(i, "urban", "cropland")})
 
-sv <- data.frame(species = names(species_vars), variables = sapply(species_vars, paste, collapse = ", "))
+sv <- data.frame(Espèce = names(species_vars), Variables = sapply(species_vars, paste, collapse = ", "))
 rownames(sv) <- 1:nrow(sv)
 #kable(sv, format = "html", table.attr = "class='table'") |>
 #  kable_styling(full_width = FALSE) |>
 #  row_spec(1:nrow(sv), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
-gt(sv)
+gt(sv) |> 
+    cols_width(
+        Espèce ~ pct(30),
+        Variables ~ pct(70)
+    ) |>
+    tab_options(
+      table.font.size = px(12)
+    )
+  
 
 
 ```
 
 ## Périodes de nidification (oiseaux)
 
-Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées. Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
+Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées (@tbl-nesting). Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
 
+```{r}
+#| label: tbl-nesting
+#| tbl-cap: "Dates utilisées pour circonscrire les observations associées à la période de nidification"
 
-```{r echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%"}
 
 bp <- list(
     `Aquila chrysaetos` = c("06-07", "08-23"), 
@@ -58,10 +70,23 @@ bp <- list(
     `Ixobrychus exilis` = c("06-07", "07-19")
 )
 
-x <- data.frame(Espèces = names(bp), Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
+x <- data.frame(Espèce = names(bp), Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
 rownames(x) <- 1:nrow(x)
 #kable(x, format = "html", table.attr = "class='table'") |>
 #  kable_styling(full_width = FALSE) |>
 #  row_spec(1:nrow(x), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
-gt(x)
+gt(x) |> 
+    cols_width(
+        Espèce ~ pct(50),
+        Début ~ pct(25),
+        Fin ~ pct(25)
+    ) |>
+    tab_options(
+      table.font.size = px(12),
+      heading.title.font.size  = px(12),
+    )# |>
+    #tab_header(
+    #    title = "Dates utilisées pour circonscrire les observations associées à la période de nidification"
+    #)
+
 ```
