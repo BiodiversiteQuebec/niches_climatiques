@@ -1,21 +1,18 @@
 # Scénarios climatiques
 
 
+Les scénarios climatiques utilisés proviennent des projections Ouranos de la réanalyse canadienne de surface de l'ensemble de simulations ESPO-G6-R2 v1.0 [@lavoie_ensemble_2024]. L’ensemble ESPO-G6-R2 v1.0 est disponible de 1950 à 2100 pour l’Amérique du Nord [https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2](https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2). La médiane de la température moyenne annuelle projetée d'un sous-ensemble de 15 modèles climatiques tirés de ESPO-G6-R2 v1.0 a été utilisé pour produire les aires de distributions projetées. Bien qu'il est recommandé par Ouranos d'utiliser l'ensemble des modèles pour effectuer les projections d'aires de distributions et d'ensuite calculer la médiane ou la moyenne sur ces distributions projetées, nous avons plutôt précalculer la médiane des 15 modèles climatiques pour générer les distributions projetées afin les temps de calculs nécessaires. De plus, puisque l'incertitude associée aux modèles de distribution d'espèces est difficile à évaluer et que plusieurs éléments de sont pas pris en compte par la méthodologie (observations opportunistes, efforts d'observations très inégal, variables d'habitats limitées, capacités de dispersion non prise en compte), il a été jugé que le gain en évaluation de l'incertitude associée aux projections serait marginal par rapport à l'incertitude associée aux choix de méthodologie et à l'incertitude inhérente à la modélisation de la distribution des espèces. La médiane a été utilisée pour limiter l'influence des valeurs potentiellement extrêmes de ceratins modèles climatique.
 
-https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2
-
-Les scénarios climatiques utilisés proviennent des projections Ouranos de la réanalyse canadienne de surface de l'ensemble de simulations ESPO-G6-R2 v1.0 (@lavoie_ensemble_2024). L’ensemble ESPO-G6-R2 v1.0 est disponible de 1950 à 2100 pour l’Amérique du Nord [https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2](https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2). La médiane de la température moyenne annuelle projetée d'un sous-ensemble de 15 modèles climatiques tirés de ESPO-G6-R2 v1.0 a été utilisé pour produire les aires de distributions projetées. Bien qu'il est recommandé par Ouranos d'utiliser l'ensemble des modèles pour effectuer les projections d'aires de distributions et d,ensuite calculer la médiane ou la moyenne sur ces projections, nous avons précalculer la médiane afin les temps de calculs nécessaires. De plus, puisque l'incertitude associée aux modèles de distribution d'espèces est difficile à évaluer et que plusieurs éléments de sont pas pris en compte par la méthodologie (observations opportunistes, efforts d'observations très inégal, variables d'habitats limitées, capacités de dispersion non prise en compte), il a été jugé que le gain en évaluation de l'incertitude associée aux projections serait marginal par rapport à l'incertitude associée aux choix de méthodologie et à l'incertitude inhérente à la modélisation de la distribution des espèces. 
-
-Trois scénarios d'émissions et trois horizons temporels ont été utilisées 
+Trois scénarios d'émissions basés sur les trajectoires communes d’évolution socio-économique (SSP) et trois horizons temporels ont été utilisées 
 
 :::: {layout-ncol=2}
 
 ::: {}
 **Scénarios d'émission:**
 
-- SSP2-4.5: optimiste (milieu de route)
-- SSP3-7.0: réaliste (rivalité régionale)
-- SSP5-8.5: pessimiste (développement basé sur les énergies fossiles)
+- SSP2-4.5: Le milieu de la route (émissions modérées)
+- SSP3-7.0: Rivalité régionale (émissions élevées)
+- SSP5-8.5: Développement à base de combustiles fossiles (émissions très élevées)
 :::
 
 ::: {}

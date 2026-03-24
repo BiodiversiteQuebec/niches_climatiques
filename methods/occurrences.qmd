@@ -1,12 +1,13 @@
 # Occurrences
 
-Les données utilisées pour le Québec proviennent de la base de données Atlas de Biodiversité Québec (version _parquet_ 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque de données sur les amphibiens et reptiles du Québec (BORAQ), les données eBird (), EPOQ () et de l'Atlas des oiseaux nicheurs () et les données de l'Atlas des micromammifères et des chiroptères du Québec (MMACH). 
+Les données utilisées pour le Québec proviennent de la base de données [Atlas](https://biodiversite-quebec.ca/fr/atlas) de Biodiversité Québec (ficher _parquet_ version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque
+d’observations des reptiles et amphibiens du Québec (BORAQ), les données GBIF [], les données eBird [], EPOQ [] et de l'Atlas des oiseaux nicheurs [] et les données de l'Atlas des micromammifères et des chiroptères du Québec (MMACH). 
 
-Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) et eBird () ont été utilisées. 
+Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) [@gbiforg_gbif_2025] et eBird [@cornell_lab_of_ornithology_ebird_2025] ont été utilisées. 
 
 ## Filtres
 
-Une inspection préalable des observations a été effectuée en amont de la modélisation afin d'identifier et éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utiliée pour circonscrire les observations appartenant à la rainette faux-grillon de l'Ouest telle qu'entendue au Québec (@equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019). Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (_Pseudacris maculata_) et de la rainette faux-grillon de l'Ouest telles que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (@fig-pseuda). 
+Une inspection préalable des observations a été effectuée en amont de la modélisation afin d'identifier et éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utiliée pour circonscrire les observations appartenant à la rainette faux-grillon de l'Ouest telle qu'entendue au Québec [@equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019]. Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (_Pseudacris maculata_) et de la rainette faux-grillon de l'Ouest telles que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (@fig-pseuda). 
 
 ```{r} 
 #| label: fig-pseuda 
@@ -69,7 +70,7 @@ plot(st_geometry(x), col = adjustcolor("black", 0.10), border = NA, add = TRUE)
 plot(st_geometry(aire), col = adjustcolor("forestgreen", 0.5), border = NA, add = TRUE)
 #plot(st_geometry(st_buffer(aire, 50000)), col = adjustcolor("forestgreen", 0.25), border = NA, add = TRUE)
 plot(st_geometry(lakes), col = "white", border = "black", lwd = 0.1, add = TRUE)
-legend("bottomright", inset = c(0, 0), pch = 15, col = c("grey70", adjustcolor("forestgreen", 0.75)), legend = c("Aire iNaturalist", "Aire MELCCFP"), ncol = 1,  bty = "n", cex = 1.25, xpd = TRUE)
+legend("bottomright", inset = c(0, 0), pch = 15, pt.cex = 2, col = c(adjustcolor("forestgreen", 0.75), "grey70"), legend = c("Aire MELCCFP", "Aire iNaturalist"), ncol = 1,  bty = "n", cex = 1.25, xpd = TRUE)
 
 ```
 
