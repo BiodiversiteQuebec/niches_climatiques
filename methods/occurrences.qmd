@@ -1,6 +1,6 @@
 # Occurrences
 
-Les données utilisées pour le Québec proviennent de la base de données [Atlas](https://biodiversite-quebec.ca/fr/atlas) de Biodiversité Québec (ficher _parquet_ version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque
+Les données utilisées pour le Québec proviennent de la base de données [Atlas](https://biodiversite-quebec.ca/fr/atlas) de Biodiversité Québec (ficher _parquet_  version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque
 d’observations des reptiles et amphibiens du Québec (BORAQ), les données GBIF [], les données eBird [], EPOQ [] et de l'Atlas des oiseaux nicheurs [] et les données de l'Atlas des micromammifères et des chiroptères du Québec (MMACH). 
 
 Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) [@gbiforg_gbif_2025] et eBird [@cornell_lab_of_ornithology_ebird_2025] ont été utilisées. 

@@ -9,12 +9,16 @@
 Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
  
 ```{r}
-suppressWarnings(source("_setup.R"))
+#suppressWarnings(source("_setup.R"))
+source("_setup.R")
 ```
 
 ```{r}
 #| label: tbl-species-vars
-#| tbl-cap: "Variables d'habitat utilisées pour chaque espèce"
+#| tbl-cap: "Variables d'habitat utilisées pour chaque espèce à l'échelle de l'Amérique du Nord (NA) ou du Québec (QC)"
+
+desc <- read.csv("data/variables.csv")
+
 
 species_vars <- list(
 `Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
@@ -35,19 +39,50 @@ species_vars <- list(
 
 species_vars <- lapply(species_vars, function(i){c(i, "urban", "cropland")})
 
-sv <- data.frame(Espèce = names(species_vars), Variables = sapply(species_vars, paste, collapse = ", "))
+sv <- data.frame(Groupe = spgroup[match(rep(names(species_vars), sapply(species_vars, length)), splatin)] ,Espèce = spfr[match(rep(names(species_vars), sapply(species_vars, length)), splatin)], var = unlist(species_vars))
+m <- match(sv$var, desc$variable)
+sv$Variables <- desc$fr[m]
+sv$Échelle <- ifelse(desc$scale[m] == "large", "NA", "QC")
 rownames(sv) <- 1:nrow(sv)
+sv <- sv[, c("Groupe", "Espèce", "Variables", "Échelle")] |>
+  distinct() |>
+  mutate(present = "✓") |>
+  pivot_wider(
+    names_from  = Échelle,
+    values_from = present,
+    values_fill = ""
+  ) |>
+  arrange(Groupe, Espèce, `NA`, Variables) |>
+  mutate(QC = ifelse(`NA` == "✓", "✓", QC))
+
 #kable(sv, format = "html", table.attr = "class='table'") |>
 #  kable_styling(full_width = FALSE) |>
 #  row_spec(1:nrow(sv), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
-gt(sv) |> 
-    cols_width(
-        Espèce ~ pct(30),
-        Variables ~ pct(70)
-    ) |>
-    tab_options(
-      table.font.size = px(12)
-    )
+
+#sv |>
+#  flextable::flextable() |>
+#  flextable::merge_v(j = c("Espèce", "Échelle")) |>
+#  flextable::theme_vanilla() |>
+#  flextable::autofit()
+
+sv |>
+  flextable() |>
+  merge_v(j = c("Groupe", "Espèce")) |>
+  theme_vanilla() |>
+  #autofit() |>
+  set_table_properties(width = 1, layout = "autofit") |>
+  fontsize(size = 8, part = "all") |>
+  padding(padding.top = 0, padding.bottom = 0, part = "all") |>
+  paginate(init = TRUE, hdr_ftr = TRUE) 
+
+#gt(sv) |> 
+#    cols_width(
+#        Espèce ~ pct(30),
+#        Variables ~ pct(70)
+#    ) |>
+#    tab_options(
+#      table.font.size = px(12)
+#    )
   
 
 
@@ -70,7 +105,7 @@ bp <- list(
     `Ixobrychus exilis` = c("06-07", "07-19")
 )
 
-x <- data.frame(Espèce = names(bp), Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
+x <- data.frame(Espèce = spfr[match(names(bp), splatin)], Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
 rownames(x) <- 1:nrow(x)
 #kable(x, format = "html", table.attr = "class='table'") |>
 #  kable_styling(full_width = FALSE) |>

@@ -43,22 +43,22 @@ format:
       margin-width: 300px     # default: 300px (right TOC)    
     fontsize: 1.1em  
     toc-title: "Sections"
-  #pdf:
-  #  documentclass: scrreprt
-  #  prefer-html: true 
-  #  pdf-engine: xelatex
-  #  link-citations: true
-  #  dev: cairo_pdf
-  #  include-in-header:
-  #    text: |
-  #      \usepackage{longtable}
-  #      \usepackage{booktabs}
-  #      \usepackage{caption}
-  #      \usepackage{colortbl}
-  #      \usepackage{array}    
-  #      \usepackage{fontspec}
-  #      \newfontfamily{\symbolfont}{Symbola}
-  #      \newcommand{\usym}[1]{{\symbolfont #1}}
+  pdf:
+    documentclass: scrreprt
+    prefer-html: true 
+    pdf-engine: xelatex
+    link-citations: true
+    dev: cairo_pdf
+    include-in-header:
+      text: |
+        \usepackage{longtable}
+        \usepackage{booktabs}
+        \usepackage{caption}
+        \usepackage{colortbl}
+        \usepackage{array}    
+        \usepackage{fontspec}
+        \newfontfamily{\symbolfont}{Symbola}
+        \newcommand{\usym}[1]{{\symbolfont #1}}
         
 
 

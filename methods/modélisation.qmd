@@ -5,6 +5,14 @@ prefer-html: true
 
 # Modélisation
 
+## Contexte
+
+Un principe important ayant guidé la méthodologie utilisée dans cette étude est que pour avoir un certain niveau de confiance envers les aires de distribution projetées, les aires de distribution actuelles modélisées devraient refléter assez fidèlement les aires de distributions connues des espèces. En effet, si les aires de distribution actuelles modélisées ne représentent pas bien les aires de distribution actuelles connues, il est semble très hasardeux de projeter les aires modélisées dans le futur. Les aires de répartition actuelles modélisées ne sont pas d'intérêt en soi, mais leur appréciation permet d'évaluer la plausibilité des aires de distribution projetées.
+
+Un autre élément ayant guidé l'approche utilisée est l'utilisation de variables biologiquement pertinentes et appropriées pour les différentes espèces étudiées. Lors de la modélisation de la distribution d'un ensemble d'espèces, il est fréquent d'utiliser un ensemble de variables prédictives sans que ces variables soient nécessairement sélectionnées en fonction de la biologie de chaque espèce modélisée. Dans ces cas, il peut être difficile d'interpréter l'effet des variables sur la présence des espèces et il n'est pas garanti que les relations établies entre la présence de l'espèce et les différentes variables ont un sens biologique. En effet, des modèles jugés performants selon différentes mesures de performance peuvent être produits en utilisant des variables prédictives n'ayant aucun sens biologique [@fourcade_paintings_2018]. De plus, si les modèles utilisés sont très flexibles, comme les arbres de régression, les relations obtenues peuvent être complexes et difficilement interprétables. Dans un contexte de modélisation des aires de distributions projetées, où les relations établies entre les variables et la présence des espèces doivent être utilisées pour projeter les aires de distribiution futures, il est essentiel d'utiliser des variables ayant un sens biologique et une relation plausible avec la présence des différentes espèces.       
+
+Contrairement à l'approche communément utilisée qui consiste à évaluer les modèles de distribution d'espèces à l'aide de mesures de performance [@araujo_standards_2019], nous avons plutôt opté pour une évaluation subjective basée sur le similarité entre les aires de distribution actuelles modélisées et les aires de distribution actuelles connues pour le Québec.
+
 L'approche méthodologique utilisée repose sur plusieurs considérations et contraintes:
 
 - intégration de variables d'habitats stables par rapport aux changements climatiques
@@ -17,6 +25,8 @@ Les choix méthodologiques reflètent ces contraintes.
 Premièrement, des variables non climatiques ont également été intégrées afin de donner plus de réalisme aux aires de répartition projetées. En effet, la distribution des espèces est influencée par beaucoup d'autres facteurs que seul les effets climatiques et il convient donc de tenir compte de ces autres facteurs pour modéliser les aires de distribution projetées. Une approche uniquement basée sur les niches climatiques risquerait de mal représenter les distributions futures [@liu_selection_2016].
 
 Nous avons également limité la complexité des modèles utilisés et notamment des relations permises entre les variables et la présence des espèces. En effet, certaines approches d'aprentissage machine communément utilisée ont été évités, car ces méthodes sont généralement très flexibles par rapport aux relations entre les variables et la présence des espèces. Dans un contexte de projections futures, il a été considéré qu'il était préférable de se limiter à des relations simples comme des relations linéaires ou quadratiques pour décrire les effets des variables sur le présence des espèces.
+
+## Comparaison de méthodes
 
 Afin de comparer différentes approches de modélisation, nous avons effectués plusieurs modèles (@tbl-models). Ces modèles peuvent être regroupés en 4 groupes:
 
@@ -314,7 +324,7 @@ Afin d'atténuer les problèmes de prédictions hors des aires de distribution c
 
 ## Filtrage des données
 
-Pour toutes les espèces, les occurrences (incluant les occurrences des groupes cibles) dont la précision des coordonées est inconnue ou supérieures à la résolution des modèles ont été éliminées, sauf dans le cas des oiseaux et des modèles de climat. 
+Pour toutes les espèces, les occurrences (incluant les occurrences des groupes cibles) dont la précision des coordonées est inconnue ou supérieure à la résolution des modèles ont été éliminées, sauf dans le cas des oiseaux et des modèles de climat. 
 
 Pour les oiseaux, la majorité des observations proviennent de la plateforme eBird et ne possèdent pas d'information sur la précision spatiale de l'observation. Dans la plupart des cas, les observations sont associées à des trajets d'une longueur variable et sont donc dépourvues de précision spatiale. Nous avons donc conserver l'entièreté des observations d'oiseaux sans précision. 
 
@@ -322,15 +332,11 @@ Pour les espèces autres que les oiseaux, une grande partie des observations tro
 
 ## Binarisation
 
-La binarisation des modèles de distribution d'espèces en vue d'obtenir des aires de réparition est une étape cruciale de la présente étude et peut avoir un impact très important sur les aires actuelles et projetées estimées [@liu_selecting_2005, @nenzen_choice_2011, @liu_selection_2016]. Les modèles de distribution produisent une valeur continue (probabilité d'occurrence relative) et un seuil doit être utilisé pour convertir ces valeurs en présence/absence et déterminer les endroits où on considère que l'espèce est présente ou absente (@fig-sdm-threshold). Deux approches principales ont été testées et évaluées en fonction du réalisme des aires de répartition actuelle produite et de leur similarité avec les aires de répartition fournies par le MELCCFP [@ministere_de_lenvironnement_de_la_lutte_contre_les_changements_climatiques_de_la_faune_et_des_parcs_aires_2026]. 
+La binarisation des modèles de distribution d'espèces en vue d'obtenir des aires de réparition est une étape cruciale de la présente étude et peut avoir un impact très important sur les aires actuelles et projetées estimées [@liu_selecting_2005, @nenzen_choice_2011, @liu_selection_2016]. Les modèles de distribution produisent une valeur continue (probabilité d'occurrence relative, _relative occurrence rate (ROR)_) et un seuil doit être utilisé pour convertir ces valeurs en présence/absence et déterminer les endroits où on considère que l'espèce est présente ou absente (@fig-sdm-threshold). Deux approches principales ont été testées et évaluées en fonction du réalisme des aires de répartition actuelle produite et de leur similarité avec les aires de répartition fournies par le MELCCFP [@ministere_de_lenvironnement_de_la_lutte_contre_les_changements_climatiques_de_la_faune_et_des_parcs_aires_2026]. 
 
 La première méthode (dite à seuil fixe) est entièrement basée sur les observations de l'espèce et consiste à identifier le seuil maximal permettant de délimiter une aire contenant au moins 95% des observations de l'espèce. Lorsqu'elle est appliquée aux modèles de distributions de la présente étude, cette méthode a comme principal avantage de permettre l'inclusion de l'ensemble des zones connues où l'espèce est trouvée. Cependant, en raison de la nécessité de modéliser la distribution des espèces à travers leur aire de répartition et de la variabilité de la densité des observations et de l'effort d'observations à travers les aires de distribution, ce seuil fixe peut faire en sorte que l'aire ainsi obtenue peut incure de larges zones au Québec où l'espèce cible n'est vraisembbalement pas présente. Dans certains cas, le seuil identifié était fortement influencé par les occurrences au sud de l,aire de répartition de l'espèce, ce qui entrainaient des limites beaucoup trop nordiques sur le territoire québécois. Cette méthode n'a donc pas été utilisée pour produire les aires projetées finales.
 
-
-La seconde méthode (dite à seuil maximisé) et celle qui a finalement été utilisée combine à la fois les présences et les pseudo-absences et le seuil utilisé est celui qui maximise la somme de la sensibilité (taux de vrais positifs) et de la spécificité (taux de vrais négatifs). Comparativement à la méthode du seuil fixe, cette méthode donnait en général des limites beaucoup plus près des limites des aires de distributions actuelles connues. Toutefois, dans certains cas, les aires identifiées par ce seuil étaient trop restreintes et excluaient un grand nombres de localisations connues pour la présence des espèces, notamment pour les espèces atteignant leur limite nord de distribution dans le sud du Québec. Pour pallier à cette lacune, si le seuil identifié ne permettait pas de contenir au moins 95% des observations de l'espèce au Québec, un ajustement était employé et le seuil était revu à la baisse afin que l'aire de répartition contienne au moins 95% des observations effectuées au Québec. Autrement dit, la méthode à seuil fixe à 95% appliquée uniquement aux observations du Québec a été utilisée si la méthode à seuil maximisé ne permettait pas d'inclure 95% des observations. Cet ajustement a uniquement été utilisé pour les modèles basés entièrement sur le climat (climatX2 et climatGAM) afin d'obtenir des aires de répartition climatiques appropriées. Pour les modèles ayant une composante d'habitat, seul la méthode à seuil maximisé sans ajustements a été utilisée, car un seuil fixe inclue beaucoup trop de zones où l'espèce n'est vraisemblablement pas trouvée.   
-
-
-
+La seconde méthode (dite à seuil maximisé) et celle qui a finalement été utilisée combine à la fois les présences et les pseudo-absences et le seuil utilisé est celui qui maximise la somme de la sensibilité (taux de vrais positifs) et de la spécificité (taux de vrais négatifs). Comparativement à la méthode du seuil fixe, cette méthode donnait en général des limites beaucoup plus près des limites des aires de distributions actuelles connues. Toutefois, dans certains cas, les aires identifiées par ce seuil étaient trop restreintes et excluaient un grand nombres de localisations connues pour la présence des espèces, notamment pour les espèces atteignant leur limite nord de distribution dans le sud du Québec. Pour pallier à cette lacune, si le seuil identifié ne permettait pas de contenir au moins 95% des observations de l'espèce au Québec, un ajustement était employé et le seuil était revu à la baisse afin que l'aire de répartition contienne au moins 95% des observations effectuées au Québec. Autrement dit, la méthode à seuil fixe à 95% appliquée uniquement aux observations du Québec a été utilisée si la méthode à seuil maximisé ne permettait pas d'inclure 95% des observations. Cet ajustement a uniquement été utilisé pour les modèles basés entièrement sur le climat (`climatX2` et `climatGAM`) afin d'obtenir des aires de répartition climatiques appropriées. Pour les modèles ayant une composante d'habitat, seule la méthode à seuil maximisé sans ajustements a été utilisée, car un seuil fixe incluait beaucoup trop de zones où l'espèce n'est vraisemblablement pas trouvée.   
 
 
 ```{r}
@@ -379,8 +385,3 @@ plot(r5 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), a
 ```
 
 
-## Extras
-
-à grande échelle, facteurs climatique, mais à une échelle plus réduite, facteur de couverture du sol [@pearson_predicting_2003] landcover element principal influencant la présence de l,espèce à plus fine échelle
-
-[@adde_projecting_2024], Suisse, 12 taxonomic groups

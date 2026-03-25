@@ -219,11 +219,11 @@ div.csl-indent {
 </header>
 
 
-<p>Les données utilisées pour le Québec proviennent de la base de données Atlas de Biodiversité Québec (version <em>parquet</em> 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque de données sur les amphibiens et reptiles du Québec (BORAQ), les données eBird (), EPOQ () et de l’Atlas des oiseaux nicheurs () et les données de l’Atlas des micromammifères et des chiroptères du Québec (MMACH).</p>
-<p>Afin de construire les niches climatiques sur la majorité de l’aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) et eBird () ont été utilisées.</p>
+<p>Les données utilisées pour le Québec proviennent de la base de données <a href="https://biodiversite-quebec.ca/fr/atlas">Atlas</a> de Biodiversité Québec (ficher <em>parquet</em> version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque d’observations des reptiles et amphibiens du Québec (BORAQ), les données GBIF [], les données eBird [], EPOQ [] et de l’Atlas des oiseaux nicheurs [] et les données de l’Atlas des micromammifères et des chiroptères du Québec (MMACH).</p>
+<p>Afin de construire les niches climatiques sur la majorité de l’aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) <span class="citation" data-cites="gbiforg_gbif_2025">(<a href="references.html#ref-gbiforg_gbif_2025" role="doc-biblioref">GBIF.org 2025</a>)</span> et eBird <span class="citation" data-cites="cornell_lab_of_ornithology_ebird_2025">(<a href="references.html#ref-cornell_lab_of_ornithology_ebird_2025" role="doc-biblioref">Cornell Lab of Ornithology 2025</a>)</span> ont été utilisées.</p>
 <section id="filtres" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="filtres"><span class="header-section-number">2.1</span> Filtres</h2>
-<p>Une inspection préalable des observations a été effectuée en amont de la modélisation afin d’identifier et éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utiliée pour circonscrire les observations appartenant à la rainette faux-grillon de l’Ouest telle qu’entendue au Québec (<span class="citation" data-cites="equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019">Équipe de rétablissement de la rainette faux-grillon de l’ouest du Québec (<a href="references.html#ref-equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019" role="doc-biblioref">2019</a>)</span>). Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (<em>Pseudacris maculata</em>) et de la rainette faux-grillon de l’Ouest telles que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (<a href="#fig-pseuda" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>).</p>
+<p>Une inspection préalable des observations a été effectuée en amont de la modélisation afin d’identifier et éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utiliée pour circonscrire les observations appartenant à la rainette faux-grillon de l’Ouest telle qu’entendue au Québec <span class="citation" data-cites="equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019">(<a href="references.html#ref-equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019" role="doc-biblioref">Équipe de rétablissement de la rainette faux-grillon de l’ouest du Québec 2019</a>)</span>. Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (<em>Pseudacris maculata</em>) et de la rainette faux-grillon de l’Ouest telles que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (<a href="#fig-pseuda" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-pseuda" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -241,8 +241,14 @@ Figure&nbsp;2.1: Aire de répartition utilisée pour circonscrire les observatio
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-cornell_lab_of_ornithology_ebird_2025" class="csl-entry" role="listitem">
+Cornell Lab of Ornithology. 2025. <em><span>eBird</span> Basic Dataset</em>. Version <span>EBD</span>_relJan-2025.
+</div>
 <div id="ref-equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019" class="csl-entry" role="listitem">
 Équipe de rétablissement de la rainette faux-grillon de l’ouest du Québec. 2019. <em>Plan de rétablissement de la rainette faux-grillon de l’Ouest (Pseudacris triseriata) — 2019-2029</em>. Ministère des Forêts, de la Faune et des Parcs, Direction générale de la gestion de la faune et des habitats, 65 p.
+</div>
+<div id="ref-gbiforg_gbif_2025" class="csl-entry" role="listitem">
+GBIF.org. 2025. <em><span>GBIF</span> Occurrence Download</em>. <a href="https://doi.org/doi.org/10.15468/dl.qx5hmp">https://doi.org/doi.org/10.15468/dl.qx5hmp</a>.
 </div>
 </div>
 </section>
