@@ -49,6 +49,11 @@ format:
     pdf-engine: xelatex
     link-citations: true
     dev: cairo_pdf
+    geometry:
+      - top=1in
+      - bottom=1in
+      - left=1in
+      - right=1in    
     include-in-header:
       text: |
         \usepackage{longtable}
@@ -57,8 +62,10 @@ format:
         \usepackage{colortbl}
         \usepackage{array}    
         \usepackage{fontspec}
+        \usepackage{layout}
         \newfontfamily{\symbolfont}{Symbola}
         \newcommand{\usym}[1]{{\symbolfont #1}}
+        \captionsetup{justification=raggedright, singlelinecheck=false}        
         
 
 

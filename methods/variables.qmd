@@ -1,4 +1,9 @@
 
+---
+execute:
+  cache: false
+---
+
 # Variables
 
 ## Climat
@@ -20,8 +25,9 @@ Certaines espèces de salamandres sont retrouvées uniquement au sud du Fleuve S
 Les variables disponibles à l'échelle nord-américaine et québécoise sont présentées ci-dessous. Les variables qui seront vraisemblablement affectées par les changements climatiques et qui n'ont pas été utilisées sont marquées d'un trait. 
 
 ```{r}
-#suppressWarnings(source("_setup.R"))
-source("_setup.R")
+#| cache: false
+suppressWarnings(source("_setup.R"))
+#source("_setup.R")
 ```
 
 ## Variables simples
@@ -122,35 +128,37 @@ vc <- lapply(unique(qc$collection), function(i){
   unnest(cols = everything()) |>
   group_by(Collection, Description)
 
-#if(knitr::is_latex_output()){
-#  kable(vc)
-#} else {
-  gt(vc) |>
-    #fmt_url(url) |>
-    cols_align("left") |>
-    cols_width(
-      Collection ~ pct(25),
-      Variables ~ pct(25),
-      Description ~ pct(50)
-    #  #license ~ px(70),
-    #  #url ~ px(130)
-    ) |>
-    tab_style(
-      style = cell_text(weight = "bold", align = "center"),
-      locations = cells_column_labels()
-    ) |>
-    tab_style(
-      style = cell_text(size = px(9)),
-      locations = cells_body(columns = c("Description"))
-    ) |>
-    tab_options(
-      table.font.size     = px(10),
-      latex.use_longtable = TRUE,
-      latex.header_repeat = TRUE
-    )# |>
-    #as_raw_html()# |>
-    #fmt_markdown(columns = variables)
-#}
+if(FALSE){
+  #if(knitr::is_latex_output()){
+  #  kable(vc)
+  #} else {
+    gt(vc) |>
+      #fmt_url(url) |>
+      cols_align("left") |>
+      cols_width(
+        Collection ~ pct(25),
+        Variables ~ pct(25),
+        Description ~ pct(50)
+      #  #license ~ px(70),
+      #  #url ~ px(130)
+      ) |>
+      tab_style(
+        style = cell_text(weight = "bold", align = "center"),
+        locations = cells_column_labels()
+      ) |>
+      tab_style(
+        style = cell_text(size = px(9)),
+        locations = cells_body(columns = c("Description"))
+      ) |>
+      tab_options(
+        table.font.size     = px(10),
+        latex.use_longtable = TRUE,
+        latex.header_repeat = TRUE
+      )# |>
+      #as_raw_html()# |>
+      #fmt_markdown(columns = variables)
+  #}
+}
 
 width <- if(knitr::is_latex_output()){c('2in', '2in', '2in')}else{c('100em', '100em', '100em')}
 
@@ -161,8 +169,27 @@ width <- if(knitr::is_latex_output()){c('2in', '2in', '2in')}else{c('100em', '10
 #  kable_styling(font_size = 6) |>
 #  #column_spec(1:3, width = ) |>
 #  collapse_rows(columns = 2:3, valign = "middle")
-  
 
+
+tableau <- vc[, 1:2] |>
+  flextable() |>
+  theme_vanilla() |>
+  merge_v(j = c("Collection")) |>
+  style(j = 1, pr_t = fp_text_default(bold = TRUE)) |>
+  padding(padding.top = 1, padding.bottom = 1, part = "body") |>
+  paginate(init = TRUE, hdr_ftr = TRUE)
+  
+if (knitr::is_latex_output()) {
+  tableau <- tableau |>
+    width(j = "Collection", width = 3) |>
+    width(j = "Variables",  width = 3)
+} else {
+  tableau <- tableau |>
+    set_table_properties(width = 1, layout = "autofit")
+}
+
+#print(tableau, preview = "pdf", latex_engine = "xelatex")
+tableau
 
 ```
 

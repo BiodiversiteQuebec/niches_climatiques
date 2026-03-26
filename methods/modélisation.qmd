@@ -1,4 +1,3 @@
-
 ---
 prefer-html: true
 ---
@@ -9,7 +8,7 @@ prefer-html: true
 
 Un principe important ayant guidé la méthodologie utilisée dans cette étude est que pour avoir un certain niveau de confiance envers les aires de distribution projetées, les aires de distribution actuelles modélisées devraient refléter assez fidèlement les aires de distributions connues des espèces. En effet, si les aires de distribution actuelles modélisées ne représentent pas bien les aires de distribution actuelles connues, il est semble très hasardeux de projeter les aires modélisées dans le futur. Les aires de répartition actuelles modélisées ne sont pas d'intérêt en soi, mais leur appréciation permet d'évaluer la plausibilité des aires de distribution projetées.
 
-Un autre élément ayant guidé l'approche utilisée est l'utilisation de variables biologiquement pertinentes et appropriées pour les différentes espèces étudiées. Lors de la modélisation de la distribution d'un ensemble d'espèces, il est fréquent d'utiliser un ensemble de variables prédictives sans que ces variables soient nécessairement sélectionnées en fonction de la biologie de chaque espèce modélisée. Dans ces cas, il peut être difficile d'interpréter l'effet des variables sur la présence des espèces et il n'est pas garanti que les relations établies entre la présence de l'espèce et les différentes variables ont un sens biologique. En effet, des modèles jugés performants selon différentes mesures de performance peuvent être produits en utilisant des variables prédictives n'ayant aucun sens biologique [@fourcade_paintings_2018]. De plus, si les modèles utilisés sont très flexibles, comme les arbres de régression, les relations obtenues peuvent être complexes et difficilement interprétables. Dans un contexte de modélisation des aires de distributions projetées, où les relations établies entre les variables et la présence des espèces doivent être utilisées pour projeter les aires de distribiution futures, il est essentiel d'utiliser des variables ayant un sens biologique et une relation plausible avec la présence des différentes espèces.       
+Un autre élément ayant guidé l'approche utilisée est l'utilisation de variables biologiquement pertinentes et appropriées pour les différentes espèces étudiées. Lors de la modélisation de la distribution d'un ensemble d'espèces, il est fréquent d'utiliser un ensemble de variables prédictives sans que ces variables soient nécessairement sélectionnées en fonction de la biologie de chaque espèce modélisée. Dans ces cas, il peut être difficile d'interpréter l'effet des variables sur la présence des espèces et il n'est pas garanti que les relations établies entre la présence de l'espèce et les différentes variables ont un sens biologique. En effet, des modèles jugés performants selon différentes mesures de performance peuvent être produits en utilisant des variables prédictives n'ayant aucun sens biologique [@fourcade_paintings_2018]. De plus, si les modèles utilisés sont très flexibles, comme les arbres de régression, les relations obtenues peuvent être complexes et difficilement interprétables. Dans un contexte de modélisation des aires de distributions projetées, où les relations établies entre les variables et la présence des espèces doivent être utilisées pour projeter les aires de distribiution futures, il est essentiel d'utiliser des variables ayant un sens biologique et une relation plausible avec la présence des différentes espèces.
 
 Contrairement à l'approche communément utilisée qui consiste à évaluer les modèles de distribution d'espèces à l'aide de mesures de performance [@araujo_standards_2019], nous avons plutôt opté pour une évaluation subjective basée sur le similarité entre les aires de distribution actuelles modélisées et les aires de distribution actuelles connues pour le Québec.
 
@@ -41,10 +40,13 @@ Pour les modèles incluant des variables d'habitat, nous avons également utilis
 - échelle locale en incuant des variables d'habitats mesurée à l'échelle du Québec
 
 ```{r}
+#suppressWarnings(source("_setup.R"))
+source("_setup.R")
+```
+
+```{r}
 #| label: tbl-models
 #| tbl-cap: "Résumé des modèles effectués"
-
-library(gt)
 
 models <- list(
   c("Climat", "climatX2", "NA", "Effet quadratique de la température moyenne annuelle"),
@@ -63,6 +65,7 @@ models <- list(
   }) |>
   do.call("rbind", args = _)
 
+if(FALSE){
 gt(models) |>
   cols_align("left") |>
   cols_width(
@@ -82,6 +85,21 @@ gt(models) |>
   #  style = cell_text(v_align = "middle"),
   #  locations = cells_body(rows = everything())
   #)
+}
+
+models |>
+  flextable() |>
+  merge_v(j = c("Type")) |>
+  theme_vanilla() |>
+  style(j = 1, pr_t = fp_text_default(bold = TRUE)) |>
+  set_table_properties(width = 1, layout = "autofit") |>
+  bg(j = "Type", bg = "#eee", part = "body") |>
+  #border_inner_h(part="body", border = fp_border(color="gray", width = 0.5)) |>
+  #border_inner_h(part="header", border = fp_border(color="gray", width = 1)) |>
+  padding(padding.top = 1, padding.bottom = 1, part = "all") |>
+  paginate(init = TRUE, hdr_ftr = TRUE) 
+
+
 
 ```
 
@@ -89,12 +107,11 @@ gt(models) |>
 
 Tous les modèles avec une composante climat ont été effectuées à l'échelle nord-américaine afin de couvrir la majorité de l'aire de distribution des espèces et ainsi éviter le problème de troncation de la niche [@chevalier_accounting_2022, @guisan_spatially_2025]. En effet, le Québec représente une petite partie de l'aire de distribution de la majorité des espèces modélisées et il serait hasardeux d'établir les relations entre le climat et la présence des espèces sur une portion réduite des valeurs climatiques auxquelles ces espèces sont soumises sur le territoire québécois.
 
-Deux modèles climatiques ont été effectués. Le premier est un modèle basé sur l'algorithme Maxent. Pour ce modèle, seuls des effets quadratiques de la température moyenne annuelle ont été utilisés (_e.g._ $x + x^2$). Afin de donner plus de flexibilité à la relation entre le climat et la présence de l'espèce, des modèles additifs à formes contraintes ont également été utilisés [@pya_shape_2015, @citores_modelling_2020]. Plus spécifiquement, des formes strictement concaves sont permises par une base "cv" (@fig-climate-models).  
+Deux modèles climatiques ont été effectués. Le premier est un modèle basé sur l'algorithme Maxent. Pour ce modèle, seuls des effets quadratiques de la température moyenne annuelle ont été utilisés (*e.g.* $x + x^2$). Afin de donner plus de flexibilité à la relation entre le climat et la présence de l'espèce, des modèles additifs à formes contraintes ont également été utilisés [@pya_shape_2015, @citores_modelling_2020]. Plus spécifiquement, des formes strictement concaves sont permises par une base "cv" (@fig-climate-models).
 
 ```{r}
 source("_setup.R")
 ```
-
 
 ```{r}
 #| label: fig-climate-models
@@ -151,26 +168,25 @@ mtext(side = 2, line = 0, outer = TRUE, text = "Probabilité de présence")
 
 ### Modèles d'habitat
 
-Ces modèles ne sont pas d'intérêt en soi, car ils ne tiennent pas comptent de la niche climatique. Ils sont plutôt destinés à être couplés avec les modèles climatiques. Le modèle à l'échelle du Québec comporte 2 avantages: 
+Ces modèles ne sont pas d'intérêt en soi, car ils ne tiennent pas comptent de la niche climatique. Ils sont plutôt destinés à être couplés avec les modèles climatiques. Le modèle à l'échelle du Québec comporte 2 avantages:
 
-  - il permet de prendre en compte certaines variables d'habitat qui ne sont facilement disponibles que pour le territoire québécois (e.g. [SIGÉOM](https://sigeom.mines.gouv.qc.ca/), [Cartes écoforestières](https://www.donneesquebec.ca/recherche/dataset/carte-ecoforestiere-avec-perturbations), [Produits dérivés du lidar](https://www.donneesquebec.ca/recherche/fr/dataset/produits-derives-de-base-du-lidar), [Géobase du réseau hydrographique du Québec (GRHQ)](https://www.donneesquebec.ca/recherche/dataset/grhq), etc.)
+- il permet de prendre en compte certaines variables d'habitat qui ne sont facilement disponibles que pour le territoire québécois (e.g. [SIGÉOM](https://sigeom.mines.gouv.qc.ca/), [Cartes écoforestières](https://www.donneesquebec.ca/recherche/dataset/carte-ecoforestiere-avec-perturbations), [Produits dérivés du lidar](https://www.donneesquebec.ca/recherche/fr/dataset/produits-derives-de-base-du-lidar), [Géobase du réseau hydrographique du Québec (GRHQ)](https://www.donneesquebec.ca/recherche/dataset/grhq), etc.)
 
-  - il permet d'utiliser une résolution plus élevée que celle utiliée à l'échelle nord-américaine
+- il permet d'utiliser une résolution plus élevée que celle utiliée à l'échelle nord-américaine
 
-  - il permet d'obtenir un modèle d'habitat basé uniquement sur la réalité locale propre au Québec, i.e. que les relations entre les différentes variables et la présence des espèces dans des régions éloignées du Québec n'auront pas d'influence sur ce qui est prédit au Québec
+- il permet d'obtenir un modèle d'habitat basé uniquement sur la réalité locale propre au Québec, i.e. que les relations entre les différentes variables et la présence des espèces dans des régions éloignées du Québec n'auront pas d'influence sur ce qui est prédit au Québec
 
 ### Modèles de climat et habitat
 
-Ce modèle est composé uniquement des données à l'échelle de l'Amérique du Nord. Il comporte à la fois les variables climatiques et d'habitat au sein d'un même modèle. Il s'agit de l'approche standard qui est généralement utilisée pour modéliser la distribution des espèces. Ce modèle ne peut être évalué à l'échelle du Québec, car car la niche climatique de l'espèce ne peut être établie qu'à l'échelle nord-américaine. 
+Ce modèle est composé uniquement des données à l'échelle de l'Amérique du Nord. Il comporte à la fois les variables climatiques et d'habitat au sein d'un même modèle. Il s'agit de l'approche standard qui est généralement utilisée pour modéliser la distribution des espèces. Ce modèle ne peut être évalué à l'échelle du Québec, car car la niche climatique de l'espèce ne peut être établie qu'à l'échelle nord-américaine.
 
 ### Modèles couplés
 
 L'idée à la base des modèles couplés (@fig-climate-extract, @fig-combine) est que les facteurs influençant la distribution des espèces dépendent de l'échelle à laquelle on s'intéresse. À grande échelle, les espèces ont généralement une région où les conditions climatiques sont favorables à leur présence. À plus fine échelle, les variables locales d'habitats (ou de microclimats) comme le type de couverture du sol ont probablement un plus grand impact sur la distribution des espèces [@pearson_predicting_2003] et seuls les habitats favorables à la présence de l'espèce peuvent être occupés. Les avantages d'un telle approche sont:
 
-  - permet de coupler des modèles effectués à différentes échelles (_e.g._ un modèle climatique à grande échelle couplé à un modèle d'habitat à plus petit échelle)
-  
-  - permet d'isoler l'effet des variables climatiques de celui des variables d'habitats dans un contexte où les deux types de variables sont potentiellement spatialement corrélées et attribuer les variations en probabilité de présence ou d'abondance à grande échelle aux variables climatiques 
+- permet de coupler des modèles effectués à différentes échelles (*e.g.* un modèle climatique à grande échelle couplé à un modèle d'habitat à plus petit échelle)
 
+- permet d'isoler l'effet des variables climatiques de celui des variables d'habitats dans un contexte où les deux types de variables sont potentiellement spatialement corrélées et attribuer les variations en probabilité de présence ou d'abondance à grande échelle aux variables climatiques
 
 ```{r}
 #| label: fig-climate-extract
@@ -286,8 +302,6 @@ plot(r3, axes = FALSE, mar = c(0, 0, 0, 0), plg = fplg(qc, at = 0:1), main = "")
 
 ```
 
-
-
 ```{r}
 #| label: fig-combine
 #| fig-height: 2 
@@ -307,37 +321,35 @@ plot(r3 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), a
 
 ## Paramétrisation des modèles
 
-Tous les modèles sauf le modèle de climat avec effets additifs contrait ont été effectués avec Maxent [@phillips_maximum_2006], une approche adaptée aux données opportunistes où seules les présences sont notées et où les absences ne sont pas répertoriées. 
+Tous les modèles sauf le modèle de climat avec effets additifs contrait ont été effectués avec Maxent [@phillips_maximum_2006], une approche adaptée aux données opportunistes où seules les présences sont notées et où les absences ne sont pas répertoriées.
 
-Le package [predicts](https://CRAN.R-project.org/package=predicts) [@hijmans_predicts_2025] a été utilisé pour les modèles effectués avec _Maxent_. Seuls les effets linéaires et quadratiques ont été utilisés. Pour les modèles de climat (`climatX2`), le facteur de pénalisation a été fixé à 0 (_betaMultiplier = 0_) afin de ne pas limiter l'ampleur de l'effet de la température. La valeur par défaut a été utilisée pour tous les autres modèles.
+Le package [predicts](https://CRAN.R-project.org/package=predicts) [@hijmans_predicts_2025] a été utilisé pour les modèles effectués avec *Maxent*. Seuls les effets linéaires et quadratiques ont été utilisés. Pour les modèles de climat (`climatX2`), le facteur de pénalisation a été fixé à 0 (*betaMultiplier = 0*) afin de ne pas limiter l'ampleur de l'effet de la température. La valeur par défaut a été utilisée pour tous les autres modèles.
 
-Les modèles lissés (`climatGAM`) ont été estimés avec le package [scam](https://CRAN.R-project.org/package=scam) [@pya_shape_2015]. Pour chaque cellule, nous avons considéré que l'espèce était présente si au moins une observation de l'espèce a été effectuée. La variable réponse modélisée était la présence ou non de l'espèce en utilisant une distribution binomiale (`family = "binomial"`). Seules les cellules où au moins une observation de l'espèce ou du groupe cible a été effectuée ont été utilisées. Un lissage contraint concave a été utilisé (`bs = "cv"`) avec une dimension de 35 (`k = 35`) et une pénalité d'ordre 2 (`m = 2`). Pour des raisons computationelles, la résolution de la grille climatique a été préalablement réduite d'un facteur 2 (_i.e._ résolution de 1 km). 
+Les modèles lissés (`climatGAM`) ont été estimés avec le package [scam](https://CRAN.R-project.org/package=scam) [@pya_shape_2015]. Pour chaque cellule, nous avons considéré que l'espèce était présente si au moins une observation de l'espèce a été effectuée. La variable réponse modélisée était la présence ou non de l'espèce en utilisant une distribution binomiale (`family = "binomial"`). Seules les cellules où au moins une observation de l'espèce ou du groupe cible a été effectuée ont été utilisées. Un lissage contraint concave a été utilisé (`bs = "cv"`) avec une dimension de 35 (`k = 35`) et une pénalité d'ordre 2 (`m = 2`). Pour des raisons computationelles, la résolution de la grille climatique a été préalablement réduite d'un facteur 2 (*i.e.* résolution de 1 km).
 
 Les modèles à l'échelle de l'Amérique du Nord ont été effectué à une résolution de 500 m, alors que les modèles à l'échelle du Québec ont été effectué à une résolution de 200 m.
 
-
 ## Pseudo-absences
 
-L'effort a été pris en compte en prenant l'ensemble des observations d'un groupe cible (_target group_) comme points de pseudo-absences [@phillips_sample_2009, @barber_targetgroup_2022]. Par exemple, l'ensemble des observations de reptiles, d'amphibiens ou de tortues ont été utilisés comme groupe cible pour les espèces de ces groupes et l'ensemble des observations de mammifères ont été utilisées pour le Petit polatouche. Les observations des jeux de données des grands mammifères ont toutefois été éliminées. Dans le cas des oiseaux et des données eBird, les pseudo-absences ont été générées à partir des identifiants des événements d'échantillonnage. En effet, la majorité des données eBird sont récoltées selon une approche d'échantillonnage où l'ensemble des individus observés sont notés. Pour les observations de eBird récoltées de façon opportuniste et pour le reste des observations d'oiseaux, l'ensemble des observations a été utilisé. Le jeu de données concernant le suivi télémétrique des fous de Bassan a toutefois été éliminée.
+L'effort a été pris en compte en prenant l'ensemble des observations d'un groupe cible (*target group*) comme points de pseudo-absences [@phillips_sample_2009, @barber_targetgroup_2022]. Par exemple, l'ensemble des observations de reptiles, d'amphibiens ou de tortues ont été utilisés comme groupe cible pour les espèces de ces groupes et l'ensemble des observations de mammifères ont été utilisées pour le Petit polatouche. Les observations des jeux de données des grands mammifères ont toutefois été éliminées. Dans le cas des oiseaux et des données eBird, les pseudo-absences ont été générées à partir des identifiants des événements d'échantillonnage. En effet, la majorité des données eBird sont récoltées selon une approche d'échantillonnage où l'ensemble des individus observés sont notés. Pour les observations de eBird récoltées de façon opportuniste et pour le reste des observations d'oiseaux, l'ensemble des observations a été utilisé. Le jeu de données concernant le suivi télémétrique des fous de Bassan a toutefois été éliminée.
 
 Afin d'atténuer les problèmes de prédictions hors des aires de distribution connues, des pseudo-absences ont également été ajoutées à l'extérieur d'une zone tampon de 250 km autour des observations de l'espèce ciblée. Considérant que la plupart des espèces modélisées sont relativement bien connues, cette approche présume qu'il est peu probable qu'il existe des populations inconnues à une distance de plus de 250 km des occurrences connues. Cette valeur de 250km pourra être réajustée au besoin en fonction des espèces et des commentaires des experts.
 
 ## Filtrage des données
 
-Pour toutes les espèces, les occurrences (incluant les occurrences des groupes cibles) dont la précision des coordonées est inconnue ou supérieure à la résolution des modèles ont été éliminées, sauf dans le cas des oiseaux et des modèles de climat. 
+Pour toutes les espèces, les occurrences (incluant les occurrences des groupes cibles) dont la précision des coordonées est inconnue ou supérieure à la résolution des modèles ont été éliminées, sauf dans le cas des oiseaux et des modèles de climat.
 
-Pour les oiseaux, la majorité des observations proviennent de la plateforme eBird et ne possèdent pas d'information sur la précision spatiale de l'observation. Dans la plupart des cas, les observations sont associées à des trajets d'une longueur variable et sont donc dépourvues de précision spatiale. Nous avons donc conserver l'entièreté des observations d'oiseaux sans précision. 
+Pour les oiseaux, la majorité des observations proviennent de la plateforme eBird et ne possèdent pas d'information sur la précision spatiale de l'observation. Dans la plupart des cas, les observations sont associées à des trajets d'une longueur variable et sont donc dépourvues de précision spatiale. Nous avons donc conserver l'entièreté des observations d'oiseaux sans précision.
 
-Pour les espèces autres que les oiseaux, une grande partie des observations trouvées sur GBIF hors du Québec proviennent de la plateforme iNaturalist. Dans bien des cas, les espèces modélisées ont aussi un statut précaire dans certaines provinces et dans certains états et leur observation sont donc masquées par la plateforme. La précision spatiale des observations masquées est de l'ordre de ~ 27 km et ces observations seraient en principe éliminées des modèles à l'échelle de l'Amérique du Nord. Toutefois, cela fait en sorte que les observations de certaines provinces ou de certains états seraient entièrement éliminées de l'analyse, ce qui rend beaucoup plus difficile, voire impossible, l'estimation juste de la relation entre le climat et la présence de l'espèce. Étant donné que les modèles de Ouranos utilisés ont une résolution grossière (10 km), nous avons conservé toutes les observations indépendemment de leur précision pour les modèles de climat. Le seuil de 500 m a toutefois été respecté pour les modèles à l'échelle nord américaine incluant l'habitat.  
+Pour les espèces autres que les oiseaux, une grande partie des observations trouvées sur GBIF hors du Québec proviennent de la plateforme iNaturalist. Dans bien des cas, les espèces modélisées ont aussi un statut précaire dans certaines provinces et dans certains états et leur observation sont donc masquées par la plateforme. La précision spatiale des observations masquées est de l'ordre de \~ 27 km et ces observations seraient en principe éliminées des modèles à l'échelle de l'Amérique du Nord. Toutefois, cela fait en sorte que les observations de certaines provinces ou de certains états seraient entièrement éliminées de l'analyse, ce qui rend beaucoup plus difficile, voire impossible, l'estimation juste de la relation entre le climat et la présence de l'espèce. Étant donné que les modèles de Ouranos utilisés ont une résolution grossière (10 km), nous avons conservé toutes les observations indépendemment de leur précision pour les modèles de climat. Le seuil de 500 m a toutefois été respecté pour les modèles à l'échelle nord américaine incluant l'habitat.
 
 ## Binarisation
 
-La binarisation des modèles de distribution d'espèces en vue d'obtenir des aires de réparition est une étape cruciale de la présente étude et peut avoir un impact très important sur les aires actuelles et projetées estimées [@liu_selecting_2005, @nenzen_choice_2011, @liu_selection_2016]. Les modèles de distribution produisent une valeur continue (probabilité d'occurrence relative, _relative occurrence rate (ROR)_) et un seuil doit être utilisé pour convertir ces valeurs en présence/absence et déterminer les endroits où on considère que l'espèce est présente ou absente (@fig-sdm-threshold). Deux approches principales ont été testées et évaluées en fonction du réalisme des aires de répartition actuelle produite et de leur similarité avec les aires de répartition fournies par le MELCCFP [@ministere_de_lenvironnement_de_la_lutte_contre_les_changements_climatiques_de_la_faune_et_des_parcs_aires_2026]. 
+La binarisation des modèles de distribution d'espèces en vue d'obtenir des aires de réparition est une étape cruciale de la présente étude et peut avoir un impact très important sur les aires actuelles et projetées estimées [@liu_selecting_2005, @nenzen_choice_2011, @liu_selection_2016]. Les modèles de distribution produisent une valeur continue (probabilité d'occurrence relative, *relative occurrence rate (ROR)*) et un seuil doit être utilisé pour convertir ces valeurs en présence/absence et déterminer les endroits où on considère que l'espèce est présente ou absente (@fig-sdm-threshold). Deux approches principales ont été testées et évaluées en fonction du réalisme des aires de répartition actuelle produite et de leur similarité avec les aires de répartition fournies par le MELCCFP [@ministere_de_lenvironnement_de_la_lutte_contre_les_changements_climatiques_de_la_faune_et_des_parcs_aires_2026].
 
 La première méthode (dite à seuil fixe) est entièrement basée sur les observations de l'espèce et consiste à identifier le seuil maximal permettant de délimiter une aire contenant au moins 95% des observations de l'espèce. Lorsqu'elle est appliquée aux modèles de distributions de la présente étude, cette méthode a comme principal avantage de permettre l'inclusion de l'ensemble des zones connues où l'espèce est trouvée. Cependant, en raison de la nécessité de modéliser la distribution des espèces à travers leur aire de répartition et de la variabilité de la densité des observations et de l'effort d'observations à travers les aires de distribution, ce seuil fixe peut faire en sorte que l'aire ainsi obtenue peut incure de larges zones au Québec où l'espèce cible n'est vraisembbalement pas présente. Dans certains cas, le seuil identifié était fortement influencé par les occurrences au sud de l,aire de répartition de l'espèce, ce qui entrainaient des limites beaucoup trop nordiques sur le territoire québécois. Cette méthode n'a donc pas été utilisée pour produire les aires projetées finales.
 
-La seconde méthode (dite à seuil maximisé) et celle qui a finalement été utilisée combine à la fois les présences et les pseudo-absences et le seuil utilisé est celui qui maximise la somme de la sensibilité (taux de vrais positifs) et de la spécificité (taux de vrais négatifs). Comparativement à la méthode du seuil fixe, cette méthode donnait en général des limites beaucoup plus près des limites des aires de distributions actuelles connues. Toutefois, dans certains cas, les aires identifiées par ce seuil étaient trop restreintes et excluaient un grand nombres de localisations connues pour la présence des espèces, notamment pour les espèces atteignant leur limite nord de distribution dans le sud du Québec. Pour pallier à cette lacune, si le seuil identifié ne permettait pas de contenir au moins 95% des observations de l'espèce au Québec, un ajustement était employé et le seuil était revu à la baisse afin que l'aire de répartition contienne au moins 95% des observations effectuées au Québec. Autrement dit, la méthode à seuil fixe à 95% appliquée uniquement aux observations du Québec a été utilisée si la méthode à seuil maximisé ne permettait pas d'inclure 95% des observations. Cet ajustement a uniquement été utilisé pour les modèles basés entièrement sur le climat (`climatX2` et `climatGAM`) afin d'obtenir des aires de répartition climatiques appropriées. Pour les modèles ayant une composante d'habitat, seule la méthode à seuil maximisé sans ajustements a été utilisée, car un seuil fixe incluait beaucoup trop de zones où l'espèce n'est vraisemblablement pas trouvée.   
-
+La seconde méthode (dite à seuil maximisé) et celle qui a finalement été utilisée combine à la fois les présences et les pseudo-absences et le seuil utilisé est celui qui maximise la somme de la sensibilité (taux de vrais positifs) et de la spécificité (taux de vrais négatifs). Comparativement à la méthode du seuil fixe, cette méthode donnait en général des limites beaucoup plus près des limites des aires de distributions actuelles connues. Toutefois, dans certains cas, les aires identifiées par ce seuil étaient trop restreintes et excluaient un grand nombres de localisations connues pour la présence des espèces, notamment pour les espèces atteignant leur limite nord de distribution dans le sud du Québec. Pour pallier à cette lacune, si le seuil identifié ne permettait pas de contenir au moins 95% des observations de l'espèce au Québec, un ajustement était employé et le seuil était revu à la baisse afin que l'aire de répartition contienne au moins 95% des observations effectuées au Québec. Autrement dit, la méthode à seuil fixe à 95% appliquée uniquement aux observations du Québec a été utilisée si la méthode à seuil maximisé ne permettait pas d'inclure 95% des observations. Cet ajustement a uniquement été utilisé pour les modèles basés entièrement sur le climat (`climatX2` et `climatGAM`) afin d'obtenir des aires de répartition climatiques appropriées. Pour les modèles ayant une composante d'habitat, seule la méthode à seuil maximisé sans ajustements a été utilisée, car un seuil fixe incluait beaucoup trop de zones où l'espèce n'est vraisemblablement pas trouvée.
 
 ```{r}
 #| label: fig-sdm-threshold
@@ -360,9 +372,6 @@ plot(r7, mar = c(0, 0, 0, 0), plg = c(border = NA, pt.cex = 5, fplg(r3, at = seq
 
 ```
 
-
-
-
 Afin de réduire les problèmes associés au débordement vers le nord des probabilités relative d'occurrences élevées, les modèles couplés ont été combinés avec les aires de répartition plutôt qu'avec les modèles de distribitions (@fig-combine2).
 
 ```{r}
@@ -383,5 +392,3 @@ par(mar = c(0,0,0,0));plot(1, 1, type = "n", axes = FALSE, xlab = "", ylab = "")
 plot(r5 * r4, mar = c(0, 0, 0, 0), plg = fplg(r3, at = seq(0, 0.8, by = 0.2)), axes = FALSE, main = "");add_background();plot_title("Couplé")
 
 ```
-
-

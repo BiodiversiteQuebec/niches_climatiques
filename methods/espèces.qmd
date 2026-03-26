@@ -1,3 +1,8 @@
+---
+execute:
+  cache: false
+---
+
 # Espèces
 
 ## Aires de répartition
@@ -9,9 +14,16 @@
 Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
  
 ```{r}
-#suppressWarnings(source("_setup.R"))
-source("_setup.R")
+#| cache: false
+suppressWarnings(source("_setup.R"))
+#source("_setup.R")
 ```
+
+<!--
+```{=latex}
+\layout
+```
+-->
 
 ```{r}
 #| label: tbl-species-vars
@@ -65,15 +77,34 @@ sv <- sv[, c("Groupe", "Espèce", "Variables", "Échelle")] |>
 #  flextable::theme_vanilla() |>
 #  flextable::autofit()
 
-sv |>
+tableau <- sv |>
   flextable() |>
   merge_v(j = c("Groupe", "Espèce")) |>
   theme_vanilla() |>
-  #autofit() |>
-  set_table_properties(width = 1, layout = "autofit") |>
-  fontsize(size = 8, part = "all") |>
-  padding(padding.top = 0, padding.bottom = 0, part = "all") |>
+  style(j = 1, pr_t = fp_text_default(bold = TRUE)) |>
+  #set_table_properties(width = 1, layout = "autofit") |>
+  bg(j = "Groupe", bg = "#eee", part = "body") |>
+  align(align = "center", part = "all") |>       # center everything
+  align(j = 3, align = "left", part = "body") |> # restore body of col 3 to left
+  #bg(j = 1, i = seq(1, nrow(sv), 2), bg = "#ddd", part = "body") |>  # odd rows
+  #bg(j = 1, i = seq(2, nrow(sv), 2), bg = "#eee", part = "body") |>       # even rows
+  padding(padding.top = 0, padding.bottom = 0, part = "body") |>
   paginate(init = TRUE, hdr_ftr = TRUE) 
+
+if (knitr::is_latex_output()) {
+  tableau <- tableau |>
+    width(j = "Groupe", width = pdfw * 0.2) |>
+    width(j = "Espèce",  width = pdfw * 0.35) |>
+    width(j = "Variables",  width = pdfw * 0.35) |>
+    width(j = "NA",  width = pdfw * 0.05) |>
+    width(j = "QC",  width = pdfw * 0.05)
+} else {
+  tableau <- tableau |>
+    set_table_properties(width = 1, layout = "autofit")
+}
+
+#print(sv, preview = "pdf", latex_engine = "xelatex")
+tableau
 
 #gt(sv) |> 
 #    cols_width(
@@ -84,7 +115,6 @@ sv |>
 #      table.font.size = px(12)
 #    )
   
-
 
 ```
 
@@ -110,18 +140,28 @@ rownames(x) <- 1:nrow(x)
 #kable(x, format = "html", table.attr = "class='table'") |>
 #  kable_styling(full_width = FALSE) |>
 #  row_spec(1:nrow(x), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
-gt(x) |> 
-    cols_width(
-        Espèce ~ pct(50),
-        Début ~ pct(25),
-        Fin ~ pct(25)
-    ) |>
-    tab_options(
-      table.font.size = px(12),
-      heading.title.font.size  = px(12),
-    )# |>
-    #tab_header(
-    #    title = "Dates utilisées pour circonscrire les observations associées à la période de nidification"
-    #)
+
+#gt(x) |> 
+#    cols_width(
+#        Espèce ~ pct(50),
+#        Début ~ pct(25),
+#        Fin ~ pct(25)
+#    ) |>
+#    tab_options(
+#      table.font.size = px(12),
+#      heading.title.font.size  = px(12),
+#    )# |>
+#    #tab_header(
+#    #    title = "Dates utilisées pour circonscrire les observations associées à la période de nidification"
+#    #)
+
+
+x |>
+  flextable() |>
+  theme_vanilla() |>
+  set_table_properties(width = 1, layout = "autofit") |>
+  #fontsize(size = 8, part = "all") |>
+  padding(padding.top = 1, padding.bottom = 1, part = "all") |>
+  paginate(init = TRUE, hdr_ftr = TRUE) 
 
 ```

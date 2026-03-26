@@ -9,6 +9,13 @@ library(rstac)
 library(flextable)
 
 
+set_flextable_defaults(
+  font.size = 8, 
+  border.color = "grey70"
+)
+
+pdfw <- 8.5 - (2 * 1.25)
+
 spnames <- list(list("Pseudacris triseriata", "Rainette faux-grillon de l'Ouest", "Rainettes"), list("Hemidactylium scutatum", 
     "Salamandre à quatre orteils", "Salamandres"), list("Gyrinophilus porphyriticus", "Salamandre pourpre", "Salamandres"), list("Desmognathus ochrophaeus", 
     "Salamandre sombre des montagnes", "Salamandres"), list("Emydoidea blandingii", "Tortue mouchetée", "Tortues"), list("Glyptemys insculpta", 
