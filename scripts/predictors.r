@@ -18,7 +18,7 @@ openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 meubles_cats <- desc_small$variable[desc_small$collection %in% c("sigeom_zones_morphosedimentologiques_percentage") & !desc_small$variable %in% c("anthropogenique", "organique", "roche")]
 
 predictors <- rast("data/predictors_500_NA.tif")
-predictors <- aggregate(predictors, 10, na.rm = TRUE)
+#predictors <- aggregate(predictors, 10, na.rm = TRUE)
 #predictors <- predictors[[grep("^P\\d+_", names(predictors), value = TRUE, invert = TRUE)]] # temp remove ouranos
 predictors <- predictors[[names(predictors)[!names(predictors) %in% desc_large$variable[grep("chelsa", desc_large$collection)]]]] # remove chelsa
 predictors[[grep("P1_", names(predictors), value = TRUE)]] - 273.15
@@ -113,7 +113,7 @@ plarge_proj <- predictors_proj
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_200_QC.tif")
-psmall <- aggregate(psmall, 10, na.rm = TRUE)
+#psmall <- aggregate(psmall, 10, na.rm = TRUE)
 #psmall <- psmall[[grep("^P\\d+_", names(psmall), value = TRUE, invert = TRUE)]] # temp remove ouranos
 psmall <- psmall[[names(psmall)[!names(psmall) %in% desc_small$variable[grep("chelsa", desc_small$collection)]]]] # remove chelsa
 

@@ -11,6 +11,16 @@ add_range2 <- function(){
   }
 }
 
+plot_lakes <- function(){
+  plot(st_geometry(lakes), col = "white", lwd = 0.1, border = NA, add = TRUE)
+}
+
+plot_max <- function(x){
+  plot(st_geometry(x), border = NA, col = "white") 
+}
+
+
+
 #############################################################################
 ### Compare actual models ###################################################
 lf <- gsub("_sdm_small.tif", "_sdm_large.tif", file_sdm)
@@ -147,6 +157,64 @@ lapply(lf, function(xx){
 
 
 
+if(FALSE){
+
+rivieres <- st_read("data/grhq.gpkg", query = "SELECT * FROM rivers WHERE ST_Area(Shape) > 500 * 500") |>
+  st_transform(6624)
+
+lakes <- st_read("data/grhq.gpkg", query = "SELECT * FROM lakes WHERE ST_Area(Shape) > 200000000") |>
+  st_transform(6624) |>
+  rbind(rivieres)
+
+##############################################################################
+### Compare projections range change for climate only ########################
+lf <- gsub("_range_proj_small.gpkg", "_range_proj_large.gpkg", file_pol_proj)
+
+display_model <- "climatGAM (habitatQC)"
+if(grepl("QC", display_model)){
+  lf <- gsub("large", "small", lf)
+}
+display_name <- model_names[[display_model]]
+selected <- paste(display_model, scenarios)
+selected <- c(display_model, selected)
+display_names <- paste0(display_name, "\n", scenarios)
+
+current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
+maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
+#fn <- gsub("_range_proj_large.tif|_range_proj_small.tif", "_range_proj_compare.png", gsub(path_raster, "results/graphics", xx))
+cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
+fn <- "plot.png"
+png(fn, units = "in", height = 11, width = 12, res = 300)
+par(mfrow = c(3, 4), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+lapply(display_names, function(xx){
+    #print(paste("fn", fn))
+    if(grepl("_2030", xx)){
+      plot_background()
+      plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
+      plot_lakes()
+      mtext(outer = FALSE, side = 2, line = 1, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 2))), xpd = TRUE, adj = 0.5, font = 2, col = "grey70", cex = 2.5)
+      if(grepl("ssp585", xx)){
+        mtext(outer = FALSE, side = 1, line = 2, text = "Actuel", xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+      }
+    } 
+    #box("plot", col = "grey95", lwd = 5);box("inner", col = "grey95", lwd = 5)
+    plot_background()
+    projected <- st_read(lf, layer = gsub("\n", " ", xx))
+    minus <- st_difference(current, projected)
+    plus <- st_difference(projected, current)
+    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union()
+    plot(st_geometry(minus), col = cols[1], border = NA, add = TRUE)
+    plot(st_geometry(plus), col = cols[2], border = NA, add = TRUE)
+    plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
+    plot_lakes()
+    if(grepl("ssp585", xx)){
+      mtext(outer = FALSE, side = 1, line = 2, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 3))), xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+    } 
+})
+par(mfrow = c(1, 1), mar = c(3.5, 0, 0, 0), oma = c(0, 0, 0, 0), new = TRUE)
+legend("top", inset = c(0, -0.03), pch = 15, pt.cex = 4, cex = 2.5, legend = c("Perte", "Gain", "Stable")[c(3, 2, 1)], col = cols[c(3, 2, 1)], nc = 3, bty = "n", xpd = NA, text.font = 2, text.col = "grey70", horiz = TRUE)
+
+dev.off()
 
 
 
@@ -155,6 +223,23 @@ lapply(lf, function(xx){
 
 
 
+
+
+  png(topng(gsub("_range", "_range_diff", file_range)), units = "in", height = 6, width = 6.5, res = 300)
+  par(mar = c(0, 0, 0, 0))
+  minus <- st_difference(polran, polran_proj)
+  plus <- st_difference(polran_proj, polran)
+  equal <- st_intersection(polran_proj, polran) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union()
+  plot_background()
+  cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
+  plot(st_geometry(minus), col = cols[1], border = NA, add = TRUE)
+  plot(st_geometry(plus), col = cols[2], border = NA, add = TRUE)
+  plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
+  plot_foreground(echelle = echelle)
+  legend("topright", inset = c(0.1, 0.1), legend = c("Perte", "Gain", "Stable")[c(2, 3, 1)], pch = 15, pt.cex = 2, col = cols[c(2, 3, 1)], bty = "n", xjust = 1, xpd = TRUE)
+  add_scenario()
+  dev.off()
+}
 
 
 graphics.off()
@@ -175,10 +260,11 @@ graphics.off()
 
 #species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
 
-if(FALSE){
-  species_list <- sp #gsub(" ", "_", species)[11]
-  for (spe in species_list) {
-    spe <- file.path(path_raster, spe)
+if(TRUE){
+  #species_list <- gsub(" ", "_", species)
+  species_list <- gsub(" ", "_", sp)
+  for (ss in species_list) {
+    spe <- file.path(path_raster, ss)
     temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
     cmd <- paste0(
       "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
@@ -187,7 +273,7 @@ if(FALSE){
       "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
       "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
     )
-    #cat(cmd)
+    cat(cmd, "\n")
     system(cmd)
   }
 }
