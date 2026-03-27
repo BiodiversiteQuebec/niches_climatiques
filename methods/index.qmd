@@ -1,0 +1,4 @@
+# Contexte {.unnumbered}
+
+Ce document présente la méthodologie utilisée pour le projet de _Modélisation des niches climatiques pour des espèces en situation précaire_ réalisé par [Biodiversité Québec](https://biodiversite-quebec.ca/fr) dans le cadre du contrat avec le [Ministère de l’Environnement, de la Lutte contre les changements climatiques, de la Faune et des Parcs (MELCCFP)](https://www.environnement.gouv.qc.ca/).
+

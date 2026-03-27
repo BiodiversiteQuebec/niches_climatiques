@@ -1,0 +1,71 @@
+project:
+  type: book
+  output-dir: ../docs
+  resources:
+    - results/
+
+execute:
+  echo: false
+  cache: true
+  message: false
+  warning: false
+
+prefer-html: true  
+
+book:
+  title: "Niches climatiques / méthodologie"
+  author: "François Rousseu"
+  date: today
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - occurrences.qmd
+    - variables.qmd
+    - espèces.qmd
+    - modélisation.qmd
+    - scénarios.qmd
+    - résultats.qmd
+    - references.qmd
+    
+
+bibliography: references.bib
+lang: fr
+
+language:
+  crossref-tbl-title: "Tableau"
+
+format:
+  html:
+    theme: cosmo
+    grid:
+      body-width: 900px      # default: 900px
+      sidebar-width: 300px    # default: 250px
+      margin-width: 300px     # default: 300px (right TOC)    
+    fontsize: 1.1em  
+    toc-title: "Sections"
+  pdf:
+    documentclass: scrreprt
+    prefer-html: true 
+    pdf-engine: xelatex
+    link-citations: true
+    dev: cairo_pdf
+    geometry:
+      - top=1in
+      - bottom=1in
+      - left=1in
+      - right=1in    
+    include-in-header:
+      text: |
+        \usepackage{longtable}
+        \usepackage{booktabs}
+        \usepackage{caption}
+        \usepackage{colortbl}
+        \usepackage{array}    
+        \usepackage{fontspec}
+        \usepackage{layout}
+        \newfontfamily{\symbolfont}{Symbola}
+        \newcommand{\usym}[1]{{\symbolfont #1}}
+        \captionsetup{justification=raggedright, singlelinecheck=false}        
+        
+
+

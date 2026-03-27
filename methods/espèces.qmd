@@ -1,0 +1,167 @@
+---
+execute:
+  cache: false
+---
+
+# Espèces
+
+## Aires de répartition
+
+## Filtrage des données
+
+## Variables par espèces
+
+Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
+ 
+```{r}
+#| cache: false
+suppressWarnings(source("_setup.R"))
+#source("_setup.R")
+```
+
+<!--
+```{=latex}
+\layout
+```
+-->
+
+```{r}
+#| label: tbl-species-vars
+#| tbl-cap: "Variables d'habitat utilisées pour chaque espèce à l'échelle de l'Amérique du Nord (NA) ou du Québec (QC)"
+
+desc <- read.csv("data/variables.csv")
+
+
+species_vars <- list(
+`Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
+`Hemidactylium scutatum` = c("tourbiere", "marais", "marecage", "organique", "forest", "twi", "earthenv_geomflat", "flat"), 
+`Gyrinophilus porphyriticus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams", "southstlawrence"), 
+`Desmognathus ochrophaeus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams", "southstlawrence"), 
+`Emydoidea blandingii` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "distance_to_rivers"),
+`Glyptemys insculpta` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "sand", "distance_to_streams", "distance_to_rivers", "meubles"),
+`Nerodia sipedon` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "distance_to_openwater"),
+`Lampropeltis triangulum` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde"), 
+`Aquila chrysaetos` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "roche", "distance_to_cliffs"), 
+`Catharus bicknelli` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness"), 
+`Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
+`Coturnicops noveboracensis` = c("earthenv_geomflat", "flat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique", "logdistance_to_coaststlawrence"), 
+`Ixobrychus exilis` = c("earthenv_geomflat", "flat", "wetland", "marais", "eau_peu_profonde", "glaciomarin", "glaciolacustre", "alluvion"), 
+`Glaucomys volans` = c("forest")
+)
+
+species_vars <- lapply(species_vars, function(i){c(i, "urban", "cropland")})
+
+sv <- data.frame(Groupe = spgroup[match(rep(names(species_vars), sapply(species_vars, length)), splatin)] ,Espèce = spfr[match(rep(names(species_vars), sapply(species_vars, length)), splatin)], var = unlist(species_vars))
+m <- match(sv$var, desc$variable)
+sv$Variables <- desc$fr[m]
+sv$Échelle <- ifelse(desc$scale[m] == "large", "NA", "QC")
+rownames(sv) <- 1:nrow(sv)
+sv <- sv[, c("Groupe", "Espèce", "Variables", "Échelle")] |>
+  distinct() |>
+  mutate(present = "✓") |>
+  pivot_wider(
+    names_from  = Échelle,
+    values_from = present,
+    values_fill = ""
+  ) |>
+  arrange(Groupe, Espèce, `NA`, Variables) |>
+  mutate(QC = ifelse(`NA` == "✓", "✓", QC))
+
+#kable(sv, format = "html", table.attr = "class='table'") |>
+#  kable_styling(full_width = FALSE) |>
+#  row_spec(1:nrow(sv), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
+
+#sv |>
+#  flextable::flextable() |>
+#  flextable::merge_v(j = c("Espèce", "Échelle")) |>
+#  flextable::theme_vanilla() |>
+#  flextable::autofit()
+
+tableau <- sv |>
+  flextable() |>
+  merge_v(j = c("Groupe", "Espèce")) |>
+  theme_vanilla() |>
+  style(j = 1, pr_t = fp_text_default(bold = TRUE)) |>
+  #set_table_properties(width = 1, layout = "autofit") |>
+  bg(j = "Groupe", bg = "#eee", part = "body") |>
+  align(align = "center", part = "all") |>       # center everything
+  align(j = 3, align = "left", part = "body") |> # restore body of col 3 to left
+  #bg(j = 1, i = seq(1, nrow(sv), 2), bg = "#ddd", part = "body") |>  # odd rows
+  #bg(j = 1, i = seq(2, nrow(sv), 2), bg = "#eee", part = "body") |>       # even rows
+  padding(padding.top = 0, padding.bottom = 0, part = "body") |>
+  paginate(init = TRUE, hdr_ftr = TRUE) 
+
+if (knitr::is_latex_output()) {
+  tableau <- tableau |>
+    width(j = "Groupe", width = pdfw * 0.2) |>
+    width(j = "Espèce",  width = pdfw * 0.35) |>
+    width(j = "Variables",  width = pdfw * 0.35) |>
+    width(j = "NA",  width = pdfw * 0.05) |>
+    width(j = "QC",  width = pdfw * 0.05)
+} else {
+  tableau <- tableau |>
+    set_table_properties(width = 1, layout = "autofit")
+}
+
+#print(sv, preview = "pdf", latex_engine = "xelatex")
+tableau
+
+#gt(sv) |> 
+#    cols_width(
+#        Espèce ~ pct(30),
+#        Variables ~ pct(70)
+#    ) |>
+#    tab_options(
+#      table.font.size = px(12)
+#    )
+  
+
+```
+
+## Périodes de nidification (oiseaux)
+
+Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées (@tbl-nesting). Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
+
+```{r}
+#| label: tbl-nesting
+#| tbl-cap: "Dates utilisées pour circonscrire les observations associées à la période de nidification"
+
+
+bp <- list(
+    `Aquila chrysaetos` = c("06-07", "08-23"), 
+    `Catharus bicknelli` = c("06-07", "07-12"), 
+    `Setophaga cerulea` = c("05-24", "07-12"), 
+    `Coturnicops noveboracensis` = c("06-07", "08-24"), 
+    `Ixobrychus exilis` = c("06-07", "07-19")
+)
+
+x <- data.frame(Espèce = spfr[match(names(bp), splatin)], Début = sapply(bp, "[", 1), Fin = sapply(bp, "[", 2))
+rownames(x) <- 1:nrow(x)
+#kable(x, format = "html", table.attr = "class='table'") |>
+#  kable_styling(full_width = FALSE) |>
+#  row_spec(1:nrow(x), extra_css = "line-height: 1; padding-top:5px; padding-bottom:5px;")
+
+#gt(x) |> 
+#    cols_width(
+#        Espèce ~ pct(50),
+#        Début ~ pct(25),
+#        Fin ~ pct(25)
+#    ) |>
+#    tab_options(
+#      table.font.size = px(12),
+#      heading.title.font.size  = px(12),
+#    )# |>
+#    #tab_header(
+#    #    title = "Dates utilisées pour circonscrire les observations associées à la période de nidification"
+#    #)
+
+
+x |>
+  flextable() |>
+  theme_vanilla() |>
+  set_table_properties(width = 1, layout = "autofit") |>
+  #fontsize(size = 8, part = "all") |>
+  padding(padding.top = 1, padding.bottom = 1, part = "all") |>
+  paginate(init = TRUE, hdr_ftr = TRUE) 
+
+```
