@@ -17,7 +17,10 @@ if(echelle == "large"){
 }
 
 plot_background <- function(){
-  plot(st_geometry(bregion), border = NA, col = "grey90") 
+  bb <- st_bbox(bregion)
+  pad_x <- (bb["xmax"] - bb["xmin"]) * 0.01  # 1%
+  pad_y <- (bb["ymax"] - bb["ymin"]) * 0.01
+  plot(st_geometry(bregion), border = NA, col = "grey90", xaxs = "i", yaxs = "i", xlim = c(bb["xmin"] - pad_x, bb["xmax"] + pad_x), ylim = c(bb["ymin"] - pad_y, bb["ymax"] + pad_y))
 }
 
 plot_foreground <- function(observations = FALSE, echelle = "large"){
