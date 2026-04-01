@@ -217,10 +217,10 @@ current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
 maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
 cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
 fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_small.png", gsub(path_raster, "results/graphics", lf))
-png(fn, units = "in", height = 12, width = 12, res = 500)
-par(mfrow = c(3, 4), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+png(fn, units = "in", height = 12, width = 9, res = 500)
+par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
 lapply(display_names, function(xx){
-    if(grepl("_2030", xx)){
+    if(grepl("_2041", xx)){
       plot_background()
       plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
       plot_lakes()
@@ -263,10 +263,10 @@ current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
 maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
 cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
 fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_small_change.png", gsub(path_raster, "results/graphics", lf))
-png(fn, units = "in", height = 11, width = 12, res = 500)
-par(mfrow = c(3, 4), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+png(fn, units = "in", height = 11, width = 9, res = 500)
+par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
 lapply(display_names, function(xx){
-    if(grepl("_2030", xx)){
+    if(grepl("_2041", xx)){
       plot_background()
       plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
       plot_lakes()
@@ -316,10 +316,10 @@ current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
 maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
 cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
 fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_large_change.png", gsub(path_raster, "results/graphics", lf))
-png(fn, units = "in", height = 11, width = 12, res = 500)
-par(mfrow = c(3, 4), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+png(fn, units = "in", height = 11, width = 9, res = 500)
+par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
 lapply(display_names, function(xx){
-    if(grepl("_2030", xx)){
+    if(grepl("_2041", xx)){
       plot_background()
       plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
       plot_lakes()
