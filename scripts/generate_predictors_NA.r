@@ -236,14 +236,14 @@ invisible(lapply(3:5, function(i){
 }))
 
 timeperiod <- c("1950", "1960", "1970", "1980", "1990", "2000", "2010", "2020", 
-"2030", "2040", "2050", "2060", "2070", "2080", "2090")[c(9, 12, 15)]
+"2030", "2040", "2050", "2060", "2070", "2080", "2090")[5:15]
 model <- c("mean", "perc10", "perc50", "perc90")[3]
 ssp <- c("ssp245", "ssp370", "ssp585")[1:3]
 
 variables <- expand.grid(ssp = ssp, timeperiod = timeperiod, model = model) |>
       apply(1, function(i){paste(i, collapse = "_")})
-kids <- ids[which(sub("^([^_]*_){2}", "", ids) %in% variables)] |>
-  grep("P1_|P2_|P5_|P6_|P12_", x = _, value = TRUE)       
+kids <- ids[which(sub("^([^_]*_){2}", "", ids) %in% variables)] |>      
+  grep("P1_", x = _, value = TRUE)  
 kfr <- fr[match(kids, ids)]  
 
 collections[[coll]]$var <- kids
