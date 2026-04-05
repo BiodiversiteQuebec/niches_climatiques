@@ -18,7 +18,7 @@ openwater_cats <- c("distance_to_lakes", "distance_to_rivers")
 meubles_cats <- desc_small$variable[desc_small$collection %in% c("sigeom_zones_morphosedimentologiques_percentage") & !desc_small$variable %in% c("anthropogenique", "organique", "roche")]
 
 predictors <- rast("data/predictors_500_NA.tif")
-predictors <- aggregate(predictors, 10, na.rm = TRUE)
+#predictors <- aggregate(predictors, 10, na.rm = TRUE)
 #predictors <- predictors[[grep("^P\\d+_", names(predictors), value = TRUE, invert = TRUE)]] # temp remove ouranos
 predictors <- predictors[[names(predictors)[!names(predictors) %in% desc_large$variable[grep("chelsa", desc_large$collection)]]]] # remove chelsa
 predictors[[grep("P1_", names(predictors), value = TRUE)]] - 273.15
@@ -69,10 +69,7 @@ desc_large <- rbind(desc_large, add)
 
 ### scenarios
 # ouranos
-timeperiod <- c("2030", "2060", "2090")
 ssp <- c("ssp585", "ssp370", "ssp245")
-keep <- grep(paste(c(timeperiod, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
-##keep <- grep("^P\\d+_", keep, value = TRUE, invert = TRUE) # temporarily remove ouranos vars
 
 # chelsa
 #timeperiod <- c("2071-2100", "2041-2070", "2011-2040")
@@ -80,10 +77,39 @@ keep <- grep(paste(c(timeperiod, ssp), collapse = "|"), names(predictors), value
 #ssp <- c("ssp585", "ssp370", "ssp126")
 #keep <- grep(paste(c(timeperiod, model, ssp), collapse = "|"), names(predictors), value = TRUE, invert = TRUE)
 
-# scenarios to consider
-timeperiod <- timeperiod[1:3]
-#model <- model[5]
-ssp <- ssp[1:3]
+### Pool simulations into 30 year periods
+periods <- list(
+  "2041-2070" = c("2040", "2050", "2060"),
+  "2071-2100" = c("2070", "2080", "2090")
+)
+
+pooled <- lapply(ssp, function(i){
+  lapply(seq_along(periods), function(j){
+    r <- mean(predictors[[paste("P1_AnnMeanTemp", i, periods[[j]], sep = "_")]]) 
+    names(r) <- paste("P1_AnnMeanTemp", i, names(periods)[j], sep = "_")
+    r
+  })
+}) |> unlist() |> rast()
+
+predictors <- c(predictors, pooled)
+
+for(i in names(pooled)){
+  add <- desc_large[desc_large$variable == "deciduous", ]
+  add$variable <- i
+  add$fr <- paste("Température moyenne annuelle", sapply(strsplit(i, "_"), "[", 4), sapply(strsplit(i, "_"), "[", 3))
+  add$var <- NA 
+  add$url <- NA
+  desc_large <- rbind(desc_large, add)
+}
+
+### Draw current temps from the simulations and replace non simulated values
+predictors$P1_AnnMeanTemp <- mean(predictors$P1_AnnMeanTemp_ssp245_2000, predictors$P1_AnnMeanTemp_ssp245_2010, predictors$P1_AnnMeanTemp_ssp245_2020)
+
+
+timeperiod <- c("2041-2070", "2071-2100")
+keep <- c(ssp, timeperiod) |>
+  paste(collapse = "|") |>
+  grep(names(predictors), value = TRUE, invert = TRUE)
 
 scenarios <- expand.grid(ssp = ssp, timeperiod = timeperiod) |>
       apply(1, function(i){paste(i, collapse = "_")}) |>
@@ -93,7 +119,7 @@ proj <- predictors
 predictors_proj <- lapply(scenarios, function(i){
   climate <- proj[[grep(i, names(proj), value = TRUE, perl = TRUE)]]
   names(climate) <- gsub(paste0("_", i), "", names(climate))
-  h <- names(predictors)[!names(predictors) %in% c(names(climate), grep(paste(scenarios, collapse = "|"), names(predictors), value = TRUE))]
+  h <- names(predictors)[!names(predictors) %in% c(names(climate), grep(paste(c(ssp, scenarios), collapse = "|"), names(predictors), value = TRUE))]
   c(predictors[[keep]][[h]], climate)
 })
 names(predictors_proj) <- scenarios
@@ -113,7 +139,7 @@ plarge_proj <- predictors_proj
 #writeRaster(psmall, "data/predictors_QC_500.tif", filetype = "COG", gdal=c("COMPRESS=DEFLATE"))
 
 psmall <-rast("data/predictors_200_QC.tif")
-psmall <- aggregate(psmall, 10, na.rm = TRUE)
+#psmall <- aggregate(psmall, 10, na.rm = TRUE)
 #psmall <- psmall[[grep("^P\\d+_", names(psmall), value = TRUE, invert = TRUE)]] # temp remove ouranos
 psmall <- psmall[[names(psmall)[!names(psmall) %in% desc_small$variable[grep("chelsa", desc_small$collection)]]]] # remove chelsa
 
@@ -312,6 +338,44 @@ plot(p$small[["distance_to_stlawrence"]], mar = c(0, 0, 2, 0), maxcell = 1e6, pl
 plot(st_geometry(ps), add = TRUE)
 plot(st_geometry(south), border = "red", add = TRUE)
 dev.off()
+
+
+
+
+
+r <- rast("data/predictors_500_NA.tif") |>
+  _[[c("P1_AnnMeanTemp", "P1_AnnMeanTemp_ssp245_2010", "P1_AnnMeanTemp_ssp370_2010", "P1_AnnMeanTemp_ssp585_2010")]]
+r <- r - 273.15  
+(g <- global(r, "range", na.rm = TRUE))
+zlim <- range(g)
+
+png("plot.png", width = 10, height = 10, units = "in", res = 300)
+plot(r, range = zlim)
+dev.off()
+
+
+
+
+scenarios <- c("ssp245", "ssp370", "ssp585")
+p <- st_point(c(-73, 46)) |> st_sfc(crs = 4326) |> st_as_sf() |> st_transform(6624)
+
+png("plot.png", width = 10, height = 10, units = "in", res = 300)
+lapply(scenarios, function(i){
+
+  r <- rast("data/predictors_500_NA.tif") 
+  r <- r[[sort(grep(paste0("P1_AnnMeanTemp_", i), names(r), value = TRUE))]] 
+  e <- unlist(extract(r, p)[, -1]) - 273.15
+  data.frame(scenario = i, year = as.integer(sapply(strsplit(names(r), "_"), tail, 1)), temperature = e)
+
+}) |>
+  do.call("rbind", args = _) |>
+  ggplot(aes(year, temperature, colour = scenario)) +
+    geom_line() +
+    theme_minimal()
+dev.off()    
+
+
+
 
 
 

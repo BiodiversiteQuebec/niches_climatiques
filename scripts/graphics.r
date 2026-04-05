@@ -11,6 +11,56 @@ add_range2 <- function(){
   }
 }
 
+plot_lakes <- function(){
+  plot(st_geometry(lakes), col = "white", lwd = 0.1, border = NA, add = TRUE)
+  plot(st_geometry(rivers), col = "white", lwd = 0.1, add = TRUE)
+}
+
+plot_max <- function(x){
+  plot(st_geometry(x), border = NA, col = "white") 
+}
+
+
+hydrolakes <- st_read("data/HydroLAKES_polys_v10.gdb")
+lakes <- hydrolakes |> 
+  filter(Continent == "North America") |>
+  filter(Lake_area >= 10) |>
+  st_transform(epsg) |>
+  st_filter(na)
+
+hydrorivers <- st_read("data/HydroRIVERS_v10.gdb")
+rivers <- hydrorivers |> 
+  filter(UPLAND_SKM >= 1000) |>
+  st_transform(epsg) |>
+  st_crop(na)
+
+#png("plot.png", width = 10, height = 10, units = "in", res = 500)
+#par(mar = c(0, 0, 0, 0))
+#plot_background()
+#plot(st_geometry(qc), col = "grey90", border = NA)
+#plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)
+#plot(st_geometry(rivers), col = "white", lwd = 0.5, add = TRUE)
+#dev.off()
+
+
+keep <- c("Saguenay")
+conditions <- paste(sprintf("TOPONYME LIKE '%%%s%%'", keep), collapse = " OR ")
+query <- paste("SELECT * FROM rivers WHERE", conditions)
+saguenay <- st_read("data/grhq.gpkg", query = query) |>
+  st_transform(epsg)
+
+#rivieres <- st_read("data/grhq.gpkg", query = "SELECT * FROM rivers WHERE ST_Area(Shape) > 200 * 200") |>
+#  st_transform(6624)
+
+lakes <- st_read("data/grhq.gpkg", query = "SELECT * FROM lakes WHERE ST_Area(Shape) > 10000000") |> 
+  st_transform(epsg) |>
+  rbind(saguenay)
+
+
+
+
+
+
 #############################################################################
 ### Compare actual models ###################################################
 lf <- gsub("_sdm_small.tif", "_sdm_large.tif", file_sdm)
@@ -148,13 +198,153 @@ lapply(lf, function(xx){
 
 
 
+##############################################################################
+### Compare projections range for climate only ###############################
+bregion <- qc
+
+lf <- gsub("_range_proj_small.gpkg", "_range_proj_large.gpkg", file_pol_proj)
+
+display_model <- "climatGAM (habitatQC)"
+if(grepl("QC", display_model)){
+  lf <- gsub("large", "small", lf)
+}
+display_name <- model_names[[display_model]]
+selected <- paste(display_model, scenarios)
+selected <- c(display_model, selected)
+display_names <- paste0(display_name, "\n", scenarios)
+
+current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
+maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
+cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
+fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_small.png", gsub(path_raster, "results/graphics", lf))
+png(fn, units = "in", height = 12, width = 9, res = 500)
+par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+lapply(display_names, function(xx){
+    if(grepl("_2041", xx)){
+      plot_background()
+      plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
+      plot_lakes()
+      mtext(outer = FALSE, side = 2, line = 1, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 2))), xpd = TRUE, adj = 0.5, font = 2, col = "grey70", cex = 2.5)
+      if(grepl("ssp585", xx)){
+        mtext(outer = FALSE, side = 1, line = 2, text = "Actuel", xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+      }
+    } 
+    plot_background()
+    projected <- st_read(lf, layer = gsub("\n", " ", xx))
+    plot(st_geometry(projected), col = cols[3], border = NA, add = TRUE)
+    plot_lakes()
+    if(grepl("ssp585", xx)){
+      mtext(outer = FALSE, side = 1, line = 2, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 3))), xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+    } 
+    #plot(st_geometry(st_bbox(qc) |> st_as_sfc() |> st_as_sf()), border = "red", xpd = TRUE, add = TRUE)
+    #plot(st_geometry(bregion), axes = TRUE, xaxs = "i", yaxs = "i")
+})
+dev.off()
+
+
+
+
+##############################################################################
+### Compare projections range change for climate only ########################
+bregion <- qc
+
+lf <- gsub("_range_proj_small.gpkg", "_range_proj_large.gpkg", file_pol_proj)
+
+display_model <- "climatGAM (habitatQC)"
+if(grepl("QC", display_model)){
+  lf <- gsub("large", "small", lf)
+}
+display_name <- model_names[[display_model]]
+selected <- paste(display_model, scenarios)
+selected <- c(display_model, selected)
+display_names <- paste0(display_name, "\n", scenarios)
+
+current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
+maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
+cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
+fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_small_change.png", gsub(path_raster, "results/graphics", lf))
+png(fn, units = "in", height = 11, width = 9, res = 500)
+par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+lapply(display_names, function(xx){
+    if(grepl("_2041", xx)){
+      plot_background()
+      plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
+      plot_lakes()
+      mtext(outer = FALSE, side = 2, line = 1, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 2))), xpd = TRUE, adj = 0.5, font = 2, col = "grey70", cex = 2.5)
+      if(grepl("ssp585", xx)){
+        mtext(outer = FALSE, side = 1, line = 2, text = "Actuel", xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+      }
+    } 
+    plot_background()
+    projected <- st_read(lf, layer = gsub("\n", " ", xx))
+    minus <- st_difference(current, projected)
+    plus <- st_difference(projected, current)
+    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union()
+    plot(st_geometry(minus), col = cols[1], border = NA, add = TRUE)
+    plot(st_geometry(plus), col = cols[2], border = NA, add = TRUE)
+    plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
+    plot_lakes()
+    if(grepl("ssp585", xx)){
+      mtext(outer = FALSE, side = 1, line = 2, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 3))), xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+    } 
+})
+par(mfrow = c(1, 1), mar = c(3.5, 0, 0, 0), oma = c(0, 0, 0, 0), new = TRUE)
+legend("top", inset = c(0, -0.03), pch = 15, pt.cex = 4, cex = 2.5, legend = c("Perte", "Gain", "Stable")[c(3, 2, 1)], col = cols[c(3, 2, 1)], bty = "n", xpd = NA, text.font = 2, text.col = "grey70", horiz = TRUE)
+
+dev.off()
 
 
 
 
 
+##############################################################################
+### Compare projections range change for climate only ########################
+bregion <- na
 
+lf <- gsub("_range_proj_small.gpkg", "_range_proj_large.gpkg", file_pol_proj)
 
+display_model <- "climatGAM (habitatNA)"
+if(grepl("QC", display_model)){
+  lf <- gsub("large", "small", lf)
+}
+display_name <- model_names[[display_model]]
+selected <- paste(display_model, scenarios)
+selected <- c(display_model, selected)
+display_names <- paste0(display_name, "\n", scenarios)
+
+current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
+maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
+cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
+fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_large_change.png", gsub(path_raster, "results/graphics", lf))
+png(fn, units = "in", height = 11, width = 9, res = 500)
+par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
+lapply(display_names, function(xx){
+    if(grepl("_2041", xx)){
+      plot_background()
+      plot(st_geometry(current), col = cols[3], border = NA, add = TRUE)
+      plot_lakes()
+      mtext(outer = FALSE, side = 2, line = 1, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 2))), xpd = TRUE, adj = 0.5, font = 2, col = "grey70", cex = 2.5)
+      if(grepl("ssp585", xx)){
+        mtext(outer = FALSE, side = 1, line = 2, text = "Actuel", xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+      }
+    } 
+    plot_background()
+    projected <- st_read(lf, layer = gsub("\n", " ", xx))
+    minus <- st_difference(current, projected)
+    plus <- st_difference(projected, current)
+    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union()
+    plot(st_geometry(minus), col = cols[1], border = NA, add = TRUE)
+    plot(st_geometry(plus), col = cols[2], border = NA, add = TRUE)
+    plot(st_geometry(equal), col = cols[3], border = NA, add = TRUE)
+    plot_lakes()
+    if(grepl("ssp585", xx)){
+      mtext(outer = FALSE, side = 1, line = 2, text = unique(sort(sapply(strsplit(xx, "\n|_"), "[", 3))), xpd = TRUE, adj = 0.35, col = "grey70", cex = 2.5, font = 2)
+    } 
+})
+par(mfrow = c(1, 1), mar = c(3.5, 0, 0, 0), oma = c(0, 0, 0, 0), new = TRUE)
+legend("top", inset = c(0, -0.03), pch = 15, pt.cex = 4, cex = 2.5, legend = c("Perte", "Gain", "Stable")[c(3, 2, 1)], col = cols[c(3, 2, 1)], bty = "n", xpd = NA, text.font = 2, text.col = "grey70", horiz = TRUE)
+
+dev.off()
 
 
 graphics.off()
@@ -175,10 +365,11 @@ graphics.off()
 
 #species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
 
-if(FALSE){
-  species_list <- sp #gsub(" ", "_", species)[11]
-  for (spe in species_list) {
-    spe <- file.path(path_raster, spe)
+if(TRUE){
+  #species_list <- gsub(" ", "_", species)
+  species_list <- gsub(" ", "_", sp)
+  for (ss in species_list) {
+    spe <- file.path(path_raster, ss)
     temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
     cmd <- paste0(
       "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
@@ -187,7 +378,7 @@ if(FALSE){
       "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
       "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
     )
-    #cat(cmd)
+    cat(cmd, "\n")
     system(cmd)
   }
 }
@@ -196,6 +387,32 @@ if(FALSE){
 
 
 if(FALSE){
+
+   ### check mean date of observations ####################################
+   path_raster <- system("echo $SCRATCH", intern = TRUE) # results/rasters
+   lf <- list.files(file.path(path_raster), full = TRUE, pattern = "observations")
+   l <- lapply(lf, st_read, layer = "climate", quiet = TRUE) |>
+     lapply((\(.){.[, c("date", "source")]})) |>
+     do.call("rbind", args = _) |>
+     filter(source != "ebird")
+
+   c(mean(as.integer(substr(l$date, 1, 4)), na.rm = TRUE), median(as.integer(substr(l$date, 1, 4)), na.rm = TRUE))
+
+   png("plot.png", width = 10, height = 8, units = "in", res= 300)
+   hist(as.integer(substr(l$date, 1, 4)), breaks = seq(1800, 2030, by = 5), xlim = c(1950, 2030))
+   dev.off()  
+
+   ### more precise changes ###############################################
+   rcl <- matrix(c(
+    0.0, 0.1, 1,  # good
+    0.1, 0.2, 2,  # bad
+    0.3, 0.5, 3,  # ok
+    0.5, 0.7, 4   # nice
+   ), ncol = 3, byrow = TRUE)
+   r_classified <- classify(my_raster, rcl)
+
+
+
 
     mo <- "climatX2"
     sc <- "ssp370"
