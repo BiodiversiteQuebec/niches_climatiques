@@ -77,16 +77,16 @@ for(ii in seq_along(pages)){
   
   toc <- lapply(split(toc, toc$species), function(i){
     a <- i[1, ] |>
-      lapply(function(i){gsub("climat", "data", i)}) |>
+      lapply(function(i){gsub("climatX2", "data", i)}) |>
       as.data.frame()
     b1 <- i[1, ] |>
-      lapply(function(i){gsub("climat", "compare", i)}) |>
+      lapply(function(i){gsub("climatX2", "compare", i)}) |>
       as.data.frame()
     b2 <- i[1, ] |>
-      lapply(function(i){gsub("climat", "compare_localized", i)}) |>
+      lapply(function(i){gsub("climatX2", "compare_localized", i)}) |>
       as.data.frame()
     b3 <- i[1, ] |>
-      lapply(function(i){gsub("climat", "proj_compare", i)}) |>
+      lapply(function(i){gsub("climatX2", "proj_compare", i)}) |>
       as.data.frame()
     
     x <- rbind(a, i, b1, b2, b3)
@@ -104,7 +104,7 @@ for(ii in seq_along(pages)){
   
   
   
-  src<-"https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures"
+  src<-"https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2"
   #src<-"/home/frousseu/Downloads/niches_climatiques/results/graphics"
   
   #species<-function(sp,url,copyright,ebirdurl,common,period,n){
