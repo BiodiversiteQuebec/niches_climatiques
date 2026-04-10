@@ -80,25 +80,76 @@ for(ii in seq_along(pages)){
       lapply(function(i){gsub("climatX2", "data", i)}) |>
       as.data.frame()
     b1 <- i[1, ] |>
-      lapply(function(i){gsub("climatX2", "compare", i)}) |>
+      lapply(function(i){gsub("climatX2", "sdm_compare", i)}) |>
       as.data.frame()
     b2 <- i[1, ] |>
-      lapply(function(i){gsub("climatX2", "compare_localized", i)}) |>
+      lapply(function(i){gsub("climatX2", "sdm_compare_localized", i)}) |>
       as.data.frame()
     b3 <- i[1, ] |>
-      lapply(function(i){gsub("climatX2", "proj_compare", i)}) |>
+      lapply(function(i){gsub("climatX2", "sdm_proj_compare", i)}) |>
       as.data.frame()
+    b4 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_proj_compare", i)}) |>
+      as.data.frame()       
+    b5 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_proj_small", i)}) |>
+      as.data.frame()  
+    b6 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_proj_small_change", i)}) |>
+      as.data.frame()    
+    b7 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_proj_large_change", i)}) |>
+      as.data.frame()        
     
-    x <- rbind(a, i, b1, b2, b3)
+    x <- rbind(a, i, b1, b2, b3, b4, b5, b6, b7)
     
-    x$nom <- gsub("data", "données", x$nom)
-    x$nom <- gsub("compare", "comparaison", x$nom)
-    x$nom <- gsub("_localized", " localisée", x$nom)
-    x$nom <- gsub("proj_comparaison", "projection", x$nom)
+    name_desc <- list(
+      data = list(
+        toc = "données",
+        desc = "Données"
+      ),
+      sdm_compare = list(
+        toc = "comparaison sdm QC",
+        desc = "Comparaison des SDMs actuels pour le Québec"
+      ),
+      sdm_compare_localized = list(
+        toc = "comparaison sdm QC local",
+        desc = "Comparaison des SDMs actuels centrée sur les occurrences"
+      ),      
+      sdm_proj_compare = list(
+        toc = "projections sdm",
+        desc = "Projections des SDMs pour le Québec"
+      ),
+      range_proj_compare = list(
+        toc = "projections range",
+        desc = "Projections des aires de répartition pour le Québec"
+      ),
+      range_proj_small = list(
+        toc = "projections range",
+        desc = "Projections des aires de répartition pour le Québec"
+      ),
+      range_proj_small_change = list(
+        toc = "projections changements QC",
+        desc = "Projections des changements dans les aires de répartition pour le Québec"
+      ),      
+      range_proj_large_change = list(
+        toc = "projections changements NA",
+        desc = "Projections des changements dans les aires de répartition pour l'Amérique du Nord"
+      )               
+    )
+    
+    x$desc <- ""
+
+    for(k in seq_along(name_desc)){
+      ma <- match(names(name_desc)[k], x$nom)
+      x$nom[ma] <- name_desc[[k]]$toc
+      x$desc[ma] <- name_desc[[k]]$desc
+    }  
     
     x <- x[c(1, 1:nrow(x)), ] 
     x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$vernaculaire, "</b>"), paste("&nbsp", x$nom))
     x
+
   }) |> do.call("rbind", args = _)
   
   
@@ -249,27 +300,33 @@ for(ii in seq_along(pages)){
     
   }
   
-  set_compare <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", n = "23"){
-    
+  set_compare <- function(sp, url = "url", copyright = "copyright", ebirdurl = "ebird", common = "sp", n = "23", desc = ""){
     spname <- sapply(strsplit(sp, "_"), "[", 1:2) |> paste(collapse = "_")
     
-    if(grepl("proj_compare", sp)){
-      explanation <- "Comparaison entre les différentes projections"
-    } else {
-      explanation <- "Comparaison entre les différentes méthodes SDM"
-    }
+    #if(grepl("proj_compare", sp)){
+    #  explanation <- "Comparaison entre les différentes projections"
+    #} else {
+    #  explanation <- "Comparaison entre les différentes méthodes SDM"
+    #}
     
+    
+
+
+
+
+
+
     paste0("
   
   <hr class=\"vspace\"> 
   <section id=\"",sp,"\" class=\"section\">
   <h2 class=\"h2\">", common,"</h2> 
     <div class=\"header\">
-      <button class=\"showmore\" onclick=\"showmorezero('",sp,"','panel0","')\">", explanation,"</button>
+      <button class=\"showmore\" onclick=\"showmorezero('",sp,"','panel0","')\">", desc,"</button>
     </div>
     <div class=\"row\" id=\"",sp,"panelzero\">
       <div class=\"col1\" id=\"",sp,"panel0\">
-        <img loading=\"lazy\" style=\"width: 100%; padding: 0px;\" src=\"",file.path(src, gsub("proj_sdm_compare", "sdm_proj_compare", gsub("compare", "sdm_compare", sp))), ".png\" alt=\"\">
+        <img loading=\"lazy\" style=\"width: 100%; padding: 0px;\" src=\"",file.path(src, sp), ".png\" alt=\"\">
       </div>
     </div>
   </section>
@@ -483,6 +540,7 @@ for(ii in seq_along(pages)){
   .showmore {
     background: none;
     border: none; /* none */
+    padding-top: 5vh;
     padding-bottom: 3vh;
     text-align: center;
     text-decoration: none;
@@ -491,12 +549,12 @@ for(ii in seq_along(pages)){
     font-size: 2.25vmin;
     font-weight: 1200;
     font-family:'Roboto Mono'; 
-    cursor: pointer;
-    height: 2vmin;
+    /* cursor: pointer; */
+    height: 3vmin;
   }
   
   .showmore:hover {
-    opacity: 0.50;
+    opacity: 0.99;
     filter: alpha(opacity=100);
   }
   
@@ -851,11 +909,11 @@ for(ii in seq_along(pages)){
       ans <- set_species(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "), period = toc$period[i], copyright = copyright)
       stri_write_lines(ans, con = con)
     }
-    if(toc$model[i] %in% c("compare", "compare_localized", "proj_compare")){
-      ans <- set_compare(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "))
+    if(toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_small_change", "range_proj_large_change")){
+      ans <- set_compare(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "), desc = toc$desc[i])
       stri_write_lines(ans, con = con)
     }
-    if(!toc$model[i] %in% c("compare", "compare_localized", "proj_compare", "data")){
+    if(!toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_compare", "range_proj_small_change", "range_proj_large_change", "data")){
       ans <- set_models(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "))
       stri_write_lines(ans, con = con)
     }
