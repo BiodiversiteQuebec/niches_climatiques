@@ -8,7 +8,31 @@ execute:
 
 ## Climat
 
+
+Les données climatiques utilisés proviennent des projections Ouranos de la réanalyse canadienne de surface de l'ensemble de simulations ESPO-G6-R2 v1.0 [@lavoie_ensemble_2024]. L’ensemble ESPO-G6-R2 v1.0 est disponible de 1950 à 2100 pour l’Amérique du Nord [https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2](https://www.ouranos.ca/fr/donnees-climatiques-ouranos/espo-g6-r2). Pour l'ensemble des variables climatiques utilisées, la médiane d'un sous-ensemble de 15 modèles climatiques tirés de ESPO-G6-R2 v1.0 a été utilisé pour représenter les variations climatiques. 
+
+Afin de simplifier l'interprétation des modèles et d'éviter l'introduction de variables climatiques non pertinentes qui pourraient mener à l'établissement de relations fortuites, nous avons opté pour une approche simplifiée basée uniquement sur la température moyenne annuelle. En effet, l'ensemble des variables climatiques disponibles sont spatialement corrélées et l'inclusion d'un grand nombre de variables pourraient contribuer à expliquer une partie des variations en probabilité de présence, mais rien ne garantie que les relations ainsi établies pourraient être utilisées pour projeter les distributions futures. En effet, des tests préliminaires ont montré que l'inclusion de trop nombreuses variables climatiques menaient à des projections futures qui ne semblaient pas plausible d'un point de vue biologique. Finalement, pour les espèces ciblées, plusieurs variables climatiques disponibles ne semblent pas a priori importante à l'échelle du Québec et les changements anticipés  (en fait, autre que la MAT, il n'y a pas vraiment de variable qui semble contraindre ou expliquer la distribution des espèces cicblées à l'échelle du Qubec et les variations anticipée ne sont ou il n'y pas vraiment de limites claires par rapport à ces variables. Notamment, les précips semblent n'avoir aucun impact.)
+
+
+étant donné qu'aucune des espèces ciblées  n'est fortement reliéé
+
+Afin de simplifier l'interprétation des modèles et 
+
+
+produire les aires de distributions projetées.
+
+ 
+2000 à 2020 des simulations pour représenter la période actuelle.
+
 La principale variable climatique utilisée est la température moyenne annuelle. Plusieurs autres variables climatiques sont disponibles, mais la pertinence de celles-ci sera déterminée lors des rencontres avec les experts.
+
+
+
+```{r}
+# provenance des données histogramme?
+```
+
+
 
 ## Habitat
 
