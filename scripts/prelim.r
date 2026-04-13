@@ -64,8 +64,40 @@ region <- st_union(region) |> st_as_sf()
 
 # lakes
 #lakes<-ne_download(scale="medium",type="lakes",destdir="data",category="physical",returnclass="sf") |> st_transform(epsg)
-lakes <- st_read("data/ne_50m_lakes.shp") |> st_transform(epsg)
-lakes <- st_filter(lakes, region)
+#lakes <- st_read("data/ne_50m_lakes.shp") |> st_transform(epsg)
+#lakes <- st_filter(lakes, region)
+
+hydrolakes <- st_read("data/HydroLAKES_polys_v10.gdb") |>
+  filter(Continent == "North America") |>
+  filter(Lake_area >= 10) |>
+  st_transform(epsg) |>
+  st_filter(na)
+
+rivers <- st_read("data/HydroRIVERS_v10.gdb") |>
+  filter(UPLAND_SKM >= 1000) |>
+  st_transform(epsg) |>
+  st_crop(na)
+
+keep <- c("Saguenay", "Bassin de Chambly")
+conditions <- paste(sprintf("TOPONYME LIKE '%%%s%%'", keep), collapse = " OR ")
+query <- paste("SELECT * FROM rivers WHERE", conditions)
+saguenay <- st_read("data/grhq.gpkg", query = query) |>
+  st_transform(epsg)
+
+lakes <- st_read("data/grhq.gpkg", query = "SELECT * FROM lakes WHERE ST_Area(Shape) > 10000000") |> 
+  st_transform(epsg) |>
+  rbind(saguenay) |>
+  rbind(st_read("data/grhq.gpkg", query = "SELECT * FROM stlawrence"))
+
+#png("plot.png", width = 10, height = 10, units = "in", res = 300)
+#par(mar = c(0, 0, 0, 0))
+#plot(st_geometry(na), col = "grey90", border = NA)
+#plot(st_geometry(rivers), col = "cyan",  lwd = 0.2, add = TRUE)
+#plot(st_geometry(hydrolakes), col = "cyan",  border = NA, add = TRUE)
+#plot(st_geometry(lakes), col = "cyan",  border = NA, add = TRUE)
+#plot(st_geometry(na), col = NA, border = "black", lwd = 0.1, add = TRUE)
+#dev.off()
+
 
 aires <- st_read("data/vertébrés.gpkg") 
 emvs <- st_read("data/emvs_dq.gpkg")

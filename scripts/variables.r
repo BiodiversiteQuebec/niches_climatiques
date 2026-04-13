@@ -7,11 +7,11 @@ climate_vars <- c("P1_AnnMeanTemp")
 #climate_vars <- c("mean_annual_air_temperature", "mean_daily_maximum_air_temperature_of_the_warmest_month", "annual_range_of_air_temperature", "annual_precipitation_amount", "mean_diurnal_air_temperature_range")
 #climate_vars <- c("mean_annual_air_temperature", "mean_diurnal_air_temperature_range")
 
-large_vars <- c("earthenv_geomfootslope", "earthenv_geomflat", "earthenv_ruggedness", "earthenv_elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland", "southstlawrence")
+large_vars <- c("earthenv_geomfootslope", "earthenv_geomflat", "earthenv_ruggedness", "earthenv_elevation", "sand", "clay", "forest", "urban", "water", "wetland", "cropland", "southstlawrence", "open")
 #dput(grep("temperature|precipitation|isothermality", names(psmall), invert = TRUE, value = TRUE))
 small_vars <-  c("alluvion", "anthropogenique", "bulk_density", "clay", "cropland", "versant","distance_to_roads", 
 "eau_peu_profonde", "elevation", "eolien", "forest", "flat", "earthenv_geomfootslope", 
-"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "prairie_humide", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "tourbiere", "twi", "urban", "water", "wetland", "distance_to_lakes", "distance_to_rivers", "distance_to_streams", "distance_to_stlawrence", "distance_to_openwater", "southstlawrence", "distance_to_coaststlawrence", "logdistance_to_coaststlawrence", "distance_to_cliffs", "meubles")
+"glaciaire", "glaciolacustre", "glaciomarin", "human_modification","indifferencie", "lacustre", "prairie_humide", "marais", "marecage", "marin", "nitrogen","organic_carbon_density", "organique", "ph", "quaternaire", "roche","ruggedness", "sand", "silt", "soil_organic_carbon", "till", "tourbiere_boisee", "tourbiere_indifferenciee", "tourbiere_minerotrophe", "tourbiere_ombrotrophe", "tourbiere", "twi", "urban", "water", "wetland", "distance_to_lakes", "distance_to_rivers", "distance_to_streams", "distance_to_stlawrence", "distance_to_openwater", "southstlawrence", "distance_to_coaststlawrence", "logdistance_to_coaststlawrence", "distance_to_cliffs", "meubles", "open")
 #name_vars <- c("% bas de pentes", "% plat", "relief accidenté", "élévation", "sable", "argile", "% forêt", "% urbain", "% eau", "% milieu humide", "% agricole")
 #names(pp) <- name_vars
 #use_small <- unique(c(c("urban", "geomflat"), sample(small_vars)))
@@ -50,10 +50,10 @@ model_names <- model_names[run_model]
 #plot(p$large[[large_vars]], mar = c(0, 0, 1, 0), axes = FALSE, plg = list(inset = c(0.5, 0.5)))
 
 
-st_bbox(p$small)
-png(file.path("results/graphics/predictors.png"), width = 12, height = 18, units = "in", res = 300)
-plot(p$small[[small_vars]], mar = c(0, 0, 2, 1), axes = FALSE, plg = list(x = st_bbox(p$small)$xmax - 2e05, y = st_bbox(p$small)$ymax - 2e05, xjust = 1, yjust = 1, size = c(0.25, 0.75)), maxnl = 1)
-dev.off()
+#st_bbox(p$small)
+#png(file.path("results/graphics/predictors.png"), width = 12, height = 18, units = "in", res = 300)
+#plot(p$small[[small_vars]], mar = c(0, 0, 2, 1), axes = FALSE, plg = list(x = st_bbox(p$small)$xmax - 2e05, y = st_bbox(p$small)$ymax - 2e05, xjust = 1, yjust = 1, size = c(0.25, 0.75)), maxnl = 1)
+#dev.off()
 
 
 

@@ -66,6 +66,10 @@ add <- desc_large[desc_large$variable == "deciduous", ]
 add$variable <- "forest"; add$fr <- "% de forêts"; add$var <- NA; add$url <- NA
 desc_large <- rbind(desc_large, add)
 
+predictors$open <- 1 - predictors$forest
+add <- desc_large[desc_large$variable == "deciduous", ]
+add$variable <- "open"; add$fr <- "% de milieux ouverts"; add$var <- NA; add$url <- NA
+desc_large <- rbind(desc_large, add)
 
 ### scenarios
 # ouranos
@@ -103,7 +107,7 @@ for(i in names(pooled)){
 }
 
 ### Draw current temps from the simulations and replace non simulated values
-predictors$P1_AnnMeanTemp <- mean(predictors$P1_AnnMeanTemp_ssp245_2000, predictors$P1_AnnMeanTemp_ssp245_2010, predictors$P1_AnnMeanTemp_ssp245_2020)
+predictors$P1_AnnMeanTemp <- mean(predictors[[c("P1_AnnMeanTemp_ssp245_2000", "P1_AnnMeanTemp_ssp245_2010", "P1_AnnMeanTemp_ssp245_2020")]])
 
 
 timeperiod <- c("2041-2070", "2071-2100")
@@ -158,6 +162,11 @@ desc_small <- rbind(desc_small, add)
 psmall$forest <- sum(psmall[[intersect(forest_cats, names(psmall))]])
 add <- desc_small[desc_small$variable == "deciduous", ]
 add$variable <- "forest"; add$fr <- "% de forêts"; add$var <- NA; add$url <- NA
+desc_small <- rbind(desc_small, add)
+
+psmall$open <- 1 - psmall$forest
+add <- desc_small[desc_small$variable == "deciduous", ]
+add$variable <- "open"; add$fr <- "% de milieux ouverts"; add$var <- NA; add$url <- NA
 desc_small <- rbind(desc_small, add)
 
 psmall$tourbiere <- sum(psmall[[intersect(bog_cats, names(psmall))]])
