@@ -2,9 +2,11 @@
 library(exiftoolr)
 library(stringi)
 library(magick)
+library(dplyr)
 
 #Sys.setlocale("LC_ALL","English")
 
+options(width = 150)
 
 pages <- list(
   tortues = "Glyptemys|Emyd",
@@ -15,7 +17,7 @@ pages <- list(
   polatouche = "Glauco"
 )
 
-for(ii in seq_along(pages)){
+for(ii in seq_along(pages)[1]){
 
   descQC <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
   descNA <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
@@ -73,35 +75,45 @@ for(ii in seq_along(pages)){
   toc$vernaculaire <- info$nom[match(toc$species, info$species)]
   toc$period <- info$period[match(toc$species, info$species)]
   toc$period <- ifelse(is.na(toc$period), "", paste("Nidification", toc$period))
+  toc$type <- "models"
   toc <- toc[order(toc$species, toc$model), ]
   
   toc <- lapply(split(toc, toc$species), function(i){
-    a <- i[1, ] |>
+    a1 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "data", i)}) |>
-      as.data.frame()
+      as.data.frame() |> mutate(nom = "Données", type = "data")
+    a2 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "climatX2", i)}) |>
+      as.data.frame() |> mutate(nom = "Modèles SDM", type = "models")   
+    b0 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "sdm_compare", i)}) |>
+      as.data.frame() |> mutate(nom = "Comparaisons", type = "comparisons")          
     b1 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "sdm_compare", i)}) |>
-      as.data.frame()
+      as.data.frame() |> mutate(type = "comparisons") 
     b2 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "sdm_compare_localized", i)}) |>
-      as.data.frame()
+      as.data.frame() |> mutate(type = "comparisons")
     b3 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "sdm_proj_compare", i)}) |>
-      as.data.frame()
+      as.data.frame() |> mutate(nom = "Projections", type = "projections")  
     b4 <- i[1, ] |>
-      lapply(function(i){gsub("climatX2", "range_proj_compare", i)}) |>
-      as.data.frame()       
+      lapply(function(i){gsub("climatX2", "sdm_proj_compare", i)}) |>
+      as.data.frame() |> mutate(type = "projections")
     b5 <- i[1, ] |>
-      lapply(function(i){gsub("climatX2", "range_proj_small", i)}) |>
-      as.data.frame()  
+      lapply(function(i){gsub("climatX2", "range_proj_compare", i)}) |>
+      as.data.frame() |> mutate(type = "projections")       
     b6 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "range_proj_small_change", i)}) |>
-      as.data.frame()    
+      as.data.frame() |> mutate(nom = "Changements", type = "changes")       
     b7 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_proj_small_change", i)}) |>
+      as.data.frame() |> mutate(type = "changes")    
+    b8 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "range_proj_large_change", i)}) |>
-      as.data.frame()        
+      as.data.frame() |> mutate(type = "changes")        
     
-    x <- rbind(a, i, b1, b2, b3, b4, b5, b6, b7)
+    x <- rbind(a1, a2, i, b0, b1, b2, b3, b4, b5, b6, b7, b8)
     
     name_desc <- list(
       data = list(
@@ -109,36 +121,34 @@ for(ii in seq_along(pages)){
         desc = "Données"
       ),
       sdm_compare = list(
-        toc = "comparaison sdm QC",
+        toc = "Modèles SDM QC",
         desc = "Comparaison des SDMs actuels pour le Québec"
       ),
       sdm_compare_localized = list(
-        toc = "comparaison sdm QC local",
+        toc = "Modèles SDM QC local",
         desc = "Comparaison des SDMs actuels centrée sur les occurrences"
       ),      
       sdm_proj_compare = list(
-        toc = "projections sdm",
+        toc = "Modèles SDM QC",
         desc = "Projections des SDMs pour le Québec"
       ),
       range_proj_compare = list(
-        toc = "projections range",
-        desc = "Projections des aires de répartition pour le Québec"
-      ),
-      range_proj_small = list(
-        toc = "projections range",
+        toc = "Aires de répartition QC",
         desc = "Projections des aires de répartition pour le Québec"
       ),
       range_proj_small_change = list(
-        toc = "projections changements QC",
+        toc = "Aires de répartition QC",
         desc = "Projections des changements dans les aires de répartition pour le Québec"
       ),      
       range_proj_large_change = list(
-        toc = "projections changements NA",
+        toc = "Aires de répartition NA",
         desc = "Projections des changements dans les aires de répartition pour l'Amérique du Nord"
       )               
     )
     
+
     x$desc <- ""
+
 
     for(k in seq_along(name_desc)){
       ma <- match(names(name_desc)[k], x$nom)
@@ -147,7 +157,16 @@ for(ii in seq_along(pages)){
     }  
     
     x <- x[c(1, 1:nrow(x)), ] 
-    x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$vernaculaire, "</b>"), paste("&nbsp", x$nom))
+    x$display <- paste("&nbsp&nbsp", x$nom)
+    #x$display <- ifelse(duplicated(x$ref, fromLast = TRUE), paste0("<b>", x$vernaculaire, "</b>"), paste("&nbsp", x$nom))
+    #x$display[1] <- paste0("<b>", x$vernaculaire[1], "</b>")
+    x$display[1] <- paste0("<span style='font-weight:bold; font-size:1.5em; color:seagreen; display:inline-block; padding-top: 4vh; padding-bottom: 1vh;'>", x$vernaculaire[1], "</span>")
+
+
+    w <- which((duplicated(x$ref, fromLast = TRUE) & x$type %in% c("models", "comparisons", "projections", "changes")) | (duplicated(x$ref, fromLast = FALSE) & x$type %in% c("data")))
+    x$display[w] <- paste0("<b>&nbsp", x$nom[w], "</b>")
+    #w <- which(!duplicated(x$ref, fromLast = TRUE) & x$type == "models")
+    #x$display[w] <- x$nom[w]
     x
 
   }) |> do.call("rbind", args = _)
@@ -308,13 +327,6 @@ for(ii in seq_along(pages)){
     #} else {
     #  explanation <- "Comparaison entre les différentes méthodes SDM"
     #}
-    
-    
-
-
-
-
-
 
     paste0("
   
@@ -434,7 +446,7 @@ for(ii in seq_along(pages)){
     height: 1vh;
     margin: 0vh;
     padding: 0vh;
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
   }
   
   .infotop {
@@ -482,7 +494,7 @@ for(ii in seq_along(pages)){
   }
   
   .section{
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
     padding-left: 2vw;
     /* border-bottom: 2px solid seagreen; */
     /* border-right: 2px solid seagreen; */
@@ -507,7 +519,7 @@ for(ii in seq_along(pages)){
   .shown {
     display: block;
     padding-top: 0vw;
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
     <!-- border-right: 2px solid seagreen; -->
   }
   
@@ -901,19 +913,23 @@ for(ii in seq_along(pages)){
   #dashit(gsub("_", " ", toc$div[i]))
   #dashit(paste(toc$species[i], toc$nom[i]))
   
-  
+  toc <<- toc
+
   invisible(lapply(1:nrow(toc), function(i){
-    if(toc$model[i] == "data" & !grepl("<b>", toc$display[i])){
+    #if(toc$model[i] == "data" & !grepl("<b>", toc$display[i])){
+    if(toc$type[i] == "data" & !grepl("<span", toc$display[i])){      
       pic <- paste0(gsub(" ", "_", toc$species[i]), "_pic.png")
       copyright <- exif_read(file.path("/home/frousseu/Downloads/niches_climatiques/results/graphics", pic), tags = "Copyright")$Copyright
       ans <- set_species(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "), period = toc$period[i], copyright = copyright)
       stri_write_lines(ans, con = con)
     }
-    if(toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_small_change", "range_proj_large_change")){
+    #if(toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_small_change", "range_proj_large_change")){
+    if(toc$type[i] %in% c("comparisons", "projections", "changes") & !grepl("<b>", toc$display[i])){      
       ans <- set_compare(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "), desc = toc$desc[i])
       stri_write_lines(ans, con = con)
     }
-    if(!toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_compare", "range_proj_small_change", "range_proj_large_change", "data")){
+    #if(!toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_compare", "range_proj_small_change", "range_proj_large_change", "data")){
+    if(!toc$type[i] %in% c("comparisons", "projections", "changes", "data") & !grepl("<b>", toc$display[i])){      
       ans <- set_models(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "))
       stri_write_lines(ans, con = con)
     }
@@ -926,7 +942,7 @@ for(ii in seq_along(pages)){
   </html>
   "))
   
-  
+  sink()
   close(con)
   
   #file.show("/home/frousseu/Downloads/website.html")
