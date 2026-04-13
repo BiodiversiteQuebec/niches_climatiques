@@ -27,6 +27,7 @@ args <- commandArgs(trailingOnly=TRUE)
 source(file.path("scripts/jobs", args))
 
 source("scripts/prelim.r")
+source("scripts/variables.r")
 source("scripts/predictors.r")
 #source("scripts/parameters.r")
 #source("scripts/species.r")
@@ -38,7 +39,6 @@ source("scripts/predictors.r")
 (sp <- species[array_id])
 #sp <- species
 source("scripts/data.r")
-source("scripts/variables.r")
 for(i in seq_along(models)){
   #i <- 1
   print(names(models)[i])

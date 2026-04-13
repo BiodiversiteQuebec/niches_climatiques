@@ -4,17 +4,17 @@ species <- c("Pseudacris triseriata", "Hemidactylium scutatum", "Gyrinophilus po
 
 
 species_vars <- list(
-`Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
+`Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "open"), 
 `Hemidactylium scutatum` = c("tourbiere", "marais", "marecage", "organique", "forest", "twi", "earthenv_geomflat", "flat"), 
-`Gyrinophilus porphyriticus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams", "southstlawrence"), 
-`Desmognathus ochrophaeus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams", "southstlawrence"), 
+`Gyrinophilus porphyriticus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams"), #, "southstlawrence"), 
+`Desmognathus ochrophaeus` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "forest", "earthenv_geomflat", "flat", "twi", "distance_to_streams"), #, "southstlawrence"), 
 `Emydoidea blandingii` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "distance_to_rivers"),
 `Glyptemys insculpta` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "sand", "distance_to_streams", "distance_to_rivers", "meubles"),
 `Nerodia sipedon` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde", "distance_to_openwater"),
 `Lampropeltis triangulum` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat", "water", "eau_peu_profonde"), 
 `Aquila chrysaetos` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness", "roche", "distance_to_cliffs"), 
 `Catharus bicknelli` = c("earthenv_elevation", "elevation", "earthenv_ruggedness", "ruggedness"), 
-`Setophaga cerulea` = c("forest", "ph", "silt", "nitrogen"), 
+`Setophaga cerulea` = c("forest"), #, "ph", "silt", "nitrogen"), 
 `Coturnicops noveboracensis` = c("earthenv_geomflat", "flat", "marais", "wetland", "prairie_humide", "glaciomarin", "organique", "logdistance_to_coaststlawrence"), 
 `Ixobrychus exilis` = c("earthenv_geomflat", "flat", "wetland", "marais", "eau_peu_profonde", "glaciomarin", "glaciolacustre", "alluvion"), 
 `Glaucomys volans` = c("forest")

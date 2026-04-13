@@ -1,8 +1,7 @@
 cat(paste(paste(format(Sys.time(), "%H:%M:%S %Y-%m-%d"), "running", sp, names(models)[i], "results.r", sep = " - "), "\n"))
 
 ## Choose scenario to produce image from
-#display_scenario <- scenarios[2]
-display_scenario <- c("ssp245_2030", "ssp245_2060", "ssp245_2090", "ssp370_2030", "ssp370_2060", "ssp370_2090", "ssp585_2030", "ssp585_2060", "ssp585_2090")[6]
+display_scenario <- scenarios[4]
 
 predictions_proj <- predictions_proj[[display_scenario]]
 ran_proj <- ran_proj[[display_scenario]]
@@ -27,8 +26,12 @@ plot_foreground <- function(observations = FALSE, echelle = "large"){
   if(observations){
     points(st_geometry(obs[[dataunc]][[echelle]]), bg = adjustcolor("orange", 0.90), col = "black", pch = 21, cex = 0.4, lwd= 0.10)
   }
-  plot(st_geometry(na), lwd = 0.1, border = adjustcolor("black", 0.75), add = TRUE)
-  plot(st_geometry(lakes), col = "white", lwd = 0.1, border = adjustcolor("black", 0.5), add = TRUE)
+  plot(st_geometry(rivers), col = "white", lwd = 0.2, add = TRUE)
+  plot(st_geometry(hydrolakes), col = "white",  border = NA, add = TRUE)
+  plot(st_geometry(lakes), col = "white",  border = NA, add = TRUE)
+  plot(st_geometry(na), lwd = 0.1, border = adjustcolor("black", 0.5), add = TRUE)
+  #plot(st_geometry(lakes), col = "white", lwd = 0.1, border = adjustcolor("black", 0.5), add = TRUE)
+
 }
 
 
