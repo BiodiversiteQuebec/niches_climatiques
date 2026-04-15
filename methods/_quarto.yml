@@ -65,7 +65,7 @@ format:
         \usepackage{layout}
         \newfontfamily{\symbolfont}{Symbola}
         \newcommand{\usym}[1]{{\symbolfont #1}}
-        \captionsetup{justification=raggedright, singlelinecheck=false}        
+        \captionsetup{justification=raggedright, singlelinecheck=false}     
         
 
 

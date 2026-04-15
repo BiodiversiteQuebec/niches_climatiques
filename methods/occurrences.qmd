@@ -70,7 +70,7 @@ plot(st_geometry(x), col = adjustcolor("black", 0.10), border = NA, add = TRUE)
 plot(st_geometry(aire), col = adjustcolor("forestgreen", 0.5), border = NA, add = TRUE)
 #plot(st_geometry(st_buffer(aire, 50000)), col = adjustcolor("forestgreen", 0.25), border = NA, add = TRUE)
 plot(st_geometry(lakes), col = "white", border = "black", lwd = 0.1, add = TRUE)
-legend("bottomright", inset = c(0, 0), pch = 15, pt.cex = 2, col = c(adjustcolor("forestgreen", 0.75), "grey70"), legend = c("Aire MELCCFP", "Aire iNaturalist"), ncol = 1,  bty = "n", cex = 1.25, xpd = TRUE)
+legend("bottomright", inset = c(0, 0), pch = 15, pt.cex = 2, col = c(adjustcolor("forestgreen", 0.75), "grey70"), legend = c("Aire MELCCFP", "Aire utilisée"), ncol = 1,  bty = "n", cex = 1.25, xpd = TRUE)
 
 ```
 

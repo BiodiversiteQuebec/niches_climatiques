@@ -27,3 +27,6 @@
 .log
 .out
 .pdf
+
+/.quarto/
+**/*.quarto_ipynb

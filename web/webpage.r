@@ -17,7 +17,7 @@ pages <- list(
   polatouche = "Glauco"
 )
 
-for(ii in seq_along(pages)[1]){
+for(ii in seq_along(pages)){
 
   descQC <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
   descNA <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")

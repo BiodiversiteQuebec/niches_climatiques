@@ -1,5 +1,7 @@
 ---
 prefer-html: true
+execute:
+  cache: true
 ---
 
 # Modélisation
@@ -40,8 +42,9 @@ Pour les modèles incluant des variables d'habitat, nous avons également utilis
 - échelle locale en incuant des variables d'habitats mesurée à l'échelle du Québec
 
 ```{r}
-#suppressWarnings(source("_setup.R"))
-source("_setup.R")
+#| cache: false
+suppressWarnings(source("_setup.R"))
+#source("_setup.R")
 ```
 
 ```{r}
@@ -87,19 +90,31 @@ gt(models) |>
   #)
 }
 
-models |>
+models <- models |>
   flextable() |>
   merge_v(j = c("Type")) |>
   theme_vanilla() |>
   style(j = 1, pr_t = fp_text_default(bold = TRUE)) |>
-  set_table_properties(width = 1, layout = "autofit") |>
+  #set_table_properties(width = 1, layout = "autofit") |>
   bg(j = "Type", bg = "#eee", part = "body") |>
   #border_inner_h(part="body", border = fp_border(color="gray", width = 0.5)) |>
   #border_inner_h(part="header", border = fp_border(color="gray", width = 1)) |>
   padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   paginate(init = TRUE, hdr_ftr = TRUE) 
 
+if (knitr::is_latex_output()) {
+  models <- models |>
+    flextable::width(j = "Type", width = pdfw * 0.20) |>
+    flextable::width(j = "Nom",  width = pdfw * 0.25) |>
+    flextable::width(j = "Échelle",  width = pdfw * 0.1) |>
+    flextable::width(j = "Description",  width = pdfw * 0.45) |>
+    theme_pdf()
+} else {
+  models <- models |>
+    set_table_properties(width = 1, layout = "autofit")
+}
 
+models
 
 ```
 
@@ -194,18 +209,16 @@ L'idée à la base des modèles couplés (@fig-climate-extract, @fig-combine) es
 #| out-width: "100%"
 #| fig-cap: "Modèle de climat à grande échelle rapporté au Québec"
 
-library(terra) 
-library(sf)
-library(geodata)
-library(rmapshaper)
-library(dplyr)
-library(rnaturalearth)
-library(sdmtools)
+#library(terra) 
+#library(sf)
+#library(geodata)
+#library(rmapshaper)
+#library(dplyr)
+#library(rnaturalearth)
+#library(sdmtools)
 
 #r1 <- rast("https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/rasters/Setophaga_cerulea_sdm_large.tif")$climat
 #r2 <- rast("https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/rasters/Setophaga_cerulea_sdm_small.tif")$habitat
-
-epsg <- 6624 #32618
 
 # Downloads polygons using package geodata
 #can <- gadm("CAN", level = 2, path = "data") |> st_as_sf()
