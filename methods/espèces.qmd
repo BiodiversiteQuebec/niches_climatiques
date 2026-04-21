@@ -100,6 +100,7 @@ if (knitr::is_latex_output()) {
     width(j = "Variables",  width = pdfw * 0.40) |>
     width(j = "NA",  width = pdfw * 0.05) |>
     width(j = "QC",  width = pdfw * 0.05) |>
+    #height(height = .05) |>
     theme_pdf()
 } else {
   tableau <- tableau |>

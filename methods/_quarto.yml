@@ -66,6 +66,7 @@ format:
         \newfontfamily{\symbolfont}{Symbola}
         \newcommand{\usym}[1]{{\symbolfont #1}}
         \captionsetup{justification=raggedright, singlelinecheck=false}     
+        \renewcommand{\arraystretch}{0.5}
         
 
 

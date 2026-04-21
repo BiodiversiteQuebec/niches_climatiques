@@ -31,8 +31,10 @@ theme_pdf <- function(ft) {
     hline_top(part = "header", border = header_border) |>
     hline_bottom(part = "header", border = header_border) |>
     hline(part = "body", border = body_border) |>
-    hline_bottom(part = "body", border = header_border) |>
-    fix_border_issues(part = "all")
+    hline_bottom(part = "body", border = header_border) |>  
+    fix_border_issues(part = "all") |>
+    height(height = 0.05, part = "body") |>
+    hrule(rule = "exact", part = "body")
 }
 
 pdfw <- 8.5 - (2 * 1.25)

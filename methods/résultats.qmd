@@ -11,32 +11,32 @@ Pour chaque modèle, les effets marginaux des différentes variables considéré
 
 <!-- <iframe src="https://biodiversitequebec.github.io/niches_climatiques/html/salamandres.html" width="100%" height="300px" style="border:1px solid #eee;"></iframe> -->
 
-Les résultats détaillés sont présentés par groupes taxonmiques ici: [salamandres](results/salamandres.html), [rainette](results/rainette.html), [tortues](results/tortues.html), [couleuvres](results/couleuvres.html), [oiseaux](results/oiseaux.html) et [polatouche](results/polatouche.html) et les liens de téléchargement sont listés plus bas.
+Les résultats détaillés sont présentés par groupes taxonmiques ici: [salamandres](results/salamandres.html){target="_blank"}, [rainette](results/rainette.html){target="_blank"}, [tortues](results/tortues.html){target="_blank"}, [couleuvres](results/couleuvres.html){target="_blank"}, [oiseaux](results/oiseaux.html){target="_blank"} et [polatouche](results/polatouche.html){target="_blank"} et les liens de téléchargement sont listés plus bas.
 
-Rainette faux-grillon de l'Ouest: [résultats](results/rainette.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Pseudacris_triseriata_all.gpkg)
+Rainette faux-grillon de l'Ouest: [résultats](results/rainette.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Pseudacris_triseriata_all.gpkg)
 
-Salamandre à quatre orteils: [résultats](results/salamandres.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Hemidactylium_scutatum_all.gpkg)
+Salamandre à quatre orteils: [résultats](results/salamandres.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Hemidactylium_scutatum_all.gpkg)
 
-Salamandre pourpre: [résultats](results/salamandres.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Gyrinophilus_porphyriticus_all.gpkg)
+Salamandre pourpre: [résultats](results/salamandres.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Gyrinophilus_porphyriticus_all.gpkg)
 
-Salamandre sombre des montagnes: [résultats](results/salamandres.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Desmognathus_ochrophaeus_all.gpkg)
+Salamandre sombre des montagnes: [résultats](results/salamandres.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Desmognathus_ochrophaeus_all.gpkg)
 
-Tortue mouchetée: [résultats](results/tortues.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Emydoidea_blandingii_all.gpkg)
+Tortue mouchetée: [résultats](results/tortues.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Emydoidea_blandingii_all.gpkg)
 
-Tortue des bois: [résultats](results/tortues.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Glyptemys_insculpta_all.gpkg)
+Tortue des bois: [résultats](results/tortues.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Glyptemys_insculpta_all.gpkg)
 
-Couleuvre d'eau: [résultats](results/couleuvres.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Nerodia_sipedon_all.gpkg)
+Couleuvre d'eau: [résultats](results/couleuvres.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Nerodia_sipedon_all.gpkg)
 
-Couleuvre tachetée: [résultats](results/couleuvres.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Lampropeltis_triangulum_all.gpkg)
+Couleuvre tachetée: [résultats](results/couleuvres.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Lampropeltis_triangulum_all.gpkg)
 
-Aigle royal: [résultats](results/oiseaux.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Aquila_chrysaetos_all.gpkg)
+Aigle royal: [résultats](results/oiseaux.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Aquila_chrysaetos_all.gpkg)
 
-Grive de Bicknell: [résultats](results/oiseaux.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Catharus_bicknelli_all.gpkg)
+Grive de Bicknell: [résultats](results/oiseaux.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Catharus_bicknelli_all.gpkg)
 
-Paruline azurée: [résultats](results/oiseaux.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Setophaga_cerulea_all.gpkg)
+Paruline azurée: [résultats](results/oiseaux.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Setophaga_cerulea_all.gpkg)
 
-Râle jaune: [résultats](results/oiseaux.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Coturnicops_noveboracensis_all.gpkg)
+Râle jaune: [résultats](results/oiseaux.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Coturnicops_noveboracensis_all.gpkg)
 
-Petit Blongios: [résultats](results/oiseaux.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Ixobrychus_exilis_all.gpkg)
+Petit Blongios: [résultats](results/oiseaux.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Ixobrychus_exilis_all.gpkg)
 
-Petit Polatouche: [résultats](results/polatouche.html), [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Glaucomys_volans_all.gpkg)
+Petit Polatouche: [résultats](results/polatouche.html){target="_blank"}, [GPKG](https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/gpkg/Glaucomys_volans_all.gpkg)

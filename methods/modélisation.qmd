@@ -120,7 +120,7 @@ models
 
 ### Modèles de climat
 
-Tous les modèles avec une composante climat ont été effectuées à l'échelle nord-américaine afin de couvrir la majorité de l'aire de distribution des espèces et ainsi éviter le problème de troncation de la niche [@chevalier_accounting_2022, @guisan_spatially_2025]. En effet, le Québec représente une petite partie de l'aire de distribution de la majorité des espèces modélisées et il serait hasardeux d'établir les relations entre le climat et la présence des espèces sur une portion réduite des valeurs climatiques auxquelles ces espèces sont soumises sur le territoire québécois.
+Tous les modèles avec une composante climat ont été effectuées à l'échelle nord-américaine afin de couvrir la majorité de l'aire de distribution des espèces et ainsi éviter le problème de troncation de la niche [@chevalier_accounting_2022, @guisan_spatially_2025, @banks_using_2026]. En effet, le Québec représente une petite partie de l'aire de distribution de la majorité des espèces modélisées et il serait hasardeux d'établir les relations entre le climat et la présence des espèces sur une portion réduite des valeurs climatiques auxquelles ces espèces sont soumises sur le territoire québécois.
 
 Deux modèles climatiques ont été effectués. Le premier est un modèle basé sur l'algorithme Maxent. Pour ce modèle, seuls des effets quadratiques de la température moyenne annuelle ont été utilisés (*e.g.* $x + x^2$). Afin de donner plus de flexibilité à la relation entre le climat et la présence de l'espèce, des modèles additifs à formes contraintes ont également été utilisés [@pya_shape_2015, @citores_modelling_2020]. Plus spécifiquement, des formes strictement concaves sont permises par une base "cv" (@fig-climate-models).
 
