@@ -193,7 +193,7 @@ div.csl-indent {
     <h2 id="toc-title">Sections</h2>
    
   <ul>
-  <li><a href="#filtres" id="toc-filtres" class="nav-link active" data-scroll-target="#filtres"><span class="header-section-number">2.1</span> Filtres</a></li>
+  <li><a href="#filtrage-des-occurrences" id="toc-filtrage-des-occurrences" class="nav-link active" data-scroll-target="#filtrage-des-occurrences"><span class="header-section-number">2.1</span> Filtrage des occurrences</a></li>
   </ul>
 </nav>
     </div>
@@ -219,11 +219,12 @@ div.csl-indent {
 </header>
 
 
-<p>Les données utilisées pour le Québec proviennent de la base de données <a href="https://biodiversite-quebec.ca/fr/atlas">Atlas</a> de Biodiversité Québec (ficher <em>parquet</em> version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque d’observations des reptiles et amphibiens du Québec (BORAQ), les données GBIF [], les données eBird [], EPOQ [] et de l’Atlas des oiseaux nicheurs [] et les données de l’Atlas des micromammifères et des chiroptères du Québec (MMACH).</p>
-<p>Afin de construire les niches climatiques sur la majorité de l’aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF (hors-Québec) <span class="citation" data-cites="gbiforg_gbif_2025">(<a href="references.html#ref-gbiforg_gbif_2025" role="doc-biblioref">GBIF.org 2025</a>)</span> et eBird <span class="citation" data-cites="cornell_lab_of_ornithology_ebird_2025">(<a href="references.html#ref-cornell_lab_of_ornithology_ebird_2025" role="doc-biblioref">Cornell Lab of Ornithology 2025</a>)</span> ont été utilisées.</p>
-<section id="filtres" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="filtres"><span class="header-section-number">2.1</span> Filtres</h2>
-<p>Une inspection préalable des observations a été effectuée en amont de la modélisation afin d’identifier et éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utiliée pour circonscrire les observations appartenant à la rainette faux-grillon de l’Ouest telle qu’entendue au Québec <span class="citation" data-cites="equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019">(<a href="references.html#ref-equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019" role="doc-biblioref">Équipe de rétablissement de la rainette faux-grillon de l’ouest du Québec 2019</a>)</span>. Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (<em>Pseudacris maculata</em>) et de la rainette faux-grillon de l’Ouest telles que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (<a href="#fig-pseuda" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>).</p>
+<p>Les données utilisées pour le Québec proviennent de la base de données <a href="https://biodiversite-quebec.ca/fr/atlas">Atlas</a> de Biodiversité Québec (ficher <em>parquet</em> version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque d’observations des reptiles et amphibiens du Québec (BORAQ) <span class="citation" data-cites="boraq_2025">(<a href="references.html#ref-boraq_2025" role="doc-biblioref">Ministère de l’Environnement, de la Lutte contre les changements climatiques, de la Faune et des Parcs (MELCCFP), © Gouvernement du Québec 2025b</a>)</span>, les données GBIF <span class="citation" data-cites="gbiforg_gbif_2025">(<a href="references.html#ref-gbiforg_gbif_2025" role="doc-biblioref">GBIF.org 2025</a>)</span>, les données eBird <span class="citation" data-cites="cornell_lab_of_ornithology_ebird_2025">(<a href="references.html#ref-cornell_lab_of_ornithology_ebird_2025" role="doc-biblioref">Cornell Lab of Ornithology 2025</a>)</span>, EPOQ (Études des populations d’oiseaux du Québec) [] et des deux Atlas des oiseaux nicheurs <span class="citation" data-cites="robert_deuxieme_2019">(<a href="references.html#ref-robert_deuxieme_2019" role="doc-biblioref">Robert et al. 2019</a>)</span> et les données de l’Atlas des micromammifères et des chiroptères du Québec <span class="citation" data-cites="mmach_2025">(<a href="references.html#ref-mmach_2025" role="doc-biblioref">Ministère de l’Environnement, de la Lutte contre les changements climatiques, de la Faune et des Parcs (MELCCFP), © Gouvernement du Québec 2025a</a>)</span>.</p>
+<p>Afin de construire les niches climatiques sur la majorité de l’aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF hors-Québec <span class="citation" data-cites="gbiforg_gbif_2025">(<a href="references.html#ref-gbiforg_gbif_2025" role="doc-biblioref">GBIF.org 2025</a>)</span> ont été utilisées pour l’ensemble des espèces, sauf les oiseaux. Pour les oiseaux, l’ensemble des données eBird ont été utilisées afin d’accéder à l’information sur les feuillets d’observations et ainsi faciliter une estimation de l’effort. Les données eBird <span class="citation" data-cites="cornell_lab_of_ornithology_ebird_2025">(<a href="references.html#ref-cornell_lab_of_ornithology_ebird_2025" role="doc-biblioref">Cornell Lab of Ornithology 2025</a>)</span> intégrées à Atlas par l’intermédiaire de GBIF ont été éliminées.</p>
+<section id="filtrage-des-occurrences" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="filtrage-des-occurrences"><span class="header-section-number">2.1</span> Filtrage des occurrences</h2>
+<p>Une inspection préalable des observations a été effectuée en amont de la modélisation afin d’identifier et d’éliminer les observations suspectes, douteuses ou erronées. Les observations acoustiques incertaines du Petit Polatouche à Mingan ont été éliminées. Une aire de répartition a été utilisée pour circonscrire les observations appartenant à la rainette faux-grillon de l’Ouest telle que définie au Québec <span class="citation" data-cites="equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019">(<a href="references.html#ref-equipe_de_retablissement_de_la_rainette_faux-grillon_de_louest_du_quebec_plan_2019" role="doc-biblioref">Équipe de rétablissement de la rainette faux-grillon de l’ouest du Québec 2019</a>)</span>. Pour ce faire, les aires de répartition de la rainette faux-grillon boréale (<em>Pseudacris maculata</em>) et de la rainette faux-grillon de l’Ouest telle que représentées sur la plateforme iNaturalist ont été combinées pour circonscrire les populations du nord-est des USA et du sud du Québec (<a href="#fig-pseuda" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>).</p>
+<!-- filtre sur les précisions/doublons -->
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-pseuda" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -249,6 +250,15 @@ Cornell Lab of Ornithology. 2025. <em><span>eBird</span> Basic Dataset</em>. Ver
 </div>
 <div id="ref-gbiforg_gbif_2025" class="csl-entry" role="listitem">
 GBIF.org. 2025. <em><span>GBIF</span> Occurrence Download</em>. <a href="https://doi.org/doi.org/10.15468/dl.qx5hmp">https://doi.org/doi.org/10.15468/dl.qx5hmp</a>.
+</div>
+<div id="ref-mmach_2025" class="csl-entry" role="listitem">
+Ministère de l’Environnement, de la Lutte contre les changements climatiques, de la Faune et des Parcs (MELCCFP), © Gouvernement du Québec. 2025a. <em>Atlas des micromammifères et des chiroptères du Québec (<span>MMACH</span>)</em>.
+</div>
+<div id="ref-boraq_2025" class="csl-entry" role="listitem">
+Ministère de l’Environnement, de la Lutte contre les changements climatiques, de la Faune et des Parcs (MELCCFP), © Gouvernement du Québec. 2025b. <em>Banque de données sur les reptiles et amphibiens du Québec (<span>BORAQ</span>)</em>.
+</div>
+<div id="ref-robert_deuxieme_2019" class="csl-entry" role="listitem">
+Robert, M., M.-H. Hachey, D. Lepage, et A. R. Couturier (direction). 2019. <em>Deuxième Atlas des oiseaux nicheurs du Québec méridional</em>. Regroupement <span>QuébecOiseaux</span>, Environnement et Changement climatique Canada, Études d’Oiseaux Canada.
 </div>
 </div>
 </section>

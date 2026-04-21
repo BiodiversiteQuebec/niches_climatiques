@@ -84,7 +84,7 @@ for(ii in seq_along(pages)){
       as.data.frame() |> mutate(nom = "Données", type = "data")
     a2 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "climatX2", i)}) |>
-      as.data.frame() |> mutate(nom = "Modèles SDM", type = "models")   
+      as.data.frame() |> mutate(nom = "Modèles", type = "models")   
     b0 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "sdm_compare", i)}) |>
       as.data.frame() |> mutate(nom = "Comparaisons", type = "comparisons")          
@@ -111,9 +111,15 @@ for(ii in seq_along(pages)){
       as.data.frame() |> mutate(type = "changes")    
     b8 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "range_proj_large_change", i)}) |>
-      as.data.frame() |> mutate(type = "changes")        
+      as.data.frame() |> mutate(type = "changes")
+    b9 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_evaluation", i)}) |>
+      as.data.frame() |> mutate(nom = "Évaluation", type = "evaluations")   
+    b10 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_evaluation", i)}) |>
+      as.data.frame() |> mutate(type = "evaluations")                       
     
-    x <- rbind(a1, a2, i, b0, b1, b2, b3, b4, b5, b6, b7, b8)
+    x <- rbind(a1, a2, i, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10)
     
     name_desc <- list(
       data = list(
@@ -121,16 +127,16 @@ for(ii in seq_along(pages)){
         desc = "Données"
       ),
       sdm_compare = list(
-        toc = "Modèles SDM QC",
-        desc = "Comparaison des SDMs actuels pour le Québec"
+        toc = "Modèles QC",
+        desc = "Comparaison des modèles actuels pour le Québec"
       ),
       sdm_compare_localized = list(
-        toc = "Modèles SDM QC local",
-        desc = "Comparaison des SDMs actuels centrée sur les occurrences"
+        toc = "Modèles QC local",
+        desc = "Comparaison des modèles actuels centrés sur les occurrences"
       ),      
       sdm_proj_compare = list(
-        toc = "Modèles SDM QC",
-        desc = "Projections des SDMs pour le Québec"
+        toc = "Modèles QC",
+        desc = "Projections des modèles pour le Québec"
       ),
       range_proj_compare = list(
         toc = "Aires de répartition QC",
@@ -143,7 +149,11 @@ for(ii in seq_along(pages)){
       range_proj_large_change = list(
         toc = "Aires de répartition NA",
         desc = "Projections des changements dans les aires de répartition pour l'Amérique du Nord"
-      )               
+      ),      
+      range_evaluation = list(
+        toc = "Aires de répartition QC",
+        desc = "Aires de distribution provenant des modèles soumis à l'évaluation"
+      )                
     )
     
 
@@ -163,7 +173,7 @@ for(ii in seq_along(pages)){
     x$display[1] <- paste0("<span style='font-weight:bold; font-size:1.5em; color:seagreen; display:inline-block; padding-top: 4vh; padding-bottom: 1vh;'>", x$vernaculaire[1], "</span>")
 
 
-    w <- which((duplicated(x$ref, fromLast = TRUE) & x$type %in% c("models", "comparisons", "projections", "changes")) | (duplicated(x$ref, fromLast = FALSE) & x$type %in% c("data")))
+    w <- which((duplicated(x$ref, fromLast = TRUE) & x$type %in% c("models", "comparisons", "projections", "changes", "evaluations")) | (duplicated(x$ref, fromLast = FALSE) & x$type %in% c("data")))
     x$display[w] <- paste0("<b>&nbsp", x$nom[w], "</b>")
     #w <- which(!duplicated(x$ref, fromLast = TRUE) & x$type == "models")
     #x$display[w] <- x$nom[w]
@@ -387,7 +397,6 @@ for(ii in seq_along(pages)){
     padding-right: 0.0%; 
     overflow-y: scroll;
   }
-  
   
   
   div.right {
@@ -725,11 +734,9 @@ for(ii in seq_along(pages)){
   "</nav>
   </div>
   <div class=\"right\">
-  <h1>Niches climatiques</h1>
+  <h1>Résultats détaillés / niches climatiques</h1>
   
-  
-  
-  <p>Modèles et résultats</p>
+  <!-- <p>Modèles et résultats</p>
   
   <h4>climatX2</h4>
   <p>Modèle avec uniquement des variables de climat</p>
@@ -748,10 +755,7 @@ for(ii in seq_along(pages)){
   <h4>climatX2 (habitatQC)</h4>
   <p>Modèle des variables d'habitat locales clippées avec le modèle de climat</p>
   <h4>climatGAM (habitatQC)</h4>
-  <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p>
-  
-  
-  <hr class=\"vspace\"> 
+  <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p> -->
   
   "))}
   
@@ -924,12 +928,12 @@ for(ii in seq_along(pages)){
       stri_write_lines(ans, con = con)
     }
     #if(toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_small_change", "range_proj_large_change")){
-    if(toc$type[i] %in% c("comparisons", "projections", "changes") & !grepl("<b>", toc$display[i])){      
+    if(toc$type[i] %in% c("comparisons", "projections", "changes", "evaluations") & !grepl("<b>", toc$display[i])){      
       ans <- set_compare(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "), desc = toc$desc[i])
       stri_write_lines(ans, con = con)
     }
     #if(!toc$model[i] %in% c("sdm_compare", "sdm_compare_localized", "sdm_proj_compare", "range_proj_compare", "range_proj_small", "range_proj_compare", "range_proj_small_change", "range_proj_large_change", "data")){
-    if(!toc$type[i] %in% c("comparisons", "projections", "changes", "data") & !grepl("<b>", toc$display[i])){      
+    if(!toc$type[i] %in% c("comparisons", "projections", "changes", "data", "evaluations") & !grepl("<b>", toc$display[i])){      
       ans <- set_models(toc$div[i], common = paste(toc$vernaculaire[i], gsub("_", " ", toc$nom[i]), sep = " \u2014\u2014 "))
       stri_write_lines(ans, con = con)
     }
