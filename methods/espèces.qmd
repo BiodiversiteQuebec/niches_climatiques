@@ -11,9 +11,9 @@ execute:
 
 ## Variables par espèces
 
-Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
+Un ensemble de variables a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que d es variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
 
-_Justifier le choix des variables par espèce et réexpliquer les limitations_
+<!-- Justifier le choix des variables par espèce et réexpliquer les limitations ? -->
  
 ```{r}
 #| cache: false
@@ -21,18 +21,12 @@ suppressWarnings(source("_setup.R"))
 #source("_setup.R")
 ```
 
-<!--
-```{=latex}
-\layout
-```
--->
 
 ```{r}
 #| label: tbl-species-vars
 #| tbl-cap: "Variables d'habitat utilisées pour chaque espèce à l'échelle de l'Amérique du Nord (NA) ou du Québec (QC)"
 
 desc <- read.csv("data/variables.csv")
-
 
 species_vars <- list(
 `Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
@@ -124,7 +118,7 @@ tableau
 
 ## Périodes de nidification (oiseaux)
 
-Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées (@tbl-nesting). Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
+Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées (@tbl-nesting) pour délimiter les observations associées à la période de nidification. Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
 
 ```{r}
 #| label: tbl-nesting

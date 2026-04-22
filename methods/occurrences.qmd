@@ -1,9 +1,9 @@
 # Occurrences
 
-Les données utilisées pour le Québec proviennent de la base de données [Atlas](https://biodiversite-quebec.ca/fr/atlas) de Biodiversité Québec (ficher _parquet_  version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque
+Les données d'observations utilisées pour le Québec proviennent de la base de données [Atlas](https://biodiversite-quebec.ca/fr/atlas) de Biodiversité Québec (ficher _parquet_  version 2025-03-17). Ces données incluent notamment les données du Centre de données sur le patrimoine naturel du Québec (CDPNQ), les données de la Banque
 d’observations des reptiles et amphibiens du Québec (BORAQ) [@boraq_2025], les données GBIF [@gbiforg_gbif_2025], les données eBird [@cornell_lab_of_ornithology_ebird_2025], EPOQ (Études des populations d'oiseaux du Québec) [] et des deux Atlas des oiseaux nicheurs [@robert_deuxieme_2019] et les données de l'Atlas des micromammifères et des chiroptères du Québec [@mmach_2025]. 
 
-Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les occurrences des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF hors-Québec [@gbiforg_gbif_2025] ont été utilisées pour l'ensemble des espèces, sauf les oiseaux. Pour les oiseaux, l'ensemble des données eBird ont été utilisées afin d'accéder à l'information sur les feuillets d'observations et ainsi faciliter une estimation de l'effort. Les données eBird [@cornell_lab_of_ornithology_ebird_2025] intégrées à Atlas par l'intermédiaire de GBIF ont été éliminées.
+Afin de construire les niches climatiques sur la majorité de l'aire de répartition des espèces, les observations des différentes espèces en Amérique du Nord (Canada et États-Unis) ont également été utilisées. Pour ce faire, les données GBIF hors-Québec [@gbiforg_gbif_2025] ont été utilisées pour l'ensemble des espèces, sauf les oiseaux. Pour les oiseaux, l'ensemble de données _eBird Basic Dataset_ (EBD) [@cornell_lab_of_ornithology_ebird_2025] a été utilisé afin d'accéder à l'information sur les feuillets d'observations et ainsi faciliter une estimation de l'effort. Le jeu de données _eBird Observational Dataset_ (EOD) [@eod_2025] disponible par GBIF et intégré à Atlas a été éliminé.
 
 ## Filtrage des occurrences
 
@@ -15,7 +15,8 @@ Une inspection préalable des observations a été effectuée en amont de la mod
 #| label: fig-pseuda 
 #| fig-cap: "Aire de répartition utilisée pour circonscrire les observations de la rainette faux-grillon de l'Ouest (_Pseudacris triseriata_)"
 
-#| label: pseuda 
+#| fig-width: 12
+#| out-width: "100%"
 
 library(sf)
 library(terra)
