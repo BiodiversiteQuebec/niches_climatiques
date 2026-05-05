@@ -1,43 +1,82 @@
 ---
 title: "Niches climatiques<br>récit numérique"
-format: 
+date: today
+format:
   revealjs:
+    output-file: revealjs-storymap.html
+    self-contained: false
     fig-align: center
-    slide-level: 2   # treat ## as top-level slides
+    slide-level: 2
     progress: true
-    history: false    
-    chalkboard: false    
+    history: false
+    chalkboard: false
     slide-number: true
-    show-slide-number: print    
+    number-sections: true
+    show-slide-number: print
     include-in-header:
       text: |
         <style>
-        h1, h2, h3, h4 {
-          color: seagreen;
-          padding-bottom: 2vh;
-        }
-        .small-text {
-          font-size: 0.3em;
-          color: #555;
-        }
-        .text-box {
-          background-color: #f0f0f0;
-          padding: 10px;
-          border-radius: 15px;
-          margin: 10px 0;
-          font-size: 0.5em;
-          color: #000;
-        }
-        </style>    
-
+          h1, h2, h3, h4 {
+            color: seagreen;
+            padding-bottom: 2vh;
+          }
+          .small-text {
+            font-size: 0.3em;
+            color: #555;
+          }
+          body {
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+          }          
+          .text-box {
+            background-color: #f0f0f0;
+            padding: 20px 10px 20px 10px;
+            border-radius: 15px;
+            margin: 40px 10px 10px 10px;
+            font-size: 0.75em;
+            color: #000;
+          }
+          .slide-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 20px;
+            margin: 100px;
+          }
+          .slide-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            font-size: 1.25em;
+          }          
+        </style>
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const sections = document.querySelectorAll("section.level2");
+            const grid = document.createElement("div");
+            grid.className = "slide-grid";
+            sections[0].parentNode.insertBefore(grid, sections[0]);
+            sections.forEach(function(section) {
+              const card = document.createElement("div");
+              card.className = "slide-card";
+              card.appendChild(section);
+              grid.appendChild(card);
+            });
+          });
+        </script>        
   html:
-    self-contained: true  
-date: today
+    output-file: html-storymap.html
+    self-contained: true
+  pdf:
+    output-file: pdf-storymap.pdf
+    self-contained: true    
 ---
 
 ## Landing page
 
 - Illustration cartographique du réchauffement et espèces en mouvement avec point d'interrogation ? 
+- Sections Quoi?, Comment?, Pourquoi?, Mais encore?, etc.
 
 ## Contexte changements climatiques
 
@@ -50,7 +89,7 @@ date: today
 ::: {.text-box}
 Les changements climatiques auront des conséquences majeures sur le climat de la planète, particulièrement dans les régions plus boréales ou nordiques comme le Québec,
 
-Des augmentation de la température moyenne annuelle de l'ordre de X degrés sont envisagés dépendemment des régions du Québec.
+Des augmentations de la température moyenne annuelle de l'ordre de X degrés sont envisagées dépendemment des régions du Québec.
 
 Pour un portrait détaillé des changements attendus, consultez la plateforme [Portraits climatiques](https://portraits.ouranos.ca/fr/spatial) produite par [Ouranos](https://www.ouranos.ca/fr)
 :::
@@ -66,11 +105,11 @@ Pour un portrait détaillé des changements attendus, consultez la plateforme [P
  - Scénarios à préconiser
 
 ::: {.text-box}
-Trois scénarios d'émissions de gaz à effet de serre crédibles sont proposés par le GIEC. Ces scénarios sont basés sur différentes trajectoires socios-économiques et sur leur influence sur la production de gaz à effet de serre. 
+Trois scénarios d'émissions de gaz à effet de serre jugés crédibles sont proposés par le GIEC. 
 
-Ces scénarios sont considérés comme modéré, élevé et très élevé.
+Ces scénarios sont basés sur différentes trajectoires socios-économiques et sur leur influence sur la production de gaz à effet de serre. Ces scénarios sont considérés comme modéré, élevé et très élevé.
 
-Le scénario retenu actuellement comme étant le plus probable le selon ministere et le [GIEC](https://www.ipcc.ch/languages-2/francais/) est le scénario à émission élevé 
+Le scénario retenu actuellement comme étant le plus probable le selon [ministère](https://www.environnement.gouv.qc.ca/plan-economie-verte/outils/mise-oeuvre-actions/directive-appreciation-traitement-risques-changements-climatiques.pdf) et le [GIEC](https://www.ipcc.ch/languages-2/francais/) est le scénario à émission élevé. 
 :::
 
 ## Espèces en situation précaire
@@ -78,11 +117,11 @@ Le scénario retenu actuellement comme étant le plus probable le selon minister
 - Vulnérabilité de ces espèces
 - Nécessité d'anticiper les changements
 - Pertinence des aires protégées futures
-- Pourquoi cette sélection d'espèce?
+- Pourquoi cette sélection d'espèces?
 - Photos des différentes espèces
 
 ::: {.text-box}
-Les espèces en situation précaires sont particulièrement vulnérables dans un context de changements climatiques, car il s'agit d'une menace qui s'ajoute aux menaces qui pèsent déjà sur ces espèces comme la perte d'habitat, l'isolement des populations, etc.
+Les espèces en situation précaires sont particulièrement vulnérables dans un contexte de changements climatiques, car il s'agit d'une menace qui s'ajoute aux menaces qui pèsent déjà sur ces espèces comme la perte d'habitat, l'isolement des populations, etc.
 
 Il est nécessaire d'anticiper les changement à venir afin de mieux protéger ces espèces.
 :::
@@ -95,11 +134,11 @@ Il est nécessaire d'anticiper les changement à venir afin de mieux protéger c
 - Visualisation de l'effet en cloche (effet quadratique)
 
 ::: {.text-box}
-Le climat a un impact majeur sur la répartition des espèces. On parle de niche climatique pour désigner la plage de valeurs du climat favorable à l'espèce et où elle peut compléter son cycle vital. 
+Le climat a un impact majeur sur la répartition des espèces. On parle de niche climatique pour désigner l'étendue des valeurs du climat favorable à l'espèce et où elle peut compléter son cycle vital. 
 
 On peut représenter simplement la niche climatique d'une espèce en utilisant une forme de cloche où la présence d'une espèce dépend des valeurs d'une variable climatique donnée, par exemple la température moyenne annuelle.
 
-On distinguera la niche fondamentale, celle où l'espèce pourrait potentiellement se maintenir, de la niche réalisée (i.e. effective) qui prend en compte les interactions biotiques, l'habitat, les perturbations, la biogéographie, etc. En général, la niche réalisée est plus étroite que la niche fondamentale. 
+On distinguera la niche fondamentale, celle où l'espèce pourrait potentiellement se maintenir, de la niche réalisée (i.e. effective) qui prend en compte les interactions biotiques, l'habitat, les perturbations, la biogéographie, etc. En général, la niche réalisée est souvent beaucoup plus étroite que la niche fondamentale. 
 :::
 
 
@@ -120,16 +159,16 @@ Plusieurs bouleversements associés aux changements climatiques sont attendus, q
 
 
 ::: {.text-box}
-Les modèles de distribution d'espèces permettent d'estimer la présence ou l'abondance des espèces à travers un territoire donné. Ils se basent principalement sur les liens entre des variables environmentales et les données d'observations pour cartographier la répartition des espèces à travers un territoire donné.
+Les modèles de distribution d'espèces cherchent à estimer la présence ou l'abondance des espèces à travers un territoire donné. Ils se basent principalement sur les liens entre des variables environmentales et la présence ou l'abondance des espèces pour cartographier leur répartition à travers un territoire donné. Ils utilisent les données d'observations ainsi que des données environnementales sur les caractéristiques du territoire visé.
 :::
 
 ## Contraintes à la méthodologie dans un contexte de changements climatiques
 
-- Variables stables dans le temps
+- Nécessite des variables stables dans le temps (trop technique?)
 - Utilisation de relation simples et établies
 
 ::: {.text-box}
-Dans un contexte de changements climatiques, ces modèles peuvent être utile pour projeter les distributions futures des espèces ciblées. Cependant, les variables environnementales utilisées doivent tenir compte du fait que les changements climatiques vont occasionner des changements qui peuvent non seulement affectr les espèces, mais aussi les habitats dont les espèces dépendent.
+Dans un contexte de changements climatiques, ces modèles peuvent être utile pour projeter les distributions futures des espèces ciblées. Cependant, les variables environnementales utilisées doivent tenir compte du fait que les changements climatiques vont entraîner des changements qui peuvent non seulement affecter les espèces, mais aussi les habitats dont les espèces dépendent.
 :::
 
 ## Projection des SDM
@@ -159,8 +198,12 @@ Les variables non-climatiques sont toutefois aussi très importantes pour expliq
 
 ## Modèle combiné climat plus habitat
 
+- Niche établie sur l,ensemble de la distribution
+- Combinée avec variables locales
+- Valoriser données env. locales
+
 ::: {.text-box}
-En prenant en compte ces autres variables d'habitat, on obtient des modèles plus réaliste pour représenter la répartition géographique des espèces.
+En prenant en compte ces autres variables d'habitat, on obtient des modèles plus réalistes pour représenter la répartition géographique des espèces.
 :::
 
 ## Changements anticipés pour une espèce
@@ -176,18 +219,20 @@ Pour l'espèce X, les changement potentiels sont majeurs.
 - Illustrer les changements
 
 ::: {.text-box}
-En comparant la distribution actuelle aux distributions projetées, on peut déterminer les zones où le climat deviendra plus favorable à la présence de l'espèce. On peut également identifier les endroits où le climat deviendra défavorable à la présence de l,espèce ainsi que les endroits qui demeureront favorable. Ceci permet de cartographier les changements attendus en fonction des gains, des pertes potentielles en répartition.
+En comparant la distribution actuelle aux distributions projetées, on peut déterminer les zones où le climat deviendra plus favorable à la présence de l'espèce ainsi que les endroits où il deviendra moins favorable. Ceci permet de cartographier les changements attendus en fonction des gains et des pertes potentielles en répartition.
 :::
 
 ## Maladaptation
 
 - Expliquer le concept 
-  - dette d'extinction, de colonisation, refuges, etc.
+  - Dette d'extinction, de colonisation, refuges, etc.
 
 ::: {.text-box}
 On peut parler de maladaptation, lorsque qu'une espèce se trouve dans une zone climatique qui n'est plus favorable à sa présence. Cela ne signifie pas nécessairement qu'elle disparaitra instantanément, mais elle pourrait avoir de la difficulté à y accomplir son cycle vital et éventuellement pourrait disparaître de ces régions. On parlera ici d'une dette d'extinction.
 
 À l'inverse, une zone où le climat deviendra favorable à la présence d'une espèce pourrait ne pas être immédiatement occupée. En effet, il se peut que des individus d'une espèce n'aient pas encore eu le temps de s'y disperser ou encore, l'habitat pourrait ne pas encore être propice à la présence de l'espèce. On parlera plutôt dans ce cas d'une dette de colonisation.
+
+La vitesse à laquelle les espèces disparaitront des endroits défavorables et pourront coloniser de nouveaux territoires favorables aura un impact majeur sur la répartition future des espèces.
 :::
 
 ## Variation dans la superficie des aires de répartition
@@ -221,11 +266,8 @@ Parmi les espèces modélisées, plusieurs atteignent la limite nord de leur dis
 
 ## Aires protégées
 
-- Leur efficacité vis-à-vis des changements anticipés?
-
-## Réfugiés climatiques ?
-
-- Des exemples QC ou NA?
+- Leur efficacité vis-à-vis des changements anticipés et des scénarios?
+- Un exemple d'application local?
 
 ## Vulnérabilité des espèces
 
@@ -235,7 +277,7 @@ Parmi les espèces modélisées, plusieurs atteignent la limite nord de leur dis
   - Tenir compte des capacités de dispersion/temps de génération etc. ?
 
 ::: {.text-box}
-Globalement, on peut classifier les différentes espèces modélisées en fonction de leur vulnérabilité aux changements climatiques. Les espèces pour lesquelles les aires de répartition actuelle deviendront entièrement défavorables à leur présence sont particulièrement vulnérables. Les espèces pour lesquelles les aires de répartition actuelles conserveront des zones favorables s'en tireront possiblement mieux. 
+On peut classifier les différentes espèces modélisées en fonction de leur vulnérabilité aux changements climatiques. Les espèces pour lesquelles les aires de répartition actuelle deviendront entièrement défavorables à leur présence sont particulièrement vulnérables. Les espèces pour lesquelles les aires de répartition actuelles conserveront des zones favorables s'en tireront possiblement mieux. 
 :::
 
 ## Globalement, un effet positif?
@@ -249,7 +291,7 @@ On pourrait penser que l'expansion potentielle des aires de répartition est plu
 ## Bémols
 
 - Plusieurs éléments ne sont pas pris en compte
-- Bien insister sur le fait qu'il s'agit de zones potentielles qui deviendront favorables ou défavorables 
+- Bien insister sur le fait qu'il s'agit de zones qui deviendront potentiellement favorables ou défavorables 
 
 ::: {.text-box}
 Il faut d'abord se rappeler qu'il s'agit de zones potentielles et qu'il y a plusieurs obstacles à la colonisation de nouveaux territoires, notamment les capacités de dispersion, les relations avec les autres espèces comme les proies et les prédateurs et simplement la vitesse à laquelle ces changements se produisent.
@@ -272,25 +314,26 @@ En plus d'avoir des capacités de dispersion limitées et d'être inféodées au
 Comparativement aux autres vertébrés, les oiseaux ont des capacités de dispersion nettement supérieures en raison de leur capacité de vol. On pourrait penser que dans leur cas, la dispersion ne sera pas un problème. Il faut cependant que les habitats aussi puissent être trouvés aux endroits où le climat devient plus favorable. Par exemple, la Paruline azurée est trouvée dans les forêts et les érablières matures du sud du Québec. Bien que le climat deviendra favorable pour cette paruline dans la zone boréale actuelle, le couvert forestier pourrait ne pas être au rendez-vous. Plusieurs centaines d'années pourraient s'écouler avant que les forêts conifériennes actuelles ne soient remplacées par des érablières matures! 
 :::
 
+## Réfugiés climatiques?
+
+- Exemple de la Grive de Bicknell qui pourrait voir son occupation de déplacer vers les altitudes plus élevées
+
+::: {.text-box}
+D'autres espèces vivant en altidude comme la Grive de Bicknell pourrait devoir se déplacer à des altitudes plus élevées pour rencontrer des conditons propices. En ce sens, les sommets de montagnes ou les territoires plus élevés pourraient servir de refuges climatiques pour les espèces pour lesquelles la dispersion vers le nord est plus difficile. Ce morcellement risque toutefois de réduire les superficies d'habitat disponibles, de favoriser l'isolement des populations et augmenter la vulnérabilité aux extinctions.
+:::
+
+<!-- Parler de contraction altitudinale? -->
+
 ## Relations biotiques
 
 - Un exemple ? (pas d'exemple en tête)
 - Différences dans la rapidité de l'adaptation (que veut dire adaptation dans ce contexte?)
 
 ::: {.text-box}
-Ce cas particulier de l'habitat est en fait représentatif de l'ensemble des interactions entre les espèces et leur environnement biotiques. Les différentes composantes de l'écologie des espèces peuvent ne pas répondre de la même façon ou au même rythme aux changements climatiques, ce qui affectera leur capacité à s'adapter aux changements.
+Ce cas particulier de l'habitat est en fait représentatif de l'ensemble des interactions entre les espèces et leur environnement biotique. Les différentes composantes de l'écologie des espèces peuvent ne pas répondre de la même façon ou au même rythme aux changements climatiques, ce qui affectera leur capacité à s'adapter aux changements.
 :::
 
-## Espèce en équilibre avec le climat?
-
-- Peut affecter l'estimation de la niche climatique
-- Trop technique?
-
-::: {.text-box}
-À noter qu'actuellement, rien n'assure que les espèces sont en équilibre avec leur environnement et notamment, avec le climat. Ceci peut affecter notre évaluation du lien entre le climat et la présence des espèces et donc, nos projections.
-:::
-
-## Réalisme biologique difficile à implémenter pleinement
+## Difficile d'intégrer le réalisme biologique
 
 - Difficulté de prendre en compte toutes ces considérations au sein d'un même modèle
 - Trop technique?
@@ -299,9 +342,18 @@ Ce cas particulier de l'habitat est en fait représentatif de l'ensemble des int
 Il est difficile, voire impossible de prendre en compte l'ensemble des éléments pouvant affecter les capacités d'adaptation aux changements climatiques des espèces, particulièrement lorsqu'on s'intéresse à un grand nombre d'espèce.
 :::
 
+## Les espèces sont-elles en équilibre avec le climat?
+
+- Peut affecter l'estimation de la niche climatique
+- Trop technique?
+
+::: {.text-box}
+À noter qu'actuellement, rien n'assure que les espèces sont en équilibre avec leur environnement et notamment, avec le climat. Ceci peut affecter notre évaluation du lien entre le climat et la présence des espèces et donc, nos projections.
+:::
 
 ## Résultats détaillés et interactifs par espèce pour tous les scénarios
 
+- Portrait détaillé pour l'ensemble des espèces modélisées
 - Distributions projetées
 - Changements projetés
 - Effets des variables ?
@@ -309,5 +361,13 @@ Il est difficile, voire impossible de prendre en compte l'ensemble des élément
 
 ## Conclusion
 
+- Conclusion générale avec une ouverture
+- Niveau d'incertitude élevé
 - Remerciements (experts, etc.)
 - Lien vers la méthodologie détaillée
+
+::: {.text-box}
+Plusieurs incertitudes demeurent quand à la capacité et à la rapidité à laquelle les espèces pourront s'adapter. Chose certaine, des bouleversements sont à prévoir.
+
+Pour la méthodologie détaillée, consultez ...
+:::

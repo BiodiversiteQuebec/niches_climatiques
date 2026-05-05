@@ -26,6 +26,10 @@
 .log
 .out
 .pdf
+storymap_files
+storymap.html
+web/*.html
+web/*.pdf
 
 /.quarto/
 **/*.quarto_ipynb
