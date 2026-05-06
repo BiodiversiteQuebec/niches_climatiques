@@ -41,7 +41,6 @@
   }
   
   
-  
   div.right {
     width: 80%; 
     float: left; 
@@ -98,7 +97,7 @@
     height: 1vh;
     margin: 0vh;
     padding: 0vh;
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
   }
   
   .infotop {
@@ -146,7 +145,7 @@
   }
   
   .section{
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
     padding-left: 2vw;
     /* border-bottom: 2px solid seagreen; */
     /* border-right: 2px solid seagreen; */
@@ -171,7 +170,7 @@
   .shown {
     display: block;
     padding-top: 0vw;
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
     <!-- border-right: 2px solid seagreen; -->
   }
   
@@ -204,6 +203,7 @@
   .showmore {
     background: none;
     border: none; /* none */
+    padding-top: 5vh;
     padding-bottom: 3vh;
     text-align: center;
     text-decoration: none;
@@ -212,12 +212,12 @@
     font-size: 2.25vmin;
     font-weight: 1200;
     font-family:'Roboto Mono'; 
-    cursor: pointer;
-    height: 2vmin;
+    /* cursor: pointer; */
+    height: 3vmin;
   }
   
   .showmore:hover {
-    opacity: 0.50;
+    opacity: 0.99;
     filter: alpha(opacity=100);
   }
   
@@ -371,29 +371,36 @@
   <body>
   <div style="display:inline-block; width:100%;">
   <div class="left">
-  <nav id="toc"><a class="toc" href="#Glaucomys_volans_data"><b>Petit polatouche</b></a><br>
-<a class="toc" href="#Glaucomys_volans_data">&nbsp données</a><br>
-<a class="toc" href="#Glaucomys_volans_climat">&nbsp climat</a><br>
-<a class="toc" href="#Glaucomys_volans_gam">&nbsp climatGAM</a><br>
-<a class="toc" href="#Glaucomys_volans_habitat">&nbsp habitatNA</a><br>
-<a class="toc" href="#Glaucomys_volans_small">&nbsp habitatQC</a><br>
-<a class="toc" href="#Glaucomys_volans_climat + habitat">&nbsp climat + habitatNA</a><br>
-<a class="toc" href="#Glaucomys_volans_climat (habitat)">&nbsp habitatNA (climat)</a><br>
-<a class="toc" href="#Glaucomys_volans_gam (habitat)">&nbsp habitatNA (climatGAM)</a><br>
-<a class="toc" href="#Glaucomys_volans_climat (small)">&nbsp habitatQC (climat)</a><br>
-<a class="toc" href="#Glaucomys_volans_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
-<a class="toc" href="#Glaucomys_volans_compare">&nbsp comparaison</a><br>
-<a class="toc" href="#Glaucomys_volans_compare_localized">&nbsp comparaison localisée</a><br>
-<a class="toc" href="#Glaucomys_volans_proj_compare">&nbsp projection</a></nav>
+  <nav id="toc"><a class="toc" href="#Glaucomys_volans_data"><span style='font-weight:bold; font-size:1.5em; color:seagreen; display:inline-block; padding-top: 4vh; padding-bottom: 1vh;'>Petit polatouche</span></a><br>
+<a class="toc" href="#Glaucomys_volans_data"><b>&nbspDonnées</b></a><br>
+<a class="toc" href="#Glaucomys_volans_climatX2"><b>&nbspModèles</b></a><br>
+<a class="toc" href="#Glaucomys_volans_climatX2">&nbsp&nbsp climatX2</a><br>
+<a class="toc" href="#Glaucomys_volans_climatGAM">&nbsp&nbsp climatGAM</a><br>
+<a class="toc" href="#Glaucomys_volans_habitatNA">&nbsp&nbsp habitatNA</a><br>
+<a class="toc" href="#Glaucomys_volans_habitatQC">&nbsp&nbsp habitatQC</a><br>
+<a class="toc" href="#Glaucomys_volans_climatX2 + habitatNA">&nbsp&nbsp climatX2 + habitatNA</a><br>
+<a class="toc" href="#Glaucomys_volans_climatX2 (habitatNA)">&nbsp&nbsp climatX2 (habitatNA)</a><br>
+<a class="toc" href="#Glaucomys_volans_climatGAM (habitatNA)">&nbsp&nbsp climatGAM (habitatNA)</a><br>
+<a class="toc" href="#Glaucomys_volans_climatX2 (habitatQC)">&nbsp&nbsp climatX2 (habitatQC)</a><br>
+<a class="toc" href="#Glaucomys_volans_climatGAM (habitatQC)">&nbsp&nbsp climatGAM (habitatQC)</a><br>
+<a class="toc" href="#Glaucomys_volans_sdm_compare"><b>&nbspComparaisons</b></a><br>
+<a class="toc" href="#Glaucomys_volans_sdm_compare">&nbsp&nbsp Modèles QC</a><br>
+<a class="toc" href="#Glaucomys_volans_sdm_compare_localized">&nbsp&nbsp Modèles QC local</a><br>
+<a class="toc" href="#Glaucomys_volans_sdm_proj_compare"><b>&nbspProjections</b></a><br>
+<a class="toc" href="#Glaucomys_volans_sdm_proj_compare">&nbsp&nbsp Modèles QC</a><br>
+<a class="toc" href="#Glaucomys_volans_range_proj_compare">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Glaucomys_volans_range_proj_small_change"><b>&nbspChangements</b></a><br>
+<a class="toc" href="#Glaucomys_volans_range_proj_small_change">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Glaucomys_volans_range_proj_large_change">&nbsp&nbsp Aires de répartition NA</a><br>
+<a class="toc" href="#Glaucomys_volans_range_evaluation"><b>&nbspÉvaluation</b></a><br>
+<a class="toc" href="#Glaucomys_volans_range_evaluation">&nbsp&nbsp Aires de répartition QC</a></nav>
   </div>
   <div class="right">
-  <h1>Niches climatiques</h1>
+  <h1>Résultats détaillés / niches climatiques</h1>
   
+  <!-- <p>Modèles et résultats</p>
   
-  
-  <p>Modèles et résultats</p>
-  
-  <h4>climat</h4>
+  <h4>climatX2</h4>
   <p>Modèle avec uniquement des variables de climat</p>
   <h4>climatGAM</h4>
   <p>Modèle de climat plus flexible, mais forcé concave</p>
@@ -401,25 +408,22 @@
   <p>Modèle avec des variables d'habitat stables uniquement (Amérique du Nord)</p>
   <h4>habitatQC</h4>
   <p>Modèle avec des variables d'habitat stables uniquement (Québec)</p>
-  <h4>climat + habitatNA</h4>
+  <h4>climatX2 + habitatNA</h4>
   <p>Modèle avec les variables de climat et d'habitat (Amérique du Nord) dans le même modèle</p>
-  <h4>habitatNA (climat)</h4>
+  <h4>climatX2 (habitatNA)</h4>
   <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat</p>
-  <h4>habitatNA (climatGAM)</h4>
+  <h4>climatGAM (habitatNA)</h4>
   <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat GAM</p>
-  <h4>habitatQC (climat)</h4>
+  <h4>climatX2 (habitatQC)</h4>
   <p>Modèle des variables d'habitat locales clippées avec le modèle de climat</p>
-  <h4>habitatQC (climatGAM)</h4>
-  <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p>
-  
-  
-  <hr class="vspace"> 
+  <h4>climatGAM (habitatQC)</h4>
+  <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p> -->
   
   
   
   <hr class="vspace"> 
   <section id="Glaucomys_volans_data" class="section">
-  <h2 class="h2">Petit polatouche —— données</h2>  
+  <h2 class="h2">Petit polatouche —— Données</h2>  
   <!-- <section class="section"></section> -->
   <div class="subheader"></div>
   
@@ -437,7 +441,7 @@
           <a class="aim" target="_blank" href="url">
             <div class="infotop"><br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
-            <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_pic.png" alt="">
+            <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
             <div class="text" style="border: 0px solid green;">cc0</div>
           </div>
@@ -447,10 +451,10 @@
         </div>
       </div>
       <div class="col4">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_na.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_na.png" alt="">
       </div>
       <div class="col3">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_quebec.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_quebec.png" alt="">
       </div>
     </div>
     <div class="header">
@@ -460,13 +464,13 @@
     </div>
     <div class="rowshow">
       <div class="col4">
-        <img loading="lazy" style="height: 15vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_uncertainty.png" alt="">
+        <img loading="lazy" style="height: 15vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_uncertainty.png" alt="">
       </div>
       <div class="col4">
-        <img loading="lazy" style="height: 20vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_na_used.png" alt="">
+        <img loading="lazy" style="height: 20vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_na_used.png" alt="">
       </div>
       <div class="col3">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_quebec_used.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_quebec_used.png" alt="">
       </div>
     </div>
   </section>
@@ -475,19 +479,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_climat" class="section">
-  <h2 class="h2">Petit polatouche —— climat</h2> 
+  <section id="Glaucomys_volans_climatX2" class="section">
+  <h2 class="h2">Petit polatouche —— climatX2</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climatpanelfirst">
-      <div class="col1" id="Glaucomys_volans_climatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_sdm_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2panelfirst">
+      <div class="col1" id="Glaucomys_volans_climatX2panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_sdm_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -495,15 +499,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climatpanelsecond">
-      <div class="col1" id="Glaucomys_volans_climatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_range_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2panelsecond">
+      <div class="col1" id="Glaucomys_volans_climatX2panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_range_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_range_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -511,15 +515,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climatpanelthird">
-      <div class="col1" id="Glaucomys_volans_climatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_sdm_diff_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2panelthird">
+      <div class="col1" id="Glaucomys_volans_climatX2panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_range_diff_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -527,14 +531,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_climatpanelfourth">
-      <div class="col1" id="Glaucomys_volans_climatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2panelfourth">
+      <div class="col1" id="Glaucomys_volans_climatX2panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climatpanel8">
+      <div class="col2" id="Glaucomys_volans_climatX2panel8">
       </div>
     </div>
   </section>
@@ -543,35 +547,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_gam" class="section">
+  <section id="Glaucomys_volans_climatGAM" class="section">
   <h2 class="h2">Petit polatouche —— climatGAM</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_gam','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_gam','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatGAM','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatGAM','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gampanelfirst">
-      <div class="col1" id="Glaucomys_volans_gampanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_sdm_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAMpanelfirst">
+      <div class="col1" id="Glaucomys_volans_climatGAMpanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gampanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_sdm_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_gam','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_gam','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Glaucomys_volans_gampanelsecond">
-      <div class="col1" id="Glaucomys_volans_gampanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_range_large.png" alt="">
-      </div>
-      <div class="col2" id="Glaucomys_volans_gampanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_range_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatGAMpanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -579,15 +567,31 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_gam','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_gam','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatGAM','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatGAM','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gampanelthird">
-      <div class="col1" id="Glaucomys_volans_gampanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_sdm_diff_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAMpanelsecond">
+      <div class="col1" id="Glaucomys_volans_climatGAMpanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_range_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gampanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_range_diff_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatGAMpanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_range_proj_large.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatGAM','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatGAM','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_climatGAMpanelthird">
+      <div class="col1" id="Glaucomys_volans_climatGAMpanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_sdm_diff_large.png" alt="">
+      </div>
+      <div class="col2" id="Glaucomys_volans_climatGAMpanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -595,14 +599,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_gam','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_gam','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatGAM','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatGAM','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_gampanelfourth">
-      <div class="col1" id="Glaucomys_volans_gampanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAMpanelfourth">
+      <div class="col1" id="Glaucomys_volans_climatGAMpanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gampanel8">
+      <div class="col2" id="Glaucomys_volans_climatGAMpanel8">
       </div>
     </div>
   </section>
@@ -611,35 +615,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_habitat" class="section">
+  <section id="Glaucomys_volans_habitatNA" class="section">
   <h2 class="h2">Petit polatouche —— habitatNA</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_habitat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_habitat','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_habitatNA','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_habitatNA','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_habitatpanelfirst">
-      <div class="col1" id="Glaucomys_volans_habitatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_sdm_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatNApanelfirst">
+      <div class="col1" id="Glaucomys_volans_habitatNApanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_habitatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_sdm_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_habitat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_habitat','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Glaucomys_volans_habitatpanelsecond">
-      <div class="col1" id="Glaucomys_volans_habitatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_range_large.png" alt="">
-      </div>
-      <div class="col2" id="Glaucomys_volans_habitatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_range_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_habitatNApanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -647,15 +635,31 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_habitat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_habitat','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_habitatNA','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_habitatNA','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_habitatpanelthird">
-      <div class="col1" id="Glaucomys_volans_habitatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_sdm_diff_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatNApanelsecond">
+      <div class="col1" id="Glaucomys_volans_habitatNApanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_range_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_habitatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_range_diff_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_habitatNApanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_range_proj_large.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_habitatNA','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_habitatNA','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_habitatNApanelthird">
+      <div class="col1" id="Glaucomys_volans_habitatNApanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_sdm_diff_large.png" alt="">
+      </div>
+      <div class="col2" id="Glaucomys_volans_habitatNApanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -663,14 +667,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_habitat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_habitat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_habitatNA','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_habitatNA','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_habitatpanelfourth">
-      <div class="col1" id="Glaucomys_volans_habitatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_habitat_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatNApanelfourth">
+      <div class="col1" id="Glaucomys_volans_habitatNApanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatNA_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_habitatpanel8">
+      <div class="col2" id="Glaucomys_volans_habitatNApanel8">
       </div>
     </div>
   </section>
@@ -679,35 +683,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_small" class="section">
+  <section id="Glaucomys_volans_habitatQC" class="section">
   <h2 class="h2">Petit polatouche —— habitatQC</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_small','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_small','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_habitatQC','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_habitatQC','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_smallpanelfirst">
-      <div class="col1" id="Glaucomys_volans_smallpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_sdm_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatQCpanelfirst">
+      <div class="col1" id="Glaucomys_volans_habitatQCpanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_sdm_small.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_smallpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_sdm_proj_small.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_small','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_small','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Glaucomys_volans_smallpanelsecond">
-      <div class="col1" id="Glaucomys_volans_smallpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_range_small.png" alt="">
-      </div>
-      <div class="col2" id="Glaucomys_volans_smallpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_range_proj_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_habitatQCpanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_sdm_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -715,51 +703,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_small','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_small','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_habitatQC','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_habitatQC','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_smallpanelthird">
-      <div class="col1" id="Glaucomys_volans_smallpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_sdm_diff_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatQCpanelsecond">
+      <div class="col1" id="Glaucomys_volans_habitatQCpanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_range_small.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_smallpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_range_diff_small.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_small','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_small','panel8')"></button>
-    </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_smallpanelfourth">
-      <div class="col1" id="Glaucomys_volans_smallpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_small_marginal_effects.png" alt="">
-      </div>
-      <div class="col2" id="Glaucomys_volans_smallpanel8">
-      </div>
-    </div>
-  </section>
-  
-    
-
-  
-  <hr class="vspace"> 
-  <section id="Glaucomys_volans_climat + habitat" class="section">
-  <h2 class="h2">Petit polatouche —— climat + habitatNA</h2> 
-  
-    <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat + habitat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat + habitat','panel2')">SDM projeté &#8628</button>
-    </div>
-    <div class="row" id="Glaucomys_volans_climat + habitatpanelfirst">
-      <div class="col1" id="Glaucomys_volans_climat + habitatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_sdm_large.png" alt="">
-      </div>
-      <div class="col2" id="Glaucomys_volans_climat + habitatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_sdm_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_habitatQCpanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_range_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -767,31 +719,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat + habitat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat + habitat','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_habitatQC','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_habitatQC','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat + habitatpanelsecond">
-      <div class="col1" id="Glaucomys_volans_climat + habitatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_range_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatQCpanelthird">
+      <div class="col1" id="Glaucomys_volans_habitatQCpanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_sdm_diff_small.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat + habitatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_range_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat + habitat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat + habitat','panel6')">Différence range &#8628</button>
-    </div>
-    <div class="row" id="Glaucomys_volans_climat + habitatpanelthird">
-      <div class="col1" id="Glaucomys_volans_climat + habitatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_sdm_diff_large.png" alt="">
-      </div>
-      <div class="col2" id="Glaucomys_volans_climat + habitatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_range_diff_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_habitatQCpanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_range_diff_small.png" alt="">
       </div>
     </div>
   </section>
@@ -799,14 +735,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat + habitat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat + habitat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_habitatQC','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_habitatQC','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_climat + habitatpanelfourth">
-      <div class="col1" id="Glaucomys_volans_climat + habitatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat + habitat_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_habitatQCpanelfourth">
+      <div class="col1" id="Glaucomys_volans_habitatQCpanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_habitatQC_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat + habitatpanel8">
+      <div class="col2" id="Glaucomys_volans_habitatQCpanel8">
       </div>
     </div>
   </section>
@@ -815,19 +751,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_climat (habitat)" class="section">
-  <h2 class="h2">Petit polatouche —— habitatNA (climat)</h2> 
+  <section id="Glaucomys_volans_climatX2 + habitatNA" class="section">
+  <h2 class="h2">Petit polatouche —— climatX2 + habitatNA</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat (habitat)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat (habitat)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2 + habitatNA','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2 + habitatNA','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat (habitat)panelfirst">
-      <div class="col1" id="Glaucomys_volans_climat (habitat)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_sdm_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 + habitatNApanelfirst">
+      <div class="col1" id="Glaucomys_volans_climatX2 + habitatNApanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (habitat)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_sdm_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 + habitatNApanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -835,15 +771,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat (habitat)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat (habitat)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2 + habitatNA','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2 + habitatNA','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat (habitat)panelsecond">
-      <div class="col1" id="Glaucomys_volans_climat (habitat)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_range_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 + habitatNApanelsecond">
+      <div class="col1" id="Glaucomys_volans_climatX2 + habitatNApanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_range_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (habitat)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_range_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 + habitatNApanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -851,15 +787,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat (habitat)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat (habitat)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2 + habitatNA','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2 + habitatNA','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat (habitat)panelthird">
-      <div class="col1" id="Glaucomys_volans_climat (habitat)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_sdm_diff_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 + habitatNApanelthird">
+      <div class="col1" id="Glaucomys_volans_climatX2 + habitatNApanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (habitat)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_range_diff_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 + habitatNApanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -867,14 +803,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat (habitat)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat (habitat)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2 + habitatNA','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2 + habitatNA','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_climat (habitat)panelfourth">
-      <div class="col1" id="Glaucomys_volans_climat (habitat)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (habitat)_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 + habitatNApanelfourth">
+      <div class="col1" id="Glaucomys_volans_climatX2 + habitatNApanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 + habitatNA_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (habitat)panel8">
+      <div class="col2" id="Glaucomys_volans_climatX2 + habitatNApanel8">
       </div>
     </div>
   </section>
@@ -883,19 +819,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_gam (habitat)" class="section">
-  <h2 class="h2">Petit polatouche —— habitatNA (climatGAM)</h2> 
+  <section id="Glaucomys_volans_climatX2 (habitatNA)" class="section">
+  <h2 class="h2">Petit polatouche —— climatX2 (habitatNA)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_gam (habitat)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_gam (habitat)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2 (habitatNA)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2 (habitatNA)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gam (habitat)panelfirst">
-      <div class="col1" id="Glaucomys_volans_gam (habitat)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_sdm_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatNA)panelfirst">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatNA)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (habitat)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_sdm_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatNA)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -903,15 +839,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_gam (habitat)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_gam (habitat)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2 (habitatNA)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2 (habitatNA)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gam (habitat)panelsecond">
-      <div class="col1" id="Glaucomys_volans_gam (habitat)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_range_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatNA)panelsecond">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatNA)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_range_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (habitat)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_range_proj_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatNA)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -919,15 +855,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_gam (habitat)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_gam (habitat)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2 (habitatNA)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2 (habitatNA)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gam (habitat)panelthird">
-      <div class="col1" id="Glaucomys_volans_gam (habitat)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_sdm_diff_large.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatNA)panelthird">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatNA)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (habitat)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_range_diff_large.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatNA)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -935,14 +871,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_gam (habitat)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_gam (habitat)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2 (habitatNA)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2 (habitatNA)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_gam (habitat)panelfourth">
-      <div class="col1" id="Glaucomys_volans_gam (habitat)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (habitat)_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatNA)panelfourth">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatNA)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatNA)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (habitat)panel8">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatNA)panel8">
       </div>
     </div>
   </section>
@@ -951,19 +887,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_climat (small)" class="section">
-  <h2 class="h2">Petit polatouche —— habitatQC (climat)</h2> 
+  <section id="Glaucomys_volans_climatGAM (habitatNA)" class="section">
+  <h2 class="h2">Petit polatouche —— climatGAM (habitatNA)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat (small)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climat (small)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatGAM (habitatNA)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatGAM (habitatNA)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat (small)panelfirst">
-      <div class="col1" id="Glaucomys_volans_climat (small)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_sdm_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatNA)panelfirst">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatNA)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (small)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_sdm_proj_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatNA)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -971,15 +907,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat (small)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climat (small)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatGAM (habitatNA)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatGAM (habitatNA)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat (small)panelsecond">
-      <div class="col1" id="Glaucomys_volans_climat (small)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_range_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatNA)panelsecond">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatNA)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_range_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (small)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_range_proj_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatNA)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -987,15 +923,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat (small)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climat (small)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatGAM (habitatNA)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatGAM (habitatNA)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_climat (small)panelthird">
-      <div class="col1" id="Glaucomys_volans_climat (small)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_sdm_diff_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatNA)panelthird">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatNA)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (small)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_range_diff_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatNA)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1003,14 +939,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat (small)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climat (small)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatGAM (habitatNA)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatGAM (habitatNA)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_climat (small)panelfourth">
-      <div class="col1" id="Glaucomys_volans_climat (small)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_climat (small)_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatNA)panelfourth">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatNA)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatNA)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_climat (small)panel8">
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatNA)panel8">
       </div>
     </div>
   </section>
@@ -1019,19 +955,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_gam (small)" class="section">
-  <h2 class="h2">Petit polatouche —— habitatQC (climatGAM)</h2> 
+  <section id="Glaucomys_volans_climatX2 (habitatQC)" class="section">
+  <h2 class="h2">Petit polatouche —— climatX2 (habitatQC)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_gam (small)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_gam (small)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2 (habitatQC)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatX2 (habitatQC)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gam (small)panelfirst">
-      <div class="col1" id="Glaucomys_volans_gam (small)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_sdm_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatQC)panelfirst">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatQC)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_sdm_small.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (small)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_sdm_proj_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatQC)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_sdm_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1039,15 +975,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_gam (small)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_gam (small)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2 (habitatQC)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatX2 (habitatQC)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gam (small)panelsecond">
-      <div class="col1" id="Glaucomys_volans_gam (small)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_range_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatQC)panelsecond">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatQC)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_range_small.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (small)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_range_proj_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatQC)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_range_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1055,15 +991,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_gam (small)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Glaucomys_volans_gam (small)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2 (habitatQC)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatX2 (habitatQC)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_gam (small)panelthird">
-      <div class="col1" id="Glaucomys_volans_gam (small)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_sdm_diff_small.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatQC)panelthird">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatQC)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_sdm_diff_small.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (small)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_range_diff_small.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatQC)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_range_diff_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1071,30 +1007,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_gam (small)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_gam (small)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2 (habitatQC)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatX2 (habitatQC)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Glaucomys_volans_gam (small)panelfourth">
-      <div class="col1" id="Glaucomys_volans_gam (small)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_gam (small)_marginal_effects.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatX2 (habitatQC)panelfourth">
+      <div class="col1" id="Glaucomys_volans_climatX2 (habitatQC)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatX2 (habitatQC)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Glaucomys_volans_gam (small)panel8">
-      </div>
-    </div>
-  </section>
-  
-    
-
-  
-  <hr class="vspace"> 
-  <section id="Glaucomys_volans_compare" class="section">
-  <h2 class="h2">Petit polatouche —— comparaison</h2> 
-    <div class="header">
-      <button class="showmore" onclick="showmorezero('Glaucomys_volans_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
-    </div>
-    <div class="row" id="Glaucomys_volans_comparepanelzero">
-      <div class="col1" id="Glaucomys_volans_comparepanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_sdm_compare.png" alt="">
+      <div class="col2" id="Glaucomys_volans_climatX2 (habitatQC)panel8">
       </div>
     </div>
   </section>
@@ -1103,14 +1023,66 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_compare_localized" class="section">
-  <h2 class="h2">Petit polatouche —— comparaison localisée</h2> 
+  <section id="Glaucomys_volans_climatGAM (habitatQC)" class="section">
+  <h2 class="h2">Petit polatouche —— climatGAM (habitatQC)</h2> 
+  
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Glaucomys_volans_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatGAM (habitatQC)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Glaucomys_volans_climatGAM (habitatQC)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Glaucomys_volans_compare_localizedpanelzero">
-      <div class="col1" id="Glaucomys_volans_compare_localizedpanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_sdm_compare_localized.png" alt="">
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatQC)panelfirst">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatQC)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_sdm_small.png" alt="">
+      </div>
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatQC)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_sdm_proj_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatGAM (habitatQC)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Glaucomys_volans_climatGAM (habitatQC)','panel4')">Range projeté &#8628</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatQC)panelsecond">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatQC)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_range_small.png" alt="">
+      </div>
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatQC)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_range_proj_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatGAM (habitatQC)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Glaucomys_volans_climatGAM (habitatQC)','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatQC)panelthird">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatQC)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_sdm_diff_small.png" alt="">
+      </div>
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatQC)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_range_diff_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header"><!--<header>-->
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatGAM (habitatQC)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Glaucomys_volans_climatGAM (habitatQC)','panel8')"></button>
+    </div><!--</header>-->
+    <div class="row" id="Glaucomys_volans_climatGAM (habitatQC)panelfourth">
+      <div class="col1" id="Glaucomys_volans_climatGAM (habitatQC)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_climatGAM (habitatQC)_marginal_effects.png" alt="">
+      </div>
+      <div class="col2" id="Glaucomys_volans_climatGAM (habitatQC)panel8">
       </div>
     </div>
   </section>
@@ -1119,14 +1091,110 @@
 
   
   <hr class="vspace"> 
-  <section id="Glaucomys_volans_proj_compare" class="section">
-  <h2 class="h2">Petit polatouche —— projection</h2> 
+  <section id="Glaucomys_volans_sdm_compare" class="section">
+  <h2 class="h2">Petit polatouche —— Modèles QC</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Glaucomys_volans_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_sdm_compare','panel0')">Comparaison des modèles actuels pour le Québec</button>
     </div>
-    <div class="row" id="Glaucomys_volans_proj_comparepanelzero">
-      <div class="col1" id="Glaucomys_volans_proj_comparepanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Glaucomys_volans_sdm_proj_compare.png" alt="">
+    <div class="row" id="Glaucomys_volans_sdm_comparepanelzero">
+      <div class="col1" id="Glaucomys_volans_sdm_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_sdm_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Glaucomys_volans_sdm_compare_localized" class="section">
+  <h2 class="h2">Petit polatouche —— Modèles QC local</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_sdm_compare_localized','panel0')">Comparaison des modèles actuels centrés sur les occurrences</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_sdm_compare_localizedpanelzero">
+      <div class="col1" id="Glaucomys_volans_sdm_compare_localizedpanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Glaucomys_volans_sdm_proj_compare" class="section">
+  <h2 class="h2">Petit polatouche —— Modèles QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_sdm_proj_compare','panel0')">Projections des modèles pour le Québec</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_sdm_proj_comparepanelzero">
+      <div class="col1" id="Glaucomys_volans_sdm_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_sdm_proj_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Glaucomys_volans_range_proj_compare" class="section">
+  <h2 class="h2">Petit polatouche —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_range_proj_compare','panel0')">Projections des aires de répartition pour le Québec</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_range_proj_comparepanelzero">
+      <div class="col1" id="Glaucomys_volans_range_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_range_proj_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Glaucomys_volans_range_proj_small_change" class="section">
+  <h2 class="h2">Petit polatouche —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_range_proj_small_change','panel0')">Projections des changements dans les aires de répartition pour le Québec</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_range_proj_small_changepanelzero">
+      <div class="col1" id="Glaucomys_volans_range_proj_small_changepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_range_proj_small_change.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Glaucomys_volans_range_proj_large_change" class="section">
+  <h2 class="h2">Petit polatouche —— Aires de répartition NA</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_range_proj_large_change','panel0')">Projections des changements dans les aires de répartition pour l'Amérique du Nord</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_range_proj_large_changepanelzero">
+      <div class="col1" id="Glaucomys_volans_range_proj_large_changepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_range_proj_large_change.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Glaucomys_volans_range_evaluation" class="section">
+  <h2 class="h2">Petit polatouche —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Glaucomys_volans_range_evaluation','panel0')">Aires de distribution provenant des modèles soumis à l'évaluation</button>
+    </div>
+    <div class="row" id="Glaucomys_volans_range_evaluationpanelzero">
+      <div class="col1" id="Glaucomys_volans_range_evaluationpanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Glaucomys_volans_range_evaluation.png" alt="">
       </div>
     </div>
   </section>

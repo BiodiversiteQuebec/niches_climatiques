@@ -11,7 +11,9 @@ execute:
 
 ## Variables par espèces
 
-Un ensemble de variables préliminaires a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents gouvernementaux traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que des variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
+Un ensemble de variables a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que d es variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles. [ajout forêt pour râle]{style="background-color: #ffeb3b; padding: 0 0px;"}  
+
+<!-- Justifier le choix des variables par espèce et réexpliquer les limitations ? -->
  
 ```{r}
 #| cache: false
@@ -19,18 +21,12 @@ suppressWarnings(source("_setup.R"))
 #source("_setup.R")
 ```
 
-<!--
-```{=latex}
-\layout
-```
--->
 
 ```{r}
 #| label: tbl-species-vars
 #| tbl-cap: "Variables d'habitat utilisées pour chaque espèce à l'échelle de l'Amérique du Nord (NA) ou du Québec (QC)"
 
 desc <- read.csv("data/variables.csv")
-
 
 species_vars <- list(
 `Pseudacris triseriata` = c("wetland", "marais", "marecage", "earthenv_geomflat", "flat"), 
@@ -93,11 +89,13 @@ tableau <- sv |>
 
 if (knitr::is_latex_output()) {
   tableau <- tableau |>
-    width(j = "Groupe", width = pdfw * 0.2) |>
-    width(j = "Espèce",  width = pdfw * 0.35) |>
-    width(j = "Variables",  width = pdfw * 0.35) |>
+    width(j = "Groupe", width = pdfw * 0.175) |>
+    width(j = "Espèce",  width = pdfw * 0.325) |>
+    width(j = "Variables",  width = pdfw * 0.40) |>
     width(j = "NA",  width = pdfw * 0.05) |>
-    width(j = "QC",  width = pdfw * 0.05)
+    width(j = "QC",  width = pdfw * 0.05) |>
+    #height(height = .05) |>
+    theme_pdf()
 } else {
   tableau <- tableau |>
     set_table_properties(width = 1, layout = "autofit")
@@ -120,7 +118,7 @@ tableau
 
 ## Périodes de nidification (oiseaux)
 
-Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées (@tbl-nesting). Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
+Pour les oiseaux, les modèles ont été restreints aux périodes de nidification des espèces ciblées. Des modèles pourraient également être réalisés pour les espèces susceptibles d'hiverner sous nos latitudes avec les changements climatiques. Les périodes de nidification telles que définies par le jeu de données _eBird Status and Trends_ [@fink_ebird_status_2024] ont été utilisées (@tbl-nesting) pour délimiter les observations associées à la période de nidification. Ces périodes pourraient être modifiées pour mieux réfléter les périodes de nidifications au Québec.
 
 ```{r}
 #| label: tbl-nesting
@@ -156,12 +154,22 @@ rownames(x) <- 1:nrow(x)
 #    #)
 
 
-x |>
+x <- x |>
   flextable() |>
   theme_vanilla() |>
   set_table_properties(width = 1, layout = "autofit") |>
   #fontsize(size = 8, part = "all") |>
   padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   paginate(init = TRUE, hdr_ftr = TRUE) 
+
+if (knitr::is_latex_output()) {
+  x <- x |>  
+    theme_pdf()
+} else{
+  x <- x |>
+    set_table_properties(width = 1, layout = "autofit")
+}
+
+x
 
 ```

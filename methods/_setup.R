@@ -1,20 +1,45 @@
 
-library(tidyr)
+library(terra) 
+library(sf)
+library(geodata)
+library(rmapshaper)
 library(dplyr)
+library(rnaturalearth)
+library(sdmtools)
+library(tidyr)
 library(knitr)
 library(kableExtra)
 library(scam)
 library(gt)
 library(rstac)
 library(flextable)
+library(officer)
 
 
 set_flextable_defaults(
   font.size = 8, 
-  border.color = "grey70"
+  border.color = "black"
 )
 
+### Table "theme" for latex
+theme_pdf <- function(ft) {
+  header_border <- fp_border(width = 0.75, color = "black")#, style = "dotted")
+  body_border <- fp_border(width = 0.25, color = "black")#, style = "dotted")
+  ft |>
+    fontsize(size = 8, part = "all") |>
+    border_remove() |>
+    hline_top(part = "header", border = header_border) |>
+    hline_bottom(part = "header", border = header_border) |>
+    hline(part = "body", border = body_border) |>
+    hline_bottom(part = "body", border = header_border) |>  
+    fix_border_issues(part = "all") |>
+    height(height = 0.05, part = "body") |>
+    hrule(rule = "exact", part = "body")
+}
+
 pdfw <- 8.5 - (2 * 1.25)
+
+epsg <- 6624 #32618
 
 spnames <- list(list("Pseudacris triseriata", "Rainette faux-grillon de l'Ouest", "Rainettes"), list("Hemidactylium scutatum", 
     "Salamandre à quatre orteils", "Salamandres"), list("Gyrinophilus porphyriticus", "Salamandre pourpre", "Salamandres"), list("Desmognathus ochrophaeus", 

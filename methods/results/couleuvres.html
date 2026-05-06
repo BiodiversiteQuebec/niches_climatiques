@@ -41,7 +41,6 @@
   }
   
   
-  
   div.right {
     width: 80%; 
     float: left; 
@@ -98,7 +97,7 @@
     height: 1vh;
     margin: 0vh;
     padding: 0vh;
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
   }
   
   .infotop {
@@ -146,7 +145,7 @@
   }
   
   .section{
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
     padding-left: 2vw;
     /* border-bottom: 2px solid seagreen; */
     /* border-right: 2px solid seagreen; */
@@ -171,7 +170,7 @@
   .shown {
     display: block;
     padding-top: 0vw;
-    border-left: 0.25vmin solid seagreen;
+    border-left: 0.0vmin solid seagreen;
     <!-- border-right: 2px solid seagreen; -->
   }
   
@@ -204,6 +203,7 @@
   .showmore {
     background: none;
     border: none; /* none */
+    padding-top: 5vh;
     padding-bottom: 3vh;
     text-align: center;
     text-decoration: none;
@@ -212,12 +212,12 @@
     font-size: 2.25vmin;
     font-weight: 1200;
     font-family:'Roboto Mono'; 
-    cursor: pointer;
-    height: 2vmin;
+    /* cursor: pointer; */
+    height: 3vmin;
   }
   
   .showmore:hover {
-    opacity: 0.50;
+    opacity: 0.99;
     filter: alpha(opacity=100);
   }
   
@@ -371,43 +371,59 @@
   <body>
   <div style="display:inline-block; width:100%;">
   <div class="left">
-  <nav id="toc"><a class="toc" href="#Lampropeltis_triangulum_data"><b>Couleuvre tachetée</b></a><br>
-<a class="toc" href="#Lampropeltis_triangulum_data">&nbsp données</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_climat">&nbsp climat</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_gam">&nbsp climatGAM</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_habitat">&nbsp habitatNA</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_small">&nbsp habitatQC</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_climat + habitat">&nbsp climat + habitatNA</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_climat (habitat)">&nbsp habitatNA (climat)</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_gam (habitat)">&nbsp habitatNA (climatGAM)</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_climat (small)">&nbsp habitatQC (climat)</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_compare">&nbsp comparaison</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_compare_localized">&nbsp comparaison localisée</a><br>
-<a class="toc" href="#Lampropeltis_triangulum_proj_compare">&nbsp projection</a><br>
-<a class="toc" href="#Nerodia_sipedon_data"><b>Couleuvre d'eau</b></a><br>
-<a class="toc" href="#Nerodia_sipedon_data">&nbsp données</a><br>
-<a class="toc" href="#Nerodia_sipedon_climat">&nbsp climat</a><br>
-<a class="toc" href="#Nerodia_sipedon_gam">&nbsp climatGAM</a><br>
-<a class="toc" href="#Nerodia_sipedon_habitat">&nbsp habitatNA</a><br>
-<a class="toc" href="#Nerodia_sipedon_small">&nbsp habitatQC</a><br>
-<a class="toc" href="#Nerodia_sipedon_climat + habitat">&nbsp climat + habitatNA</a><br>
-<a class="toc" href="#Nerodia_sipedon_climat (habitat)">&nbsp habitatNA (climat)</a><br>
-<a class="toc" href="#Nerodia_sipedon_gam (habitat)">&nbsp habitatNA (climatGAM)</a><br>
-<a class="toc" href="#Nerodia_sipedon_climat (small)">&nbsp habitatQC (climat)</a><br>
-<a class="toc" href="#Nerodia_sipedon_gam (small)">&nbsp habitatQC (climatGAM)</a><br>
-<a class="toc" href="#Nerodia_sipedon_compare">&nbsp comparaison</a><br>
-<a class="toc" href="#Nerodia_sipedon_compare_localized">&nbsp comparaison localisée</a><br>
-<a class="toc" href="#Nerodia_sipedon_proj_compare">&nbsp projection</a></nav>
+  <nav id="toc"><a class="toc" href="#Lampropeltis_triangulum_data"><span style='font-weight:bold; font-size:1.5em; color:seagreen; display:inline-block; padding-top: 4vh; padding-bottom: 1vh;'>Couleuvre tachetée</span></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_data"><b>&nbspDonnées</b></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatX2"><b>&nbspModèles</b></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatX2">&nbsp&nbsp climatX2</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatGAM">&nbsp&nbsp climatGAM</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_habitatNA">&nbsp&nbsp habitatNA</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_habitatQC">&nbsp&nbsp habitatQC</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatX2 + habitatNA">&nbsp&nbsp climatX2 + habitatNA</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatX2 (habitatNA)">&nbsp&nbsp climatX2 (habitatNA)</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatGAM (habitatNA)">&nbsp&nbsp climatGAM (habitatNA)</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatX2 (habitatQC)">&nbsp&nbsp climatX2 (habitatQC)</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_climatGAM (habitatQC)">&nbsp&nbsp climatGAM (habitatQC)</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_sdm_compare"><b>&nbspComparaisons</b></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_sdm_compare">&nbsp&nbsp Modèles QC</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_sdm_compare_localized">&nbsp&nbsp Modèles QC local</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_sdm_proj_compare"><b>&nbspProjections</b></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_sdm_proj_compare">&nbsp&nbsp Modèles QC</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_range_proj_compare">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_range_proj_small_change"><b>&nbspChangements</b></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_range_proj_small_change">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_range_proj_large_change">&nbsp&nbsp Aires de répartition NA</a><br>
+<a class="toc" href="#Lampropeltis_triangulum_range_evaluation"><b>&nbspÉvaluation</b></a><br>
+<a class="toc" href="#Lampropeltis_triangulum_range_evaluation">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Nerodia_sipedon_data"><span style='font-weight:bold; font-size:1.5em; color:seagreen; display:inline-block; padding-top: 4vh; padding-bottom: 1vh;'>Couleuvre d'eau</span></a><br>
+<a class="toc" href="#Nerodia_sipedon_data"><b>&nbspDonnées</b></a><br>
+<a class="toc" href="#Nerodia_sipedon_climatX2"><b>&nbspModèles</b></a><br>
+<a class="toc" href="#Nerodia_sipedon_climatX2">&nbsp&nbsp climatX2</a><br>
+<a class="toc" href="#Nerodia_sipedon_climatGAM">&nbsp&nbsp climatGAM</a><br>
+<a class="toc" href="#Nerodia_sipedon_habitatNA">&nbsp&nbsp habitatNA</a><br>
+<a class="toc" href="#Nerodia_sipedon_habitatQC">&nbsp&nbsp habitatQC</a><br>
+<a class="toc" href="#Nerodia_sipedon_climatX2 + habitatNA">&nbsp&nbsp climatX2 + habitatNA</a><br>
+<a class="toc" href="#Nerodia_sipedon_climatX2 (habitatNA)">&nbsp&nbsp climatX2 (habitatNA)</a><br>
+<a class="toc" href="#Nerodia_sipedon_climatGAM (habitatNA)">&nbsp&nbsp climatGAM (habitatNA)</a><br>
+<a class="toc" href="#Nerodia_sipedon_climatX2 (habitatQC)">&nbsp&nbsp climatX2 (habitatQC)</a><br>
+<a class="toc" href="#Nerodia_sipedon_climatGAM (habitatQC)">&nbsp&nbsp climatGAM (habitatQC)</a><br>
+<a class="toc" href="#Nerodia_sipedon_sdm_compare"><b>&nbspComparaisons</b></a><br>
+<a class="toc" href="#Nerodia_sipedon_sdm_compare">&nbsp&nbsp Modèles QC</a><br>
+<a class="toc" href="#Nerodia_sipedon_sdm_compare_localized">&nbsp&nbsp Modèles QC local</a><br>
+<a class="toc" href="#Nerodia_sipedon_sdm_proj_compare"><b>&nbspProjections</b></a><br>
+<a class="toc" href="#Nerodia_sipedon_sdm_proj_compare">&nbsp&nbsp Modèles QC</a><br>
+<a class="toc" href="#Nerodia_sipedon_range_proj_compare">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Nerodia_sipedon_range_proj_small_change"><b>&nbspChangements</b></a><br>
+<a class="toc" href="#Nerodia_sipedon_range_proj_small_change">&nbsp&nbsp Aires de répartition QC</a><br>
+<a class="toc" href="#Nerodia_sipedon_range_proj_large_change">&nbsp&nbsp Aires de répartition NA</a><br>
+<a class="toc" href="#Nerodia_sipedon_range_evaluation"><b>&nbspÉvaluation</b></a><br>
+<a class="toc" href="#Nerodia_sipedon_range_evaluation">&nbsp&nbsp Aires de répartition QC</a></nav>
   </div>
   <div class="right">
-  <h1>Niches climatiques</h1>
+  <h1>Résultats détaillés / niches climatiques</h1>
   
+  <!-- <p>Modèles et résultats</p>
   
-  
-  <p>Modèles et résultats</p>
-  
-  <h4>climat</h4>
+  <h4>climatX2</h4>
   <p>Modèle avec uniquement des variables de climat</p>
   <h4>climatGAM</h4>
   <p>Modèle de climat plus flexible, mais forcé concave</p>
@@ -415,25 +431,22 @@
   <p>Modèle avec des variables d'habitat stables uniquement (Amérique du Nord)</p>
   <h4>habitatQC</h4>
   <p>Modèle avec des variables d'habitat stables uniquement (Québec)</p>
-  <h4>climat + habitatNA</h4>
+  <h4>climatX2 + habitatNA</h4>
   <p>Modèle avec les variables de climat et d'habitat (Amérique du Nord) dans le même modèle</p>
-  <h4>habitatNA (climat)</h4>
+  <h4>climatX2 (habitatNA)</h4>
   <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat</p>
-  <h4>habitatNA (climatGAM)</h4>
+  <h4>climatGAM (habitatNA)</h4>
   <p>Modèle basé sur l'habitat uniquement clippé par le modèle de climat GAM</p>
-  <h4>habitatQC (climat)</h4>
+  <h4>climatX2 (habitatQC)</h4>
   <p>Modèle des variables d'habitat locales clippées avec le modèle de climat</p>
-  <h4>habitatQC (climatGAM)</h4>
-  <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p>
-  
-  
-  <hr class="vspace"> 
+  <h4>climatGAM (habitatQC)</h4>
+  <p>Modèle des variables d'habitat locales clippées avec le modèle de climat GAM</p> -->
   
   
   
   <hr class="vspace"> 
   <section id="Lampropeltis_triangulum_data" class="section">
-  <h2 class="h2">Couleuvre tachetée —— données</h2>  
+  <h2 class="h2">Couleuvre tachetée —— Données</h2>  
   <!-- <section class="section"></section> -->
   <div class="subheader"></div>
   
@@ -451,9 +464,9 @@
           <a class="aim" target="_blank" href="url">
             <div class="infotop"><br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
-            <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_pic.png" alt="">
+            <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
-            <div class="text" style="border: 0px solid green;">(c) Charlie O'Brien, no rights reserved (CC0)</div>
+            <div class="text" style="border: 0px solid green;">(c) Bonnie Isaac, no rights reserved (CC0)</div>
           </div>
           <!-- </a> -->
           <div class="infobottom"><i>Lampropeltis triangulum</i></div>
@@ -461,10 +474,10 @@
         </div>
       </div>
       <div class="col4">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_na.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_na.png" alt="">
       </div>
       <div class="col3">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_quebec.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_quebec.png" alt="">
       </div>
     </div>
     <div class="header">
@@ -474,13 +487,13 @@
     </div>
     <div class="rowshow">
       <div class="col4">
-        <img loading="lazy" style="height: 15vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_uncertainty.png" alt="">
+        <img loading="lazy" style="height: 15vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_uncertainty.png" alt="">
       </div>
       <div class="col4">
-        <img loading="lazy" style="height: 20vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_na_used.png" alt="">
+        <img loading="lazy" style="height: 20vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_na_used.png" alt="">
       </div>
       <div class="col3">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_quebec_used.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_quebec_used.png" alt="">
       </div>
     </div>
   </section>
@@ -489,19 +502,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_climat" class="section">
-  <h2 class="h2">Couleuvre tachetée —— climat</h2> 
+  <section id="Lampropeltis_triangulum_climatX2" class="section">
+  <h2 class="h2">Couleuvre tachetée —— climatX2</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climatpanelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_climatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_sdm_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2panelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_sdm_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -509,15 +522,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climatpanelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_climatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_range_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2panelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_range_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_range_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -525,15 +538,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climatpanelthird">
-      <div class="col1" id="Lampropeltis_triangulum_climatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_sdm_diff_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2panelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_range_diff_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -541,14 +554,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_climatpanelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_climatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2panelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climatpanel8">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2panel8">
       </div>
     </div>
   </section>
@@ -557,35 +570,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_gam" class="section">
+  <section id="Lampropeltis_triangulum_climatGAM" class="section">
   <h2 class="h2">Couleuvre tachetée —— climatGAM</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_gam','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_gam','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatGAM','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatGAM','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gampanelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_gampanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_sdm_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAMpanelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAMpanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gampanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_sdm_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_gam','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_gam','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Lampropeltis_triangulum_gampanelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_gampanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_range_large.png" alt="">
-      </div>
-      <div class="col2" id="Lampropeltis_triangulum_gampanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_range_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAMpanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -593,15 +590,31 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_gam','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_gam','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatGAM','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatGAM','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gampanelthird">
-      <div class="col1" id="Lampropeltis_triangulum_gampanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_sdm_diff_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAMpanelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAMpanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_range_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gampanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_range_diff_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAMpanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_range_proj_large.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatGAM','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatGAM','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_climatGAMpanelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAMpanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_sdm_diff_large.png" alt="">
+      </div>
+      <div class="col2" id="Lampropeltis_triangulum_climatGAMpanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -609,14 +622,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_gam','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_gam','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatGAM','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatGAM','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_gampanelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_gampanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAMpanelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAMpanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gampanel8">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAMpanel8">
       </div>
     </div>
   </section>
@@ -625,35 +638,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_habitat" class="section">
+  <section id="Lampropeltis_triangulum_habitatNA" class="section">
   <h2 class="h2">Couleuvre tachetée —— habitatNA</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_habitat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_habitat','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_habitatNA','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_habitatNA','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_habitatpanelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_habitatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_sdm_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatNApanelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_habitatNApanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_habitatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_sdm_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_habitat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_habitat','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Lampropeltis_triangulum_habitatpanelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_habitatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_range_large.png" alt="">
-      </div>
-      <div class="col2" id="Lampropeltis_triangulum_habitatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_range_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_habitatNApanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -661,15 +658,31 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_habitat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_habitat','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_habitatNA','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_habitatNA','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_habitatpanelthird">
-      <div class="col1" id="Lampropeltis_triangulum_habitatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_sdm_diff_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatNApanelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_habitatNApanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_range_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_habitatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_range_diff_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_habitatNApanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_range_proj_large.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_habitatNA','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_habitatNA','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_habitatNApanelthird">
+      <div class="col1" id="Lampropeltis_triangulum_habitatNApanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_sdm_diff_large.png" alt="">
+      </div>
+      <div class="col2" id="Lampropeltis_triangulum_habitatNApanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -677,14 +690,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_habitat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_habitat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_habitatNA','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_habitatNA','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_habitatpanelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_habitatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_habitat_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatNApanelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_habitatNApanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatNA_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_habitatpanel8">
+      <div class="col2" id="Lampropeltis_triangulum_habitatNApanel8">
       </div>
     </div>
   </section>
@@ -693,35 +706,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_small" class="section">
+  <section id="Lampropeltis_triangulum_habitatQC" class="section">
   <h2 class="h2">Couleuvre tachetée —— habitatQC</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_small','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_small','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_habitatQC','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_habitatQC','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_smallpanelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_smallpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_sdm_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatQCpanelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_habitatQCpanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_sdm_small.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_smallpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_sdm_proj_small.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_small','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_small','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Lampropeltis_triangulum_smallpanelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_smallpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_range_small.png" alt="">
-      </div>
-      <div class="col2" id="Lampropeltis_triangulum_smallpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_range_proj_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_habitatQCpanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_sdm_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -729,51 +726,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_small','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_small','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_habitatQC','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_habitatQC','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_smallpanelthird">
-      <div class="col1" id="Lampropeltis_triangulum_smallpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_sdm_diff_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatQCpanelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_habitatQCpanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_range_small.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_smallpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_range_diff_small.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_small','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_small','panel8')"></button>
-    </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_smallpanelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_smallpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_small_marginal_effects.png" alt="">
-      </div>
-      <div class="col2" id="Lampropeltis_triangulum_smallpanel8">
-      </div>
-    </div>
-  </section>
-  
-    
-
-  
-  <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_climat + habitat" class="section">
-  <h2 class="h2">Couleuvre tachetée —— climat + habitatNA</h2> 
-  
-    <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat + habitat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat + habitat','panel2')">SDM projeté &#8628</button>
-    </div>
-    <div class="row" id="Lampropeltis_triangulum_climat + habitatpanelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_climat + habitatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_sdm_large.png" alt="">
-      </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat + habitatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_sdm_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_habitatQCpanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_range_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -781,31 +742,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat + habitat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat + habitat','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_habitatQC','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_habitatQC','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat + habitatpanelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_climat + habitatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_range_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatQCpanelthird">
+      <div class="col1" id="Lampropeltis_triangulum_habitatQCpanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_sdm_diff_small.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat + habitatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_range_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat + habitat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat + habitat','panel6')">Différence range &#8628</button>
-    </div>
-    <div class="row" id="Lampropeltis_triangulum_climat + habitatpanelthird">
-      <div class="col1" id="Lampropeltis_triangulum_climat + habitatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_sdm_diff_large.png" alt="">
-      </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat + habitatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_range_diff_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_habitatQCpanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_range_diff_small.png" alt="">
       </div>
     </div>
   </section>
@@ -813,14 +758,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat + habitat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat + habitat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_habitatQC','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_habitatQC','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_climat + habitatpanelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_climat + habitatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat + habitat_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_habitatQCpanelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_habitatQCpanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_habitatQC_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat + habitatpanel8">
+      <div class="col2" id="Lampropeltis_triangulum_habitatQCpanel8">
       </div>
     </div>
   </section>
@@ -829,19 +774,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_climat (habitat)" class="section">
-  <h2 class="h2">Couleuvre tachetée —— habitatNA (climat)</h2> 
+  <section id="Lampropeltis_triangulum_climatX2 + habitatNA" class="section">
+  <h2 class="h2">Couleuvre tachetée —— climatX2 + habitatNA</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat (habitat)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat (habitat)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2 + habitatNA','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2 + habitatNA','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat (habitat)panelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_climat (habitat)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_sdm_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 + habitatNApanelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 + habitatNApanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (habitat)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_sdm_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 + habitatNApanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -849,15 +794,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat (habitat)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat (habitat)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2 + habitatNA','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2 + habitatNA','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat (habitat)panelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_climat (habitat)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_range_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 + habitatNApanelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 + habitatNApanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_range_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (habitat)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_range_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 + habitatNApanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -865,15 +810,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat (habitat)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat (habitat)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2 + habitatNA','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2 + habitatNA','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat (habitat)panelthird">
-      <div class="col1" id="Lampropeltis_triangulum_climat (habitat)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_sdm_diff_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 + habitatNApanelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 + habitatNApanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (habitat)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_range_diff_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 + habitatNApanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -881,14 +826,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat (habitat)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat (habitat)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2 + habitatNA','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2 + habitatNA','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_climat (habitat)panelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_climat (habitat)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (habitat)_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 + habitatNApanelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 + habitatNApanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 + habitatNA_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (habitat)panel8">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 + habitatNApanel8">
       </div>
     </div>
   </section>
@@ -897,19 +842,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_gam (habitat)" class="section">
-  <h2 class="h2">Couleuvre tachetée —— habitatNA (climatGAM)</h2> 
+  <section id="Lampropeltis_triangulum_climatX2 (habitatNA)" class="section">
+  <h2 class="h2">Couleuvre tachetée —— climatX2 (habitatNA)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_gam (habitat)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_gam (habitat)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2 (habitatNA)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2 (habitatNA)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gam (habitat)panelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_gam (habitat)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_sdm_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatNA)panelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (habitat)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_sdm_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -917,15 +862,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_gam (habitat)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_gam (habitat)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2 (habitatNA)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2 (habitatNA)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gam (habitat)panelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_gam (habitat)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_range_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatNA)panelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_range_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (habitat)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_range_proj_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -933,15 +878,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_gam (habitat)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_gam (habitat)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2 (habitatNA)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2 (habitatNA)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gam (habitat)panelthird">
-      <div class="col1" id="Lampropeltis_triangulum_gam (habitat)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_sdm_diff_large.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatNA)panelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (habitat)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_range_diff_large.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -949,14 +894,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_gam (habitat)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_gam (habitat)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2 (habitatNA)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2 (habitatNA)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_gam (habitat)panelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_gam (habitat)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (habitat)_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatNA)panelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatNA)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (habitat)panel8">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatNA)panel8">
       </div>
     </div>
   </section>
@@ -965,19 +910,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_climat (small)" class="section">
-  <h2 class="h2">Couleuvre tachetée —— habitatQC (climat)</h2> 
+  <section id="Lampropeltis_triangulum_climatGAM (habitatNA)" class="section">
+  <h2 class="h2">Couleuvre tachetée —— climatGAM (habitatNA)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat (small)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climat (small)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatGAM (habitatNA)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatGAM (habitatNA)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat (small)panelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_climat (small)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_sdm_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatNA)panelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (small)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_sdm_proj_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -985,15 +930,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat (small)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climat (small)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatGAM (habitatNA)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatGAM (habitatNA)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat (small)panelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_climat (small)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_range_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatNA)panelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_range_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (small)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_range_proj_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1001,15 +946,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat (small)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climat (small)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatGAM (habitatNA)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatGAM (habitatNA)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_climat (small)panelthird">
-      <div class="col1" id="Lampropeltis_triangulum_climat (small)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_sdm_diff_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatNA)panelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (small)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_range_diff_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1017,14 +962,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat (small)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climat (small)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatGAM (habitatNA)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatGAM (habitatNA)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_climat (small)panelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_climat (small)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_climat (small)_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatNA)panelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatNA)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_climat (small)panel8">
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatNA)panel8">
       </div>
     </div>
   </section>
@@ -1033,19 +978,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_gam (small)" class="section">
-  <h2 class="h2">Couleuvre tachetée —— habitatQC (climatGAM)</h2> 
+  <section id="Lampropeltis_triangulum_climatX2 (habitatQC)" class="section">
+  <h2 class="h2">Couleuvre tachetée —— climatX2 (habitatQC)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_gam (small)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_gam (small)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2 (habitatQC)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatX2 (habitatQC)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gam (small)panelfirst">
-      <div class="col1" id="Lampropeltis_triangulum_gam (small)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_sdm_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatQC)panelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_sdm_small.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (small)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_sdm_proj_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_sdm_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1053,15 +998,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_gam (small)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_gam (small)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2 (habitatQC)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatX2 (habitatQC)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gam (small)panelsecond">
-      <div class="col1" id="Lampropeltis_triangulum_gam (small)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_range_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatQC)panelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_range_small.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (small)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_range_proj_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_range_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1069,15 +1014,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_gam (small)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_gam (small)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2 (habitatQC)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatX2 (habitatQC)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_gam (small)panelthird">
-      <div class="col1" id="Lampropeltis_triangulum_gam (small)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_sdm_diff_small.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatQC)panelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_sdm_diff_small.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (small)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_range_diff_small.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_range_diff_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1085,30 +1030,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_gam (small)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_gam (small)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2 (habitatQC)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatX2 (habitatQC)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Lampropeltis_triangulum_gam (small)panelfourth">
-      <div class="col1" id="Lampropeltis_triangulum_gam (small)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_gam (small)_marginal_effects.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatX2 (habitatQC)panelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatX2 (habitatQC)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Lampropeltis_triangulum_gam (small)panel8">
-      </div>
-    </div>
-  </section>
-  
-    
-
-  
-  <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_compare" class="section">
-  <h2 class="h2">Couleuvre tachetée —— comparaison</h2> 
-    <div class="header">
-      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
-    </div>
-    <div class="row" id="Lampropeltis_triangulum_comparepanelzero">
-      <div class="col1" id="Lampropeltis_triangulum_comparepanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_sdm_compare.png" alt="">
+      <div class="col2" id="Lampropeltis_triangulum_climatX2 (habitatQC)panel8">
       </div>
     </div>
   </section>
@@ -1117,14 +1046,66 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_compare_localized" class="section">
-  <h2 class="h2">Couleuvre tachetée —— comparaison localisée</h2> 
+  <section id="Lampropeltis_triangulum_climatGAM (habitatQC)" class="section">
+  <h2 class="h2">Couleuvre tachetée —— climatGAM (habitatQC)</h2> 
+  
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatGAM (habitatQC)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Lampropeltis_triangulum_climatGAM (habitatQC)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_compare_localizedpanelzero">
-      <div class="col1" id="Lampropeltis_triangulum_compare_localizedpanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_sdm_compare_localized.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatQC)panelfirst">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_sdm_small.png" alt="">
+      </div>
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_sdm_proj_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatGAM (habitatQC)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Lampropeltis_triangulum_climatGAM (habitatQC)','panel4')">Range projeté &#8628</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatQC)panelsecond">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_range_small.png" alt="">
+      </div>
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_range_proj_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatGAM (habitatQC)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Lampropeltis_triangulum_climatGAM (habitatQC)','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatQC)panelthird">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_sdm_diff_small.png" alt="">
+      </div>
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_range_diff_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header"><!--<header>-->
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatGAM (habitatQC)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Lampropeltis_triangulum_climatGAM (habitatQC)','panel8')"></button>
+    </div><!--</header>-->
+    <div class="row" id="Lampropeltis_triangulum_climatGAM (habitatQC)panelfourth">
+      <div class="col1" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_climatGAM (habitatQC)_marginal_effects.png" alt="">
+      </div>
+      <div class="col2" id="Lampropeltis_triangulum_climatGAM (habitatQC)panel8">
       </div>
     </div>
   </section>
@@ -1133,14 +1114,110 @@
 
   
   <hr class="vspace"> 
-  <section id="Lampropeltis_triangulum_proj_compare" class="section">
-  <h2 class="h2">Couleuvre tachetée —— projection</h2> 
+  <section id="Lampropeltis_triangulum_sdm_compare" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Modèles QC</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_sdm_compare','panel0')">Comparaison des modèles actuels pour le Québec</button>
     </div>
-    <div class="row" id="Lampropeltis_triangulum_proj_comparepanelzero">
-      <div class="col1" id="Lampropeltis_triangulum_proj_comparepanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Lampropeltis_triangulum_sdm_proj_compare.png" alt="">
+    <div class="row" id="Lampropeltis_triangulum_sdm_comparepanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_sdm_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_sdm_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Lampropeltis_triangulum_sdm_compare_localized" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Modèles QC local</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_sdm_compare_localized','panel0')">Comparaison des modèles actuels centrés sur les occurrences</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_sdm_compare_localizedpanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_sdm_compare_localizedpanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Lampropeltis_triangulum_sdm_proj_compare" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Modèles QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_sdm_proj_compare','panel0')">Projections des modèles pour le Québec</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_sdm_proj_comparepanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_sdm_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_sdm_proj_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Lampropeltis_triangulum_range_proj_compare" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_range_proj_compare','panel0')">Projections des aires de répartition pour le Québec</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_range_proj_comparepanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_range_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_range_proj_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Lampropeltis_triangulum_range_proj_small_change" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_range_proj_small_change','panel0')">Projections des changements dans les aires de répartition pour le Québec</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_range_proj_small_changepanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_range_proj_small_changepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_range_proj_small_change.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Lampropeltis_triangulum_range_proj_large_change" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Aires de répartition NA</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_range_proj_large_change','panel0')">Projections des changements dans les aires de répartition pour l'Amérique du Nord</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_range_proj_large_changepanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_range_proj_large_changepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_range_proj_large_change.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Lampropeltis_triangulum_range_evaluation" class="section">
+  <h2 class="h2">Couleuvre tachetée —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Lampropeltis_triangulum_range_evaluation','panel0')">Aires de distribution provenant des modèles soumis à l'évaluation</button>
+    </div>
+    <div class="row" id="Lampropeltis_triangulum_range_evaluationpanelzero">
+      <div class="col1" id="Lampropeltis_triangulum_range_evaluationpanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Lampropeltis_triangulum_range_evaluation.png" alt="">
       </div>
     </div>
   </section>
@@ -1150,7 +1227,7 @@
   
   <hr class="vspace"> 
   <section id="Nerodia_sipedon_data" class="section">
-  <h2 class="h2">Couleuvre d'eau —— données</h2>  
+  <h2 class="h2">Couleuvre d'eau —— Données</h2>  
   <!-- <section class="section"></section> -->
   <div class="subheader"></div>
   
@@ -1168,7 +1245,7 @@
           <a class="aim" target="_blank" href="url">
             <div class="infotop"><br>scénario = 2041-2070_gfdl-esm4_ssp370</div>
             <!-- <a class="aim" target="_blank" href="url"> -->
-            <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_pic.png" alt="">
+            <img loading="lazy" style="height: 16vw; padding-top: 5%; padding-left: 0%; border: 0px solid green;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_pic.png" alt="">
           <div class="middle" style="border: 0px solid red;">
             <div class="text" style="border: 0px solid green;">cc0</div>
           </div>
@@ -1178,10 +1255,10 @@
         </div>
       </div>
       <div class="col4">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_na.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_na.png" alt="">
       </div>
       <div class="col3">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_quebec.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_quebec.png" alt="">
       </div>
     </div>
     <div class="header">
@@ -1191,13 +1268,13 @@
     </div>
     <div class="rowshow">
       <div class="col4">
-        <img loading="lazy" style="height: 15vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_uncertainty.png" alt="">
+        <img loading="lazy" style="height: 15vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_uncertainty.png" alt="">
       </div>
       <div class="col4">
-        <img loading="lazy" style="height: 20vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_na_used.png" alt="">
+        <img loading="lazy" style="height: 20vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_na_used.png" alt="">
       </div>
       <div class="col3">
-        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_quebec_used.png" alt="">
+        <img loading="lazy" style="height: 25vw; padding: 1vh;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_quebec_used.png" alt="">
       </div>
     </div>
   </section>
@@ -1206,19 +1283,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_climat" class="section">
-  <h2 class="h2">Couleuvre d'eau —— climat</h2> 
+  <section id="Nerodia_sipedon_climatX2" class="section">
+  <h2 class="h2">Couleuvre d'eau —— climatX2</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climatpanelfirst">
-      <div class="col1" id="Nerodia_sipedon_climatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_sdm_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2panelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatX2panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_sdm_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1226,15 +1303,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climatpanelsecond">
-      <div class="col1" id="Nerodia_sipedon_climatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_range_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2panelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatX2panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_range_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_range_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1242,15 +1319,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climatpanelthird">
-      <div class="col1" id="Nerodia_sipedon_climatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_sdm_diff_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2panelthird">
+      <div class="col1" id="Nerodia_sipedon_climatX2panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_range_diff_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1258,14 +1335,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_climatpanelfourth">
-      <div class="col1" id="Nerodia_sipedon_climatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2panelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatX2panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climatpanel8">
+      <div class="col2" id="Nerodia_sipedon_climatX2panel8">
       </div>
     </div>
   </section>
@@ -1274,35 +1351,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_gam" class="section">
+  <section id="Nerodia_sipedon_climatGAM" class="section">
   <h2 class="h2">Couleuvre d'eau —— climatGAM</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_gam','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_gam','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatGAM','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatGAM','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gampanelfirst">
-      <div class="col1" id="Nerodia_sipedon_gampanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_sdm_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAMpanelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatGAMpanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gampanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_sdm_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_gam','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_gam','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Nerodia_sipedon_gampanelsecond">
-      <div class="col1" id="Nerodia_sipedon_gampanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_range_large.png" alt="">
-      </div>
-      <div class="col2" id="Nerodia_sipedon_gampanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_range_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatGAMpanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1310,15 +1371,31 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_gam','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_gam','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatGAM','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatGAM','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gampanelthird">
-      <div class="col1" id="Nerodia_sipedon_gampanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_sdm_diff_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAMpanelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatGAMpanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_range_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gampanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_range_diff_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatGAMpanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_range_proj_large.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatGAM','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatGAM','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_climatGAMpanelthird">
+      <div class="col1" id="Nerodia_sipedon_climatGAMpanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_sdm_diff_large.png" alt="">
+      </div>
+      <div class="col2" id="Nerodia_sipedon_climatGAMpanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1326,14 +1403,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_gam','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_gam','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatGAM','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatGAM','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_gampanelfourth">
-      <div class="col1" id="Nerodia_sipedon_gampanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAMpanelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatGAMpanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gampanel8">
+      <div class="col2" id="Nerodia_sipedon_climatGAMpanel8">
       </div>
     </div>
   </section>
@@ -1342,35 +1419,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_habitat" class="section">
+  <section id="Nerodia_sipedon_habitatNA" class="section">
   <h2 class="h2">Couleuvre d'eau —— habitatNA</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_habitat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_habitat','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_habitatNA','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_habitatNA','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_habitatpanelfirst">
-      <div class="col1" id="Nerodia_sipedon_habitatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_sdm_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatNApanelfirst">
+      <div class="col1" id="Nerodia_sipedon_habitatNApanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_habitatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_sdm_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_habitat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_habitat','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Nerodia_sipedon_habitatpanelsecond">
-      <div class="col1" id="Nerodia_sipedon_habitatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_range_large.png" alt="">
-      </div>
-      <div class="col2" id="Nerodia_sipedon_habitatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_range_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_habitatNApanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1378,15 +1439,31 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_habitat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_habitat','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_habitatNA','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_habitatNA','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_habitatpanelthird">
-      <div class="col1" id="Nerodia_sipedon_habitatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_sdm_diff_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatNApanelsecond">
+      <div class="col1" id="Nerodia_sipedon_habitatNApanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_range_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_habitatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_range_diff_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_habitatNApanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_range_proj_large.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_habitatNA','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_habitatNA','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_habitatNApanelthird">
+      <div class="col1" id="Nerodia_sipedon_habitatNApanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_sdm_diff_large.png" alt="">
+      </div>
+      <div class="col2" id="Nerodia_sipedon_habitatNApanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1394,14 +1471,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_habitat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_habitat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_habitatNA','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_habitatNA','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_habitatpanelfourth">
-      <div class="col1" id="Nerodia_sipedon_habitatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_habitat_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatNApanelfourth">
+      <div class="col1" id="Nerodia_sipedon_habitatNApanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatNA_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_habitatpanel8">
+      <div class="col2" id="Nerodia_sipedon_habitatNApanel8">
       </div>
     </div>
   </section>
@@ -1410,35 +1487,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_small" class="section">
+  <section id="Nerodia_sipedon_habitatQC" class="section">
   <h2 class="h2">Couleuvre d'eau —— habitatQC</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_small','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_small','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_habitatQC','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_habitatQC','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_smallpanelfirst">
-      <div class="col1" id="Nerodia_sipedon_smallpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_sdm_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatQCpanelfirst">
+      <div class="col1" id="Nerodia_sipedon_habitatQCpanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_sdm_small.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_smallpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_sdm_proj_small.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_small','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_small','panel4')">Range projeté &#8628</button>
-    </div>
-    <div class="row" id="Nerodia_sipedon_smallpanelsecond">
-      <div class="col1" id="Nerodia_sipedon_smallpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_range_small.png" alt="">
-      </div>
-      <div class="col2" id="Nerodia_sipedon_smallpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_range_proj_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_habitatQCpanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_sdm_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1446,51 +1507,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_small','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_small','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_habitatQC','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_habitatQC','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_smallpanelthird">
-      <div class="col1" id="Nerodia_sipedon_smallpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_sdm_diff_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatQCpanelsecond">
+      <div class="col1" id="Nerodia_sipedon_habitatQCpanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_range_small.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_smallpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_range_diff_small.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_small','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_small','panel8')"></button>
-    </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_smallpanelfourth">
-      <div class="col1" id="Nerodia_sipedon_smallpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_small_marginal_effects.png" alt="">
-      </div>
-      <div class="col2" id="Nerodia_sipedon_smallpanel8">
-      </div>
-    </div>
-  </section>
-  
-    
-
-  
-  <hr class="vspace"> 
-  <section id="Nerodia_sipedon_climat + habitat" class="section">
-  <h2 class="h2">Couleuvre d'eau —— climat + habitatNA</h2> 
-  
-    <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat + habitat','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat + habitat','panel2')">SDM projeté &#8628</button>
-    </div>
-    <div class="row" id="Nerodia_sipedon_climat + habitatpanelfirst">
-      <div class="col1" id="Nerodia_sipedon_climat + habitatpanel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_sdm_large.png" alt="">
-      </div>
-      <div class="col2" id="Nerodia_sipedon_climat + habitatpanel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_sdm_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_habitatQCpanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_range_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1498,31 +1523,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat + habitat','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat + habitat','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_habitatQC','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_habitatQC','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat + habitatpanelsecond">
-      <div class="col1" id="Nerodia_sipedon_climat + habitatpanel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_range_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatQCpanelthird">
+      <div class="col1" id="Nerodia_sipedon_habitatQCpanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_sdm_diff_small.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat + habitatpanel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_range_proj_large.png" alt="">
-      </div>
-    </div>
-  </section>
-  
-  
-  <section class="section">
-    <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat + habitat','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat + habitat','panel6')">Différence range &#8628</button>
-    </div>
-    <div class="row" id="Nerodia_sipedon_climat + habitatpanelthird">
-      <div class="col1" id="Nerodia_sipedon_climat + habitatpanel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_sdm_diff_large.png" alt="">
-      </div>
-      <div class="col2" id="Nerodia_sipedon_climat + habitatpanel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_range_diff_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_habitatQCpanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_range_diff_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1530,14 +1539,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat + habitat','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat + habitat','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_habitatQC','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_habitatQC','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_climat + habitatpanelfourth">
-      <div class="col1" id="Nerodia_sipedon_climat + habitatpanel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat + habitat_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_habitatQCpanelfourth">
+      <div class="col1" id="Nerodia_sipedon_habitatQCpanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_habitatQC_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat + habitatpanel8">
+      <div class="col2" id="Nerodia_sipedon_habitatQCpanel8">
       </div>
     </div>
   </section>
@@ -1546,19 +1555,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_climat (habitat)" class="section">
-  <h2 class="h2">Couleuvre d'eau —— habitatNA (climat)</h2> 
+  <section id="Nerodia_sipedon_climatX2 + habitatNA" class="section">
+  <h2 class="h2">Couleuvre d'eau —— climatX2 + habitatNA</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat (habitat)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat (habitat)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2 + habitatNA','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2 + habitatNA','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat (habitat)panelfirst">
-      <div class="col1" id="Nerodia_sipedon_climat (habitat)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_sdm_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 + habitatNApanelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatX2 + habitatNApanel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (habitat)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_sdm_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 + habitatNApanel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1566,15 +1575,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat (habitat)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat (habitat)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2 + habitatNA','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2 + habitatNA','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat (habitat)panelsecond">
-      <div class="col1" id="Nerodia_sipedon_climat (habitat)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_range_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 + habitatNApanelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatX2 + habitatNApanel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_range_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (habitat)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_range_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 + habitatNApanel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1582,15 +1591,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat (habitat)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat (habitat)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2 + habitatNA','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2 + habitatNA','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat (habitat)panelthird">
-      <div class="col1" id="Nerodia_sipedon_climat (habitat)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_sdm_diff_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 + habitatNApanelthird">
+      <div class="col1" id="Nerodia_sipedon_climatX2 + habitatNApanel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (habitat)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_range_diff_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 + habitatNApanel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1598,14 +1607,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat (habitat)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat (habitat)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2 + habitatNA','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2 + habitatNA','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_climat (habitat)panelfourth">
-      <div class="col1" id="Nerodia_sipedon_climat (habitat)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (habitat)_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 + habitatNApanelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatX2 + habitatNApanel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 + habitatNA_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (habitat)panel8">
+      <div class="col2" id="Nerodia_sipedon_climatX2 + habitatNApanel8">
       </div>
     </div>
   </section>
@@ -1614,19 +1623,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_gam (habitat)" class="section">
-  <h2 class="h2">Couleuvre d'eau —— habitatNA (climatGAM)</h2> 
+  <section id="Nerodia_sipedon_climatX2 (habitatNA)" class="section">
+  <h2 class="h2">Couleuvre d'eau —— climatX2 (habitatNA)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_gam (habitat)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_gam (habitat)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2 (habitatNA)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2 (habitatNA)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gam (habitat)panelfirst">
-      <div class="col1" id="Nerodia_sipedon_gam (habitat)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_sdm_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatNA)panelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatNA)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (habitat)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_sdm_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatNA)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1634,15 +1643,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_gam (habitat)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_gam (habitat)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2 (habitatNA)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2 (habitatNA)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gam (habitat)panelsecond">
-      <div class="col1" id="Nerodia_sipedon_gam (habitat)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_range_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatNA)panelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatNA)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_range_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (habitat)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_range_proj_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatNA)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1650,15 +1659,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_gam (habitat)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_gam (habitat)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2 (habitatNA)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2 (habitatNA)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gam (habitat)panelthird">
-      <div class="col1" id="Nerodia_sipedon_gam (habitat)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_sdm_diff_large.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatNA)panelthird">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatNA)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (habitat)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_range_diff_large.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatNA)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1666,14 +1675,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_gam (habitat)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_gam (habitat)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2 (habitatNA)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2 (habitatNA)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_gam (habitat)panelfourth">
-      <div class="col1" id="Nerodia_sipedon_gam (habitat)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (habitat)_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatNA)panelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatNA)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatNA)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (habitat)panel8">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatNA)panel8">
       </div>
     </div>
   </section>
@@ -1682,19 +1691,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_climat (small)" class="section">
-  <h2 class="h2">Couleuvre d'eau —— habitatQC (climat)</h2> 
+  <section id="Nerodia_sipedon_climatGAM (habitatNA)" class="section">
+  <h2 class="h2">Couleuvre d'eau —— climatGAM (habitatNA)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat (small)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climat (small)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatGAM (habitatNA)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatGAM (habitatNA)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat (small)panelfirst">
-      <div class="col1" id="Nerodia_sipedon_climat (small)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_sdm_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatNA)panelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatNA)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_sdm_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (small)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_sdm_proj_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatNA)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_sdm_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1702,15 +1711,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat (small)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climat (small)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatGAM (habitatNA)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatGAM (habitatNA)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat (small)panelsecond">
-      <div class="col1" id="Nerodia_sipedon_climat (small)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_range_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatNA)panelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatNA)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_range_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (small)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_range_proj_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatNA)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_range_proj_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1718,15 +1727,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat (small)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climat (small)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatGAM (habitatNA)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatGAM (habitatNA)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_climat (small)panelthird">
-      <div class="col1" id="Nerodia_sipedon_climat (small)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_sdm_diff_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatNA)panelthird">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatNA)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_sdm_diff_large.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (small)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_range_diff_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatNA)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_range_diff_large.png" alt="">
       </div>
     </div>
   </section>
@@ -1734,14 +1743,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat (small)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climat (small)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatGAM (habitatNA)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatGAM (habitatNA)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_climat (small)panelfourth">
-      <div class="col1" id="Nerodia_sipedon_climat (small)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_climat (small)_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatNA)panelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatNA)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatNA)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_climat (small)panel8">
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatNA)panel8">
       </div>
     </div>
   </section>
@@ -1750,19 +1759,19 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_gam (small)" class="section">
-  <h2 class="h2">Couleuvre d'eau —— habitatQC (climatGAM)</h2> 
+  <section id="Nerodia_sipedon_climatX2 (habitatQC)" class="section">
+  <h2 class="h2">Couleuvre d'eau —— climatX2 (habitatQC)</h2> 
   
     <div class="header">
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_gam (small)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
-      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_gam (small)','panel2')">SDM projeté &#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2 (habitatQC)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatX2 (habitatQC)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gam (small)panelfirst">
-      <div class="col1" id="Nerodia_sipedon_gam (small)panel1">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_sdm_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatQC)panelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatQC)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_sdm_small.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (small)panel2">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_sdm_proj_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatQC)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_sdm_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1770,15 +1779,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_gam (small)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
-      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_gam (small)','panel4')">Range projeté &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2 (habitatQC)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatX2 (habitatQC)','panel4')">Range projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gam (small)panelsecond">
-      <div class="col1" id="Nerodia_sipedon_gam (small)panel3">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_range_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatQC)panelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatQC)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_range_small.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (small)panel4">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_range_proj_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatQC)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_range_proj_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1786,15 +1795,15 @@
   
   <section class="section">
     <div class="header">
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_gam (small)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
-      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_gam (small)','panel6')">Différence range &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2 (habitatQC)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatX2 (habitatQC)','panel6')">Différence range &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_gam (small)panelthird">
-      <div class="col1" id="Nerodia_sipedon_gam (small)panel5">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_sdm_diff_small.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatQC)panelthird">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatQC)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_sdm_diff_small.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (small)panel6">
-        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_range_diff_small.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatQC)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_range_diff_small.png" alt="">
       </div>
     </div>
   </section>
@@ -1802,30 +1811,14 @@
   
   <section class="section">
     <div class="header"><!--<header>-->
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_gam (small)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
-      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_gam (small)','panel8')"></button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2 (habitatQC)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatX2 (habitatQC)','panel8')"></button>
     </div><!--</header>-->
-    <div class="row" id="Nerodia_sipedon_gam (small)panelfourth">
-      <div class="col1" id="Nerodia_sipedon_gam (small)panel7">
-        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_gam (small)_marginal_effects.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatX2 (habitatQC)panelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatX2 (habitatQC)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatX2 (habitatQC)_marginal_effects.png" alt="">
       </div>
-      <div class="col2" id="Nerodia_sipedon_gam (small)panel8">
-      </div>
-    </div>
-  </section>
-  
-    
-
-  
-  <hr class="vspace"> 
-  <section id="Nerodia_sipedon_compare" class="section">
-  <h2 class="h2">Couleuvre d'eau —— comparaison</h2> 
-    <div class="header">
-      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_compare','panel0')">Comparaison entre les différentes méthodes SDM</button>
-    </div>
-    <div class="row" id="Nerodia_sipedon_comparepanelzero">
-      <div class="col1" id="Nerodia_sipedon_comparepanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_sdm_compare.png" alt="">
+      <div class="col2" id="Nerodia_sipedon_climatX2 (habitatQC)panel8">
       </div>
     </div>
   </section>
@@ -1834,14 +1827,66 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_compare_localized" class="section">
-  <h2 class="h2">Couleuvre d'eau —— comparaison localisée</h2> 
+  <section id="Nerodia_sipedon_climatGAM (habitatQC)" class="section">
+  <h2 class="h2">Couleuvre d'eau —— climatGAM (habitatQC)</h2> 
+  
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_compare_localized','panel0')">Comparaison entre les différentes méthodes SDM</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatGAM (habitatQC)','panel1')">&nbsp&nbsp&nbsp&nbspSDM actuel&#8628</button>
+      <button class="showmore" onclick="showmorefirst('Nerodia_sipedon_climatGAM (habitatQC)','panel2')">SDM projeté &#8628</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_compare_localizedpanelzero">
-      <div class="col1" id="Nerodia_sipedon_compare_localizedpanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_sdm_compare_localized.png" alt="">
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatQC)panelfirst">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatQC)panel1">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_sdm_small.png" alt="">
+      </div>
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatQC)panel2">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_sdm_proj_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatGAM (habitatQC)','panel3')">&nbsp&nbsp&nbsp&nbspRange actuel &#8628</button>
+      <button class="showmore" onclick="showmoresecond('Nerodia_sipedon_climatGAM (habitatQC)','panel4')">Range projeté &#8628</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatQC)panelsecond">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatQC)panel3">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_range_small.png" alt="">
+      </div>
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatQC)panel4">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_range_proj_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header">
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatGAM (habitatQC)','panel5')">&nbsp&nbsp&nbsp&nbspDifférence sdm &#8628</button>
+      <button class="showmore" onclick="showmorethird('Nerodia_sipedon_climatGAM (habitatQC)','panel6')">Différence range &#8628</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatQC)panelthird">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatQC)panel5">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_sdm_diff_small.png" alt="">
+      </div>
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatQC)panel6">
+        <img loading="lazy" style="height: 30vw; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_range_diff_small.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="section">
+    <div class="header"><!--<header>-->
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatGAM (habitatQC)','panel7')">&nbsp&nbsp&nbsp&nbspEffets variables &#8628</button>
+      <button class="showmore" onclick="showmorefourth('Nerodia_sipedon_climatGAM (habitatQC)','panel8')"></button>
+    </div><!--</header>-->
+    <div class="row" id="Nerodia_sipedon_climatGAM (habitatQC)panelfourth">
+      <div class="col1" id="Nerodia_sipedon_climatGAM (habitatQC)panel7">
+        <img loading="lazy" style="width: 200%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_climatGAM (habitatQC)_marginal_effects.png" alt="">
+      </div>
+      <div class="col2" id="Nerodia_sipedon_climatGAM (habitatQC)panel8">
       </div>
     </div>
   </section>
@@ -1850,14 +1895,110 @@
 
   
   <hr class="vspace"> 
-  <section id="Nerodia_sipedon_proj_compare" class="section">
-  <h2 class="h2">Couleuvre d'eau —— projection</h2> 
+  <section id="Nerodia_sipedon_sdm_compare" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Modèles QC</h2> 
     <div class="header">
-      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_proj_compare','panel0')">Comparaison entre les différentes projections</button>
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_sdm_compare','panel0')">Comparaison des modèles actuels pour le Québec</button>
     </div>
-    <div class="row" id="Nerodia_sipedon_proj_comparepanelzero">
-      <div class="col1" id="Nerodia_sipedon_proj_comparepanel0">
-        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures/Nerodia_sipedon_sdm_proj_compare.png" alt="">
+    <div class="row" id="Nerodia_sipedon_sdm_comparepanelzero">
+      <div class="col1" id="Nerodia_sipedon_sdm_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_sdm_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Nerodia_sipedon_sdm_compare_localized" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Modèles QC local</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_sdm_compare_localized','panel0')">Comparaison des modèles actuels centrés sur les occurrences</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_sdm_compare_localizedpanelzero">
+      <div class="col1" id="Nerodia_sipedon_sdm_compare_localizedpanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_sdm_compare_localized.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Nerodia_sipedon_sdm_proj_compare" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Modèles QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_sdm_proj_compare','panel0')">Projections des modèles pour le Québec</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_sdm_proj_comparepanelzero">
+      <div class="col1" id="Nerodia_sipedon_sdm_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_sdm_proj_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Nerodia_sipedon_range_proj_compare" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_range_proj_compare','panel0')">Projections des aires de répartition pour le Québec</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_range_proj_comparepanelzero">
+      <div class="col1" id="Nerodia_sipedon_range_proj_comparepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_range_proj_compare.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Nerodia_sipedon_range_proj_small_change" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_range_proj_small_change','panel0')">Projections des changements dans les aires de répartition pour le Québec</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_range_proj_small_changepanelzero">
+      <div class="col1" id="Nerodia_sipedon_range_proj_small_changepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_range_proj_small_change.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Nerodia_sipedon_range_proj_large_change" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Aires de répartition NA</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_range_proj_large_change','panel0')">Projections des changements dans les aires de répartition pour l'Amérique du Nord</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_range_proj_large_changepanelzero">
+      <div class="col1" id="Nerodia_sipedon_range_proj_large_changepanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_range_proj_large_change.png" alt="">
+      </div>
+    </div>
+  </section>
+  
+    
+
+  
+  <hr class="vspace"> 
+  <section id="Nerodia_sipedon_range_evaluation" class="section">
+  <h2 class="h2">Couleuvre d'eau —— Aires de répartition QC</h2> 
+    <div class="header">
+      <button class="showmore" onclick="showmorezero('Nerodia_sipedon_range_evaluation','panel0')">Aires de distribution provenant des modèles soumis à l'évaluation</button>
+    </div>
+    <div class="row" id="Nerodia_sipedon_range_evaluationpanelzero">
+      <div class="col1" id="Nerodia_sipedon_range_evaluationpanel0">
+        <img loading="lazy" style="width: 100%; padding: 0px;" src="https://object-arbutus.cloud.computecanada.ca/bq-io/niches_climatiques/figures2/Nerodia_sipedon_range_evaluation.png" alt="">
       </div>
     </div>
   </section>
