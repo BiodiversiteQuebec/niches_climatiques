@@ -11,7 +11,7 @@ execute:
 
 ## Variables par espèces
 
-Un ensemble de variables a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que d es variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles.   
+Un ensemble de variables a été identifié pour chaque espèce modélisée et cet ensemble de variables a été utilisé pour chaque modèle ayant une composante d'habitat (@tbl-species-vars). Pour chaque espèce, la sélection de variables pertinentes a été effectuée à partir des différents documents traitant de l'espèce (_e.g._ plan de rétablissement, état de la situation, etc.) et des connaissances sur l'espèce. À noter que d es variables représentant des habitats défavorables pour les espèces ont également été considérées. Par exemple, les milieux urbanisés sont probablement évités par la majorité des espèces modélisées et ont donc été utilisés dans les modèles. [ajout forêt pour râle]{style="background-color: #ffeb3b; padding: 0 0px;"}  
 
 <!-- Justifier le choix des variables par espèce et réexpliquer les limitations ? -->
  
