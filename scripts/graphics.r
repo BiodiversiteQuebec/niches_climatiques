@@ -11,9 +11,9 @@ add_range2 <- function(){
   }
 }
 
-plot_lakes <- function(){
-  plot(st_geometry(lakes), col = "white", lwd = 0.1, border = NA, add = TRUE)
-  plot(st_geometry(rivers), col = "white", lwd = 0.1, add = TRUE)
+plot_lakes <- function(lwd = 0.1, ...){
+  plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)
+  plot(st_geometry(rivers), col = "white", add = TRUE, ...)
   plot(st_geometry(hydrolakes), col = "white",  border = NA, add = TRUE)
   plot(st_geometry(lakes), col = "white",  border = NA, add = TRUE)
 }
@@ -336,7 +336,7 @@ display_names <- paste0(display_name, "\n", scenarios)
 
 current <- st_read(gsub("_proj_", "_", lf), layer = display_model)
 maximum <- st_read(lf, layer = gsub("\n", " ", tail(display_names, 1)))
-cols <- adjustcolor(c("tomato", "blue", "darkgreen"), 0.5)
+cols <- c(adjustcolor(c("tomato", "blue"), 0.5), range_cols)
 fn <- gsub("_range_proj_large.gpkg|_range_proj_small.gpkg", "_range_proj_large_change.png", gsub(path_raster, "results/graphics", lf))
 png(fn, units = "in", height = 24, width = 18, res = 500)
 par(mfrow = c(3, 3), mar = c(0, 0, 0, 0), oma = c(4, 4, 2.5, 0))
@@ -373,6 +373,70 @@ par(mfrow = c(1, 1), mar = c(3.5, 0, 0, 0), oma = c(0, 0, 0, 0), new = TRUE)
 legend("top", inset = c(0, 0.01), pch = 15, pt.cex = 4, cex = 2.5, legend = c("Perte", "Gain", "Stable")[c(3, 2, 1)], col = cols[c(3, 2, 1)], bty = "n", xpd = NA, text.font = 2, text.col = "grey70", horiz = TRUE)
 
 dev.off()
+
+
+####################################################################
+### Évaluations ####################################################
+
+for(sp in species){
+file_pol <- gsub(".tif", ".gpkg", file.path(path_raster, paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif")))
+
+evaluate_models <- c("ClimatX2 (HabitatNA)", "ClimatGAM (HabitatNA)", "ClimatX2 (HabitatQC)", "ClimatGAM (HabitatQC)")
+ran <- lapply(evaluate_models, function(i){
+  if(grepl("NA", i)){
+    x <- st_read(gsub("small", "large", file_pol), layer = i)
+  } else {
+    x <- st_read(gsub("large", "small", file_pol), layer = i)
+  }
+  st_intersection(x, qc)
+})
+
+win <- lapply(ran, function(i){
+  lat <- st_bbox(qc) |> st_transform(epsg)
+  st_bbox(i) |> 
+    st_as_sfc() |> 
+    st_as_sf() |> 
+    st_buffer(50000) |>
+    #st_crop(c(xmin = -Inf, ymin = 117000, xmax = Inf, ymax = Inf)) |>
+    st_crop(qc)
+}) |> do.call("rbind", args = _) |> st_union()
+
+ar <- diff(st_bbox(win)[c(1, 3)]) / diff(st_bbox(win)[c(2, 4)])
+w <- 25
+
+png("plot.png", units = "in", height = w / ar, width = w, res = 500)
+line_height <- par("cin")[2]
+dev.off() # dummy plot to get dims of margins
+
+nrows <- 2 # assumes two rows
+top_margin_lines <- 4
+total_height <- w / ar + nrows * top_margin_lines * line_height
+
+fn <- gsub("_range_small.gpkg|_range_large.gpkg", "_range_evaluation.png", gsub(path_raster, "results/graphics", file_pol))
+png(fn, units = "in", height = total_height, width = w, res = 500)
+par(mfrow = c(2, 2), mar = c(0, 0, top_margin_lines, 0), oma = c(0, 0, 0, 0))
+lapply(seq_along(ran), function(i){
+    #plot(crop(crop(x, st_buffer(x, 250000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = range_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, main = i)
+    x <- ran[[i]]
+    plot(st_geometry(win), border = NA, xaxs = "i", yaxs = "i")
+    plot(st_geometry(qc), border = NA, col = "grey90", add = TRUE, xpd = FALSE)
+    plot(x, axes = FALSE, add = TRUE, plg = plg, col = range_cols, border = NA, legend = FALSE)
+    plot_lakes(lwd = 0.25)
+    mtext(side = 3, line = 1, text = evaluate_models[i], col = "grey70", font = 2, cex = 2.5)
+    #plot_foreground(observations = TRUE, echelle = "small")
+    #add_range2()
+})
+dev.off()
+}
+
+
+
+
+
+
+
+
+
 
 
 graphics.off()
@@ -422,13 +486,36 @@ if(FALSE){
    l <- lapply(lf, st_read, layer = "climate", quiet = TRUE) |>
      lapply((\(.){.[, c("date", "source")]})) |>
      do.call("rbind", args = _) |>
+     filter(!is.na(date)) |>
      filter(source != "ebird")
 
    c(mean(as.integer(substr(l$date, 1, 4)), na.rm = TRUE), median(as.integer(substr(l$date, 1, 4)), na.rm = TRUE))
+   sum(l$date >= "2000-01-01") / length(l$date)
 
    png("plot.png", width = 10, height = 8, units = "in", res= 300)
    hist(as.integer(substr(l$date, 1, 4)), breaks = seq(1800, 2030, by = 5), xlim = c(1950, 2030))
    dev.off()  
+
+  l <- lapply(lf, st_read, layer = "climate", quiet = TRUE) |>
+    lapply((\(.){.[, c("date", "source")]})) |>
+    lapply((\(.){filter(., !is.na(date))$date})) |>
+    lapply((\(.){c(mean(as.integer(substr(., 1, 4)), na.rm = TRUE), median(as.integer(substr(., 1, 4)), na.rm = TRUE), sum(. >= "2000-01-01") / length(.))})) |>
+    setNames(gsub("_observations.gpkg", "", basename(lf)))
+
+  png("plot.png", width = 10, height = 10, units = "in", res = 300)
+  par(mfrow = c(4, 4), mar = c(2, 2, 1, 0))
+  l <- lapply(lf, st_read, layer = "climate", quiet = TRUE) |>
+    lapply((\(.){.[, c("date", "source")]})) |>
+    lapply((\(.){filter(., !is.na(date))$date})) |>
+    lapply((\(.){hist(as.integer(substr(., 1, 4)), breaks = seq(1800, 2030, by = 10), xlim = c(1950, 2030), main = "", xlab = "")}))
+  dev.off()
+
+  
+
+
+
+
+
 
    ### more precise changes ###############################################
    rcl <- matrix(c(
