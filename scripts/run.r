@@ -19,10 +19,10 @@ on.exit({
 )
 
 array_id <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
-#array_id <- 1
+array_id <- 6
 
 args <- commandArgs(trailingOnly=TRUE)
-#args <- "niches_climatiques.r"
+args <- "niches_climatiques.r"
 
 source(file.path("scripts/jobs", args))
 

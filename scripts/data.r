@@ -300,3 +300,14 @@ if(!is.null(aire)){
 
 
 
+png("observations.png", width = 8, height = 8, units = "in", res = 300)
+par(mar = c(0, 0, 0, 0))
+if(nrow(obs_qc) == 0){
+  plot(st_geometry(st_crop(na, qc)))
+} else {
+  plot(st_geometry(st_crop(na, st_buffer(obs_qc, 100000))))
+}
+plot(st_geometry(qc), col = "grey90", border = "white", lwd = 1, add = FALSE)
+plot(st_geometry(lakes), col = "white", border = NA, add = TRUE, lwd = 0.5)
+plot(st_geometry(obs_qc), bg = adjustcolor("orange", 0.90), col = "black", pch = 21, cex = 0.8, lwd= 0.20, add = TRUE)
+dev.off()
