@@ -82,7 +82,7 @@ emvs <- st_read("/home/frousseu/links/projects/rpp-gonzalez/frousseu/niches_clim
 
 aires <- rbind(vert, emvs)
 
-st_write(aires, "storymap_ranges.gpkg", append = TRUE)
+st_write(aires, "storymap_ranges.gpkg", append = FALSE)
 
 system("ogr2ogr -f PMTiles storymap_ranges.pmtiles storymap_ranges.gpkg storymap_ranges")
  
