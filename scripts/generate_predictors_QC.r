@@ -1,6 +1,8 @@
 
 
-### This script gathers predictors for modeling the distribution of emv species for the finance indicators
+### This script gathers predictors for modeling the distribution of emv species for the finance indicators or for climate niches. It is meant to be run on a VM or NOT on Rorqual!
+
+## The producing of QC.gpkg can howver be done on rorqual on login node
 
 library(terra)
 library(sf)
@@ -18,7 +20,7 @@ library(rmapshaper)
 #r <- rast("data/predictors_100m_band1.tif")
 #plot(r)
 
-tmpath <- "/home/frousseu/data2/qc"
+tmpath <- "data" #"/home/frousseu/data2/qc"
 setwd(dirname(tmpath))
 epsg <- 6624
 
@@ -58,7 +60,7 @@ get_urls <- function(coll, ids, stac){
 }
 
 # Downloads polygons using package geodata
-can <- gadm("CAN", level = 1, path = "/home/frousseu/data2/na") |> st_as_sf()
+can <- gadm("CAN", level = 1, path = tmpath) |> st_as_sf()
 qc_gadm <- can[can$NAME_1 %in% c("Québec"), ]
 qc_gadm <- st_transform(qc_gadm, epsg)
 
@@ -82,7 +84,7 @@ qc <- rbind(g[, "geometry"], pols[c(2, 4), "geometry"]) |>
 region <- qc
 st_write(region, file.path(tmpath, "QC.gpkg"), append = FALSE)
 
-# png("~/data/niches_climatiques/plot.png", width = 5, height = 5, units = "in", res = 300); plot(st_geometry(qc)); dev.off()
+# png("plot.png", width = 5, height = 5, units = "in", res = 300); plot(st_geometry(qc)); dev.off()
 
 ### STAC information
 io <- stac("https://io.biodiversite-quebec.ca/stac/")
