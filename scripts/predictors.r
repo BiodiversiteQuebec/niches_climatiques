@@ -224,6 +224,41 @@ plot(pp, mar = c(0, 0, 2, 0), maxnl = 100, maxcell = 1e7, main = desc_small$fr[m
 dev.off()
 
 
+### Individual images meant to feed the storymap
+
+sl <- st_read("data/grhq.gpkg", layer = "stlawrence")
+qc_atlas <- st_read("data/qc_atlas.gpkg") |> st_transform(epsg)
+lakesqc <- lakes[!grepl("Fleuve|Golfe", lakes$TOPONYME), ] |>
+  st_intersection(qc_atlas)
+ppp <- aggregate(pp, 10, na.rm = TRUE)  
+
+spvars <- species_vars |>
+  unlist() |>
+  unique()
+
+#for(v in names(pp)[1:5]){
+for(v in spvars[1:30]){
+  rrr <- ppp[[v]] |>
+    crop(qc_atlas, mask = TRUE) |>
+    mask(sl, inverse = TRUE) |>
+    #mask(qc_atlas, inverse = FALSE) |>
+    trim()
+  png(file.path("results/graphics/predictors", paste0("predictor_", v, ".png")), width = 6, height = 7, units = "in", res = 200)
+  par(bg = "transparent")
+  plot(rrr, mar = c(0, 0, 0, 0), maxnl = 100, maxcell = 1e6, main = desc_small$fr[match(v, desc_small$variable)], plg = NULL, legend = FALSE, axes = FALSE, col = coloScale(1:200, c("grey90", "#7bb5b1", "#2e483e", "#e0b658")), fun = function(){plot(st_geometry(lakesqc), col = "white", border = NA, add = TRUE)})
+  dev.off()
+}
+
+
+
+#png("plot.png", width = 6, height = 6, units = "in", res = 300)
+##plot(st_geometry(qc_atlas), border = NA, col = "red")
+#plot(rrr)
+#plot(st_geometry(lakes[!grepl("Fleuve|Golfe", lakes$TOPONYME), ]), col = "#ffff00", border = NA, add = TRUE)
+#dev.off()
+
+
+
 
 on <- names(p$large)[order(match(names(p$large), desc_large$variable), na.last = NA)]
 on <- c(on, setdiff(names(p$large), on))
