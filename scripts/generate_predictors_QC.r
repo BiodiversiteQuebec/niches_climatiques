@@ -58,7 +58,7 @@ get_urls <- function(coll, ids, stac){
 }
 
 # Downloads polygons using package geodata
-can <- gadm("CAN", level = 2, path = "/home/frousseu/data2/na") |> st_as_sf()
+can <- gadm("CAN", level = 1, path = "/home/frousseu/data2/na") |> st_as_sf()
 qc_gadm <- can[can$NAME_1 %in% c("Québec"), ]
 qc_gadm <- st_transform(qc_gadm, epsg)
 
@@ -82,8 +82,9 @@ qc <- rbind(g[, "geometry"], pols[c(2, 4), "geometry"]) |>
 region <- qc
 st_write(region, file.path(tmpath, "QC.gpkg"), append = FALSE)
 
+# png("~/data/niches_climatiques/plot.png", width = 5, height = 5, units = "in", res = 300); plot(st_geometry(qc)); dev.off()
 
-
+### STAC information
 io <- stac("https://io.biodiversite-quebec.ca/stac/")
 coll <- "chelsa-clim"
 
