@@ -23,11 +23,11 @@ x <- rbind(pt, pm) |>
   st_as_sf() |>
   st_transform(epsg)
 
-o <- !(as.logical(lengths(st_intersects(obs, na[na$NAME_1 %in% c("Québec"), ]))) & !as.logical(lengths(st_intersects(obs, st_buffer(aire, 50000)))))
+o <- !(as.logical(lengths(st_intersects(obs, qc_full))) & !as.logical(lengths(st_intersects(obs, st_buffer(aire, 50000)))))
 
 obs <- obs[o, ]
 
-o <- !(!as.logical(lengths(st_intersects(obs, na[na$NAME_1 %in% c("Québec"), ]))) & !as.logical(lengths(st_intersects(obs, x))))
+o <- !(!as.logical(lengths(st_intersects(obs, qc_full))) & !as.logical(lengths(st_intersects(obs, x))))
 
 obs <- obs[o, ]
 

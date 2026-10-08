@@ -49,8 +49,11 @@ region <- na
 labrador <- ms_explode(na[na$NAME_1 %in% c("Newfoundland and Labrador"), ]) 
 labrador <- labrador[which.max(st_area(labrador)), ] # keep Labarador
 #region <- rbind(region, labrador)
-qc <- na[na$NAME_1 %in% c("Québec"),] |>
+
+qc_full <- st_read("data/QC.gpkg")
+qc <- #na[na$NAME_1 %in% c("Québec"),] |>
         #rbind(labrador) |>
+      qc_full |>  
         ms_simplify(0.01)
 
 na <- ms_simplify(na, 0.01) |> st_make_valid()
