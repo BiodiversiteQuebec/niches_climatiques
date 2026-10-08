@@ -9,6 +9,8 @@ library(rstac)
 library(geodata)
 library(doParallel)
 library(foreach)
+library(ratlas)
+library(rmapshaper)
 
 
 #library(terra)
@@ -57,8 +59,26 @@ get_urls <- function(coll, ids, stac){
 
 # Downloads polygons using package geodata
 can <- gadm("CAN", level = 2, path = "/home/frousseu/data2/na") |> st_as_sf()
-qc <- can[can$NAME_1 %in% c("Québec"), ]
-qc <- st_transform(qc, epsg)
+qc_gadm <- can[can$NAME_1 %in% c("Québec"), ]
+qc_gadm <- st_transform(qc_gadm, epsg)
+
+qc_atlas <- ratlas::db_read_table(table_name = "regions", type = "admin", scale = 1, output_geometry = TRUE) |>
+  sf::st_as_sf() |>
+  sf::st_transform(epsg)
+
+pols <- st_difference(qc_atlas, qc_gadm) |>
+  ms_explode() |>
+  st_buffer(0.5) # to avoid tiny alignements problems
+pols$area <- as.numeric(st_area(pols))
+pols <- pols[rev(order(pols$area)), ]
+
+
+g <- st_intersection(qc_atlas, qc_gadm)
+
+# uses gadm land precise map, cut it out with official map to remove offshore islands and add back Labarador parts from the official, buffer it slightly and union it with cut
+qc <- rbind(g[, "geometry"], pols[c(2, 4), "geometry"]) |>
+  st_union()
+
 region <- qc
 st_write(region, file.path(tmpath, "QC.gpkg"), append = FALSE)
 
