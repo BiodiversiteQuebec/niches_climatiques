@@ -20,7 +20,7 @@ library(rmapshaper)
 #r <- rast("data/predictors_100m_band1.tif")
 #plot(r)
 
-tmpath <- "data" #"/home/frousseu/data2/qc"
+tmpath <- "/home/frousseu/data2/qc" # data
 setwd(dirname(tmpath))
 epsg <- 6624
 
@@ -87,7 +87,9 @@ st_write(region, file.path(tmpath, "QC.gpkg"), append = FALSE)
 # png("plot.png", width = 5, height = 5, units = "in", res = 300); plot(st_geometry(qc)); dev.off()
 
 ### STAC information
-io <- stac("https://io.biodiversite-quebec.ca/stac/")
+stac_old <- "https://io.biodiversite-quebec.ca/stac/"
+stac_bq <- "https://io.biodiversite-quebec.ca/stac2/"
+stac_biab <- "https://stac.geobon.org/"
 coll <- "chelsa-clim"
 
 ###############################################
@@ -95,123 +97,109 @@ coll <- "chelsa-clim"
 
 collections <- list(
   "earthenv_topography_derived" = c(
-    "geomflat_perc", "earthenv_geomflat", "% de terrains plats",
-    "geomfootslope_per", "earthenv_geomfootslope", "% de bas de pentes"
+    "geomflat_perc", "earthenv_geomflat", "% de terrains plats", "stac_biab",
+    "geomfootslope_per", "earthenv_geomfootslope", "% de bas de pentes", "stac_biab"
   ),
   "earthenv_topography" = c(
-    "elevation", "earthenv_elevation", "Élévation",
-    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique"
+    "elevation", "earthenv_elevation", "Élévation", "stac_biab",
+    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique", "stac_biab"
   ),
   "soilgrids" = c(
-    "sand_0-5cm", "sand", "% de sable",
-    "clay_0-5cm", "clay", "% d'argile",
-    "silt_0-5cm", "silt", "% de limon",
-    "phh2o_0-5cm", "ph", "pH",
-    "nitrogen_0-5cm", "nitrogen", "Azote",
-    "bdod_0-5cm", "bulk_density", "Densité volumique",
-    "soc_0-5cm", "soil_organic_carbon", "Carbone organique du sol",
-    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique"
+    "sand_0-5cm", "sand", "% de sable", "stac_biab",
+    "clay_0-5cm", "clay", "% d'argile", "stac_biab",
+    "silt_0-5cm", "silt", "% de limon", "stac_biab",
+    "phh2o_0-5cm", "ph", "pH", "stac_biab",
+    "nitrogen_0-5cm", "nitrogen", "Azote", "stac_biab",
+    "bdod_0-5cm", "bulk_density", "Densité volumique", "stac_biab",
+    "soc_0-5cm", "soil_organic_carbon", "Carbone organique du sol", "stac_biab",
+    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique", "stac_biab"
   ),
   "distance_to_roads" = c(
-    "distance_to_roads", "distance_to_roads", "Distance aux routes"
+    "distance_to_roads", "distance_to_roads", "Distance aux routes", "stac_biab"
   ),
   "silvis" = c(
-   "NDVI16_cumulative", "ndvi", "NDVI",
-   "LAI8_cumulative", "lai", "Index de surface foliaire"
+   "NDVI16_cumulative", "ndvi", "NDVI", "stac_biab",
+   "LAI8_cumulative", "lai", "Index de surface foliaire", "stac_biab"
   ),
   "ghmts" = c(
-    "GHMTS", "human_modification", "Modifications humaines"
+    "GHMTS", "human_modification", "Modifications humaines", "stac_biab"
   ),
   "twi" = c(
-    "twi", "twi", "Indice d'humidité topograhique"
+    "twi", "twi", "Indice d'humidité topograhique", "stac_bq"
   ),
   "mhc" = c(
-    "mhc", "mhc", "Hauteur de la canopée"
+    "mhc", "mhc", "Hauteur de la canopée", "stac_bq"
   ),
   "sigeom_zones_morphosedimentologiques_percentage" = c(
-    "Alluvion_1", "alluvion", "% de dépôts d'alluvions",
-    "Dépôt_2", "versant", "% de dépôts de versants",
-    "Éolien_3", "eolien", "% de dépôts éoliens",
-    "Glaciaire_4", "glaciaire", "% de dépôts glaciaires",
-    "Anthropogénique_5", "anthropogenique", "% de dépôts anthropogéniques",
-    "Lacustre_6", "lacustre", "% de dépôts lacustres",
-    "Glaciolacustre_7", "glaciolacustre", "% de dépôts glaciolacustres",
-    "Marin_8", "marin", "% de dépôts marins",
-    "Glaciomarin_9", "glaciomarin", "% de dépôts glaciomarins",
-    "Organique_10", "organique", "% de dépôts organiques",
-    "Quaternaire_11", "quaternaire", "% de dépôts quaternaires",
-    "Roche_12", "roche", "% de dépôts rocheux",
-    "Till_13", "till", "% de dépôts de till"
+    "Alluvion_1", "alluvion", "% de dépôts d'alluvions", "stac_old",
+    "Dépôt_2", "versant", "% de dépôts de versants", "stac_old",
+    "Éolien_3", "eolien", "% de dépôts éoliens", "stac_old",
+    "Glaciaire_4", "glaciaire", "% de dépôts glaciaires", "stac_old",
+    "Anthropogénique_5", "anthropogenique", "% de dépôts anthropogéniques", "stac_old",
+    "Lacustre_6", "lacustre", "% de dépôts lacustres", "stac_old",
+    "Glaciolacustre_7", "glaciolacustre", "% de dépôts glaciolacustres", "stac_old",
+    "Marin_8", "marin", "% de dépôts marins", "stac_old",
+    "Glaciomarin_9", "glaciomarin", "% de dépôts glaciomarins", "stac_old",
+    "Organique_10", "organique", "% de dépôts organiques", "stac_old",
+    "Quaternaire_11", "quaternaire", "% de dépôts quaternaires", "stac_old",
+    "Roche_12", "roche", "% de dépôts rocheux", "stac_old",
+    "Till_13", "till", "% de dépôts de till", "stac_old"
   ),
   "mhp2023_percentage" = c(
-    "Eau_peu_profonde_1", "eau_peu_profonde", "% d'eau peu profonde",
-    "Marais_2", "marais", "% de marais",
-    "Marécage_3", "marecage", "% de marécages",
-    "Milieu_humide_indifférencié_4", "indifferencie", "% de zones humides indifférenciées",
-    "Prairie_humide_5", "prairie_humide", "% de prairies humides",
-    "Tourbière_boisée_6", "tourbiere_boisee", "% de tourbières boisées",
-    "Tourbière_ouverte_indifférenciée_7", "tourbiere_indifferenciee", "% de tourbières indifférenciées",
-    "Tourbière_ouverte_minérotrophe_8", "tourbiere_minerotrophe", "% de tourbières ouverte minérotrophe",
-    "Tourbière_ouverte_ombrotrophe_9", "tourbiere_ombrotrophe", "% de tourbières ouverte ombrotrophe"
+    "Eau_peu_profonde_1", "eau_peu_profonde", "% d'eau peu profonde", "stac_bq",
+    "Marais_2", "marais", "% de marais", "stac_bq",
+    "Marécage_3", "marecage", "% de marécages", "stac_bq",
+    "Milieu_humide_indifférencié_4", "indifferencie", "% de zones humides indifférenciées", "stac_bq",
+    "Prairie_humide_5", "prairie_humide", "% de prairies humides", "stac_bq",
+    "Tourbière_boisée_6", "tourbiere_boisee", "% de tourbières boisées", "stac_bq",
+    "Tourbière_ouverte_indifférenciée_7", "tourbiere_indifferenciee", "% de tourbières indifférenciées", "stac_bq",
+    "Tourbière_ouverte_minérotrophe_8", "tourbiere_minerotrophe", "% de tourbières ouverte minérotrophe", "stac_bq",
+    "Tourbière_ouverte_ombrotrophe_9", "tourbiere_ombrotrophe", "% de tourbières ouverte ombrotrophe", "stac_bq"
   ),
   "GRHQ" = c(
-    "lakes", "distance_to_lakes", "Distance aux lacs",
-    "rivers", "distance_to_rivers", "Distance aux rivières",
-    "streams", "distance_to_streams", "Distance aux cours d'eau",
-    "stlawrence", "distance_to_stlawrence", "Distance au Saint-Laurent",
-    "coast_stlawrence", "distance_to_coaststlawrence", "Distance à la côte et à l'axe du Saint-Laurent"
+    "lakes", "distance_to_lakes", "Distance aux lacs", "stac_bq",
+    "rivers", "distance_to_rivers", "Distance aux rivières", "stac_bq",
+    "streams", "distance_to_streams", "Distance aux cours d'eau", "stac_bq",
+    "stlawrence", "distance_to_stlawrence", "Distance au Saint-Laurent", "stac_bq",
+    "coast_stlawrence", "distance_to_coaststlawrence", "Distance à la côte et à l'axe du Saint-Laurent", "stac_bq"
   ),
   "cop-dem-glo" = c(
-    "elevation", "elevation", "Élévation",
-    "ruggedness", "ruggedness", "Indice de rugosité topographique",
-    "distance_to_cliffs", "distance_to_cliffs", "Distance aux falaises"
+    "elevation", "elevation", "Élévation", "stac_bq",
+    "ruggedness", "ruggedness", "Indice de rugosité topographique", "stac_bq",
+    "distance_to_cliffs", "distance_to_cliffs", "Distance aux falaises", "stac_bq"
   ),
   "geomorphons_percentages" = c(
-    "flat", "flat", "% de terrains plats"
+    "flat", "flat", "% de terrains plats", "stac_old"
   ),
   "carte_eco_code_terrain_depot" = c(
-    "distance_aux_habitats_tortues", "distance_aux_habitats_tortues", "Distance aux habitats de tortues"
+    "distance_aux_habitats_tortues", "distance_aux_habitats_tortues", "Distance aux habitats de tortues", "stac_bq"
+  ),
+  "geologie_du_socle" = c(
+    "basique", "basique", "% de roches basiques", "stac_bq",
+    "calcaire", "calcaire", "% de roches calcaires", "stac_bq", 
+    "dolomie", "dolomie", "% de roches dolomitiques", "stac_bq", 
+    "marbre", "marbre", "% de marbre", "stac_bq", 
+    "serpentine", "serpentine", "% de roches serpentineuses", "stac_bq", 
+    "mafique" , "mafique", "% de roches mafiques", "stac_bq",
+    "ignees_volcaniques", "ignees_volcaniques", "% de roches ignées volcaniques", "stac_bq",
+    "ignees_intrusives", "ignees_intrusives", "% de roches ignées intrusives", "stac_bq",
+    "metamorphiques", "metamorphiques", "% de roches métamorphiques", "stac_bq",
+    "sedimentaires", "sedimentaires", "% de roches ignées sédimentaires", "stac_bq"
   )
 )
 
 collections <- lapply(collections, function(i){
   list(
-    var = i[seq(1, length(i), by = 3)],
-    name = i[seq(2, length(i), by = 3)],
-    fr = i[seq(3, length(i), by = 3)]    
+    var = i[seq(1, length(i), by = 4)],
+    name = i[seq(2, length(i), by = 4)],
+    fr = i[seq(3, length(i), by = 4)],
+    stac = i[seq(4, length(i), by = 4)]     
   )
 })
 
 
 ###############################################
 ### add collections with automated names ######
-
-climvars <- c(
-  "mean annual air temperature", "Température moyenne annuelle",
-  "mean diurnal air temperature range", "Amplitude de la température moyenne annuelle ",
-  "isothermality", "Isothermalité",
-  "temperature seasonality", "Saisonnalité de la température",
-  "mean daily maximum air temperature of the warmest month", "Température maximale quotidienne moyenne du mois le plus chaud",
-  "mean daily minimum air temperature of the coldest month", "Température minimale quotidienne moyenne du mois le plus froid",
-  "annual range of air temperature", "Amplitude annuelle de la température",
-  "mean daily mean air temperatures of the wettest quarter", "Température moyenne quotidienne du trimestre le hlus humide",
-  "mean daily mean air temperatures of the driest quarter", "Température moyenne quotidienne du trimestre le plus sec",
-  "mean daily mean air temperatures of the warmest quarter", "Température moyenne quotidienne du trimestre le plus chaud",
-  "mean daily mean air temperatures of the coldest quarter", "Température moyenne quotidienne du trimestre le plus froid",
-  "annual precipitation amount", "Précipitations annuelles",
-  "precipitation amount of the wettest month", "Précipitations du mois le plus humide",
-  "precipitation amount of the driest month", "Précipitations du mois le plus sec",
-  "precipitation seasonality", "Saisonnalité des précipitations",
-  "mean monthly precipitation amount of the wettest quarter", "Précipitations mensuelles moyennes du trimestre le plus humide",
-  "mean monthly precipitation amount of the driest quarter", "Précipitations mensuelles moyennes du trimestre le plus sec",
-  "mean monthly precipitation amount of the warmest quarter", "Précipitations mensuelles moyennes du trimestre le plus chaud",
-  "mean monthly precipitation amount of the coldest quarter", "Précipitations mensuelles moyennes du trimestre le plus froid"
-)
-
-
-collections[["chelsa-clim"]]$var <- paste0("bio", 1:19)
-collections[["chelsa-clim"]]$name <- gsub(" ", "_", climvars[seq(1, length(climvars), by = 2)])
-collections[["chelsa-clim"]]$fr <- climvars[seq(2, length(climvars), by = 2)]
 
 cecvars <- c(
   "coniferous", "% de forêts conifériennes",
@@ -238,54 +226,27 @@ cecvars <- c(
 collections[["cec_land_cover_percentage"]]$var <- paste0("cec_land_cover_percent_class_", 1:19)
 collections[["cec_land_cover_percentage"]]$name <- cecvars[seq(1, length(cecvars), by = 2)]
 collections[["cec_land_cover_percentage"]]$fr <- cecvars[seq(2, length(cecvars), by = 2)]
-
+collections[["cec_land_cover_percentage"]]$stac <- rep("stac_bq", length(collections[["cec_land_cover_percentage"]]$var))
 
 ### Ouranos
 coll <- "ouranos_past_climate_period"
 
-ids <- get_ids(coll, io)
-fr <- get_fr(coll, io)
+ids <- get_ids(coll, stac(get("stac_bq")))
+fr <- get_fr(coll, stac(get("stac_bq")))
 
 collections[[coll]]$var <- ids
 collections[[coll]]$name <- ids
 collections[[coll]]$fr <- fr
-
+collections[[coll]]$stac <- rep("stac_bq", length(ids))
 
 ###############################################
 ### add collections with more complex names ###
 
-### Chelsa ####################################
-coll <- "chelsa-clim-proj"
-
-ids <- get_ids(coll, io)
-
-table(sapply(strsplit(ids, "_"), "[", 2))
-lapply(strsplit(ids, "_"), "[", 3:4) |>
-  do.call("rbind", args = _) |>
-  as.data.table() |>
-  setnames(c("model", "ssp")) |>
-  _[ , (n = .N), by = .(model, ssp)]
-invisible(lapply(2:4, function(i){
-  dput(unique(sapply(strsplit(ids, "_"), "[", i)))
-}))
-
-timeperiod <- c("2071-2100", "2041-2070", "2011-2040")[2]
-model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")[4]
-ssp <- c("ssp585", "ssp370", "ssp126")[3]
-
-variables <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
-      apply(1, function(i){paste(i, collapse = "_")})
-ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)]      
-
-#collections[["chelsa-clim-proj"]]$var <- ids
-#collections[["chelsa-clim-proj"]]$name <- ids
-
-
 ### Ouranos ####################################
 coll <- "ouranos_climate_projections"
 
-ids <- get_ids(coll, io)
-fr <- get_fr(coll, io)
+ids <- get_ids(coll, stac(get("stac_old")))
+fr <- get_fr(coll, stac(get("stac_old")))
  
 grep("2030|2060|2090", ids, value = TRUE) |>
  strsplit("_") |>
@@ -317,11 +278,11 @@ kfr <- fr[match(kids, ids)]
 ################################################
 #### Put vars together #########################
 
-variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
+variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), stac = unlist(lapply(collections, function(i){i$stac}), use.names = FALSE), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
 
 
 urls <- lapply(seq_along(collections), function(i){
-  get_urls(names(collections)[[i]], collections[[i]]$var, io)
+  get_urls(names(collections)[[i]], collections[[i]]$var, stac(get(collections[[i]]$stac[1])))
 })
 
 variables$url <- unlist(urls, use.names = FALSE)
@@ -374,7 +335,7 @@ rfill <- rbind(rfill, rfill0)
 #rfill <- rfill[10:12, ]
 
 # make mask
-cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
+cmd <- sprintf('gdal_calc.py -A %s/P1_AnnMeanTemp.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
 system(cmd)
 
 
@@ -520,7 +481,7 @@ system(cmd)
 cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
-foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
+foreach(i = 1:nrow(variables[1:nrow(variables), ][1:2,])) %dopar% {
 #cmd <- sprintf('gdal_translate -of COG -r average -tr 500 500 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i])
 cmd <- sprintf('gdalwarp -r average -tr 200 200 -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling and no need to produce COG here
 system(cmd)
