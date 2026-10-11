@@ -481,7 +481,7 @@ system(cmd)
 cl <- makeCluster(10)
 registerDoParallel(cl)
 getDoParWorkers()
-foreach(i = 1:nrow(variables[1:nrow(variables), ][1:2,])) %dopar% {
+foreach(i = 1:nrow(variables[1:nrow(variables), ])) %dopar% {
 #cmd <- sprintf('gdal_translate -of COG -r average -tr 500 500 -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i])
 cmd <- sprintf('gdalwarp -r average -tr 200 200 -srcnodata -9999 -dstnodata -9999 -ovr NONE -co COMPRESS=DEFLATE %s/%s.tif %s/%s_lowres.tif', tmpath, variables$name[i], tmpath, variables$name[i]) # do not use overview in resampling and no need to produce COG here
 system(cmd)
