@@ -1,5 +1,7 @@
 
-### This script gathers predictors for modeling the distribution of emv species for the finance indicators
+### This script gathers predictors for modeling the distribution of emv species for the finance indicators or for climate niches. It is meant to be run on a VM or NOT on Rorqual!
+
+## The producing of QC.gpkg can howver be done on rorqual on login node
 
 library(terra)
 library(sf)
@@ -8,6 +10,8 @@ library(rstac)
 library(geodata)
 library(doParallel)
 library(foreach)
+library(ratlas)
+library(rmapshaper)
 
 #library(terra)
 #r <- rast("data/predictors.tif")
@@ -64,8 +68,10 @@ region <- na
 st_write(region, file.path(tmpath, "NA.gpkg"), append = FALSE)
 x <- st_read(file.path(tmpath, "NA.gpkg"))
 
-
-io <- stac("https://io.biodiversite-quebec.ca/stac/")
+### STAC information
+stac_old <- "https://io.biodiversite-quebec.ca/stac/"
+stac_bq <- "https://io.biodiversite-quebec.ca/stac2/"
+stac_biab <- "https://stac.geobon.org/"
 coll <- "chelsa-clim"
 
 ###############################################
@@ -73,74 +79,47 @@ coll <- "chelsa-clim"
 
 collections <- list(
   "earthenv_topography_derived" = c(
-    "geomflat_perc", "earthenv_geomflat", "% de terrains plats", 
-    "geomfootslope_per", "earthenv_geomfootslope", "% de bas de pentes"
+    "geomflat_perc", "earthenv_geomflat", "% de terrains plats", "stac_biab", 
+    "geomfootslope_per", "earthenv_geomfootslope", "% de bas de pentes", "stac_biab"
   ),
   "earthenv_topography" = c(
-    "elevation", "earthenv_elevation", "Élévation",
-    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique"
+    "elevation", "earthenv_elevation", "Élévation", "stac_biab",
+    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique" "stac_biab"
   ),
   "soilgrids" = c(
-    "sand_0-5cm", "sand", "% de sable",
-    "clay_0-5cm", "clay", "% d'argile",
-    "silt_0-5cm", "silt", "% de limon",
-    "phh2o_0-5cm", "ph", "pH",
-    "nitrogen_0-5cm", "nitrogen", "Azote",
-    "bdod_0-5cm", "bulk_density", "Densité volumique",
-    "soc_0-5cm", "soil_organic_carbon", "Carbone organique du sol",
-    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique"
+    "sand_0-5cm", "sand", "% de sable", "stac_biab",
+    "clay_0-5cm", "clay", "% d'argile", "stac_biab",
+    "silt_0-5cm", "silt", "% de limon", "stac_biab",
+    "phh2o_0-5cm", "ph", "pH", "stac_biab",
+    "nitrogen_0-5cm", "nitrogen", "Azote", "stac_biab",
+    "bdod_0-5cm", "bulk_density", "Densité volumique", "stac_biab",
+    "soc_0-5cm", "soil_organic_carbon", "Carbone organique du sol", "stac_biab",
+    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique" "stac_biab"
   ),
   "distance_to_roads" = c(
-    "distance_to_roads", "distance_to_roads", "Distance aux routes"
+    "distance_to_roads", "distance_to_roads", "Distance aux routes" "stac_biab"
   ),
   "silvis" = c(
-   "NDVI16_cumulative", "ndvi", "NDVI",
-   "LAI8_cumulative", "lai", "Index de surface foliaire"
+   "NDVI16_cumulative", "ndvi", "NDVI", "stac_biab",
+   "LAI8_cumulative", "lai", "Index de surface foliaire" "stac_biab"
   ),
   "ghmts" = c(
-    "GHMTS", "human_modification", "Modifications humaines"
+    "GHMTS", "human_modification", "Modifications humaines", "stac_biab"
   )
 )
 
 collections <- lapply(collections, function(i){
   list(
-    var = i[seq(1, length(i), by = 3)],
-    name = i[seq(2, length(i), by = 3)],
-    fr = i[seq(3, length(i), by = 3)]   
+    var = i[seq(1, length(i), by = 4)],
+    name = i[seq(2, length(i), by = 4)],
+    fr = i[seq(3, length(i), by = 4)] 
+    stac = i[seq(4, length(i), by = 4)]  
   )
 })
 
 
 ###############################################
 ### add collections with automated names ######
-
-### Chelsa ####################################
-climvars <- c(
-  "mean annual air temperature", "Température moyenne annuelle",
-  "mean diurnal air temperature range", "Amplitude de la température moyenne annuelle ",
-  "isothermality", "Isothermalité",
-  "temperature seasonality", "Saisonnalité de la température",
-  "mean daily maximum air temperature of the warmest month", "Température maximale quotidienne moyenne du mois le plus chaud",
-  "mean daily minimum air temperature of the coldest month", "Température minimale quotidienne moyenne du mois le plus froid",
-  "annual range of air temperature", "Amplitude annuelle de la température",
-  "mean daily mean air temperatures of the wettest quarter", "Température moyenne quotidienne du trimestre le hlus humide",
-  "mean daily mean air temperatures of the driest quarter", "Température moyenne quotidienne du trimestre le plus sec",
-  "mean daily mean air temperatures of the warmest quarter", "Température moyenne quotidienne du trimestre le plus chaud",
-  "mean daily mean air temperatures of the coldest quarter", "Température moyenne quotidienne du trimestre le plus froid",
-  "annual precipitation amount", "Précipitations annuelles",
-  "precipitation amount of the wettest month", "Précipitations du mois le plus humide",
-  "precipitation amount of the driest month", "Précipitations du mois le plus sec",
-  "precipitation seasonality", "Saisonnalité des précipitations",
-  "mean monthly precipitation amount of the wettest quarter", "Précipitations mensuelles moyennes du trimestre le plus humide",
-  "mean monthly precipitation amount of the driest quarter", "Précipitations mensuelles moyennes du trimestre le plus sec",
-  "mean monthly precipitation amount of the warmest quarter", "Précipitations mensuelles moyennes du trimestre le plus chaud",
-  "mean monthly precipitation amount of the coldest quarter", "Précipitations mensuelles moyennes du trimestre le plus froid"
-)
-
-
-collections[["chelsa-clim"]]$var <- paste0("bio", 1:19)
-collections[["chelsa-clim"]]$name <- gsub(" ", "_", climvars[seq(1, length(climvars), by = 2)])
-collections[["chelsa-clim"]]$fr <- climvars[seq(2, length(climvars), by = 2)]
 
 cecvars <- c(
   "coniferous", "% de forêts conifériennes",
@@ -167,62 +146,27 @@ cecvars <- c(
 collections[["cec_land_cover_percentage"]]$var <- paste0("cec_land_cover_percent_class_", 1:19)
 collections[["cec_land_cover_percentage"]]$name <- cecvars[seq(1, length(cecvars), by = 2)]
 collections[["cec_land_cover_percentage"]]$fr <- cecvars[seq(2, length(cecvars), by = 2)]
+collections[["cec_land_cover_percentage"]]$stac <- rep("stac_bq", length(collections[["cec_land_cover_percentage"]]$var))
 
 ### Ouranos ######################################
 coll <- "ouranos_past_climate_period"
 
-ids <- get_ids(coll, io)
-fr <- get_fr(coll, io)
+ids <- get_ids(coll, stac(get("stac_bq")))
+fr <- get_fr(coll, stac(get("stac_bq")))
 
 collections[[coll]]$var <- ids
 collections[[coll]]$name <- ids
 collections[[coll]]$fr <- fr
+collections[[coll]]$stac <- rep("stac_bq", length(ids))
 
 ###############################################
 ### add collections with more complex names ###
 
-### Chelsa ####################################
-coll <- "chelsa-clim-proj"
-
-ids <- get_ids(coll, io)
-
-table(sapply(strsplit(ids, "_"), "[", 2))
-lapply(strsplit(ids, "_"), "[", 3:4) |>
-  do.call("rbind", args = _) |>
-  as.data.table() |>
-  setnames(c("model", "ssp")) |>
-  _[ , (n = .N), by = .(model, ssp)]
-invisible(lapply(2:4, function(i){
-  dput(unique(sapply(strsplit(ids, "_"), "[", i)))
-}))
-
-timeperiod <- c("2071-2100", "2041-2070", "2011-2040")[1:3]
-model <- c("ukesm1-0-ll", "mri-esm2-0", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "gfdl-esm4")[5]
-ssp <- c("ssp585", "ssp370", "ssp126")[2]
-
-variables <- expand.grid(timeperiod = timeperiod, model = model, ssp = ssp) |>
-      apply(1, function(i){paste(i, collapse = "_")})
-ids <- ids[which(sub("^[^_]*_", "", ids) %in% variables)] |>
-  grep("bio1_|bio2_|bio5_|bio6_|bio12_", x = _, value = TRUE)      
-
-#chelsavars <- variables[variables$coll == "chelsa-clim", ]
-idsname <- ids
-idsfr <- ids
-for(i in seq_along(collections[["chelsa-clim"]]$var)){
-  idsname <- gsub(paste0(collections[["chelsa-clim"]]$var[i], "_"), paste0(collections[["chelsa-clim"]]$name[i], "_"), idsname)
-  idsfr <- gsub(paste0(collections[["chelsa-clim"]]$var[i], "_"), paste0(collections[["chelsa-clim"]]$fr[i], " "), idsfr)
-} 
-
-collections[["chelsa-clim-proj"]]$var <- ids
-collections[["chelsa-clim-proj"]]$name <- idsname
-collections[["chelsa-clim-proj"]]$fr <- idsfr
-
-
 ### Ouranos ####################################
 coll <- "ouranos_climate_projections"
 
-ids <- get_ids(coll, io)
-fr <- get_fr(coll, io)
+ids <- get_ids(coll, stac(get("stac_old")))
+fr <- get_fr(coll, stac(get("stac_old")))
  
 grep("2030|2060|2090", ids, value = TRUE) |>
  strsplit("_") |>
@@ -251,14 +195,13 @@ collections[[coll]]$name <- sub("(_|\\s)[^_\\s]*$", "", kids)
 collections[[coll]]$fr <- sub("(_|\\s)[^_\\s]*$", "", kfr)
 
 
-
 #####################################################
 ### Pool variables together #########################
-variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
+variables <- data.frame(coll = rep(names(collections), times = sapply(collections, function(i){length(i$var)})), stac = unlist(lapply(collections, function(i){i$stac}), use.names = FALSE), var = unlist(lapply(collections, function(i){i$var}), use.names = FALSE), name = unlist(lapply(collections, function(i){i$name}), use.names = FALSE), fr = unlist(lapply(collections, function(i){i$fr}), use.names = FALSE))
 
 
 urls <- lapply(seq_along(collections), function(i){
-  get_urls(names(collections)[[i]], collections[[i]]$var, io)
+  get_urls(names(collections)[[i]], collections[[i]]$var, stac(get(collections[[i]]$stac[1])))
 })
 
 variables$url <- unlist(urls, use.names = FALSE)
@@ -270,11 +213,11 @@ if(TRUE){
 
 if(TRUE){
   desc <- variables
-  names(desc) <- c("collection", "var", "variable", "fr", "url")
+  names(desc) <- c("collection", "stac", "var", "variable", "fr", "url")
   #desc <- desc[, c("collection", "variable", "url")]
   #desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na", paste0(desc$variable, ".tif"))
   write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
-  system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
+  system(sprintf(". ~/.ssh/s5cmd_bq.sh; s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/na/", tmpath))
   #x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/na/description.csv")
 }
 
@@ -303,7 +246,7 @@ rfill0 <- data.frame(var = variables$name[variables$coll %in% c("silvis")], fill
 rfill <- rbind(rfill, rfill0)
 
 # make mask
-cmd <- sprintf('gdal_calc.py -A %s/mean_annual_air_temperature.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
+cmd <- sprintf('gdal_calc.py -A %s/P1_AnnMeanTemp.tif --outfile=%s/mask.tif --calc="1*(A!=-9999)" --NoDataValue=none --type=Byte --co="COMPRESS=DEFLATE" --overwrite', tmpath, tmpath)
 system(cmd)
 
 
@@ -414,7 +357,7 @@ system(cmd)
 
 quit(save = "no")
 
-system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.tif' s3://bq-io/sdm_predictors/na/", tmpath))
+system(sprintf(". ~/.ssh/s5cmd_bq.sh; s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.tif' s3://bq-sdm/sdm_predictors/na/", tmpath))
 
 ##########################################################################
 ### the stacking of all files does not seem to work or end so putting this on ice for now...
