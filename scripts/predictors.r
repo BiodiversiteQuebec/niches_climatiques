@@ -9,6 +9,11 @@ options(width = 150)
 #names(predictors_proj)[c(20, 21, 24, 25, 26)] <- c("geomfootslope", "geomflat", "silt", "sand", "clay")
 
 desc_large <- read.csv("data/nadescription.csv") |> arrange(collection, variable)
+if(!"stac" %in% names(desc_large)){ # temporary fix before desc_large gets its stac column
+  desc_large$stac <-ifelse(grepl("cec_|ouranos", desc_large$collection), "stac_bq", "stac_biab")
+  desc_large <- desc_large[ ,c("collection", "stac", "var", "variable", "fr", "url")]
+}
+
 desc_small <- read.csv("data/qcdescription.csv") |> arrange(collection, variable)
 
 ### vars to pool
@@ -22,20 +27,6 @@ predictors <- rast("data/predictors_500_NA.tif")
 #predictors <- predictors[[grep("^P\\d+_", names(predictors), value = TRUE, invert = TRUE)]] # temp remove ouranos
 predictors <- predictors[[names(predictors)[!names(predictors) %in% desc_large$variable[grep("chelsa", desc_large$collection)]]]] # remove chelsa
 predictors[[grep("P1_", names(predictors), value = TRUE)]] - 273.15
-
-
-if(any(names(predictors) == "geomflat")){w <- which(names(predictors) == "geomflat");names(predictors)[w]<-"earthenv_geomflat"} # temp fix will become obsolete
-if(any(names(predictors) == "geomfootslope")){w <- which(names(predictors) == "geomfootslope");names(predictors)[w]<-"earthenv_geomfootslope"} # temp fix will become obsolete
-if(any(names(predictors) == "elevation")){w <- which(names(predictors) == "elevation");names(predictors)[w]<-"earthenv_elevation"} # temp fix will become obsolete
-if(any(names(predictors) == "ruggedness")){w <- which(names(predictors) == "ruggedness");names(predictors)[w]<-"earthenv_ruggedness"} # temp fix will become obsolete
-if(any(names(predictors) == "polar_lichen")){w <- which(names(predictors) == "polar_lichen");names(predictors)[w]<-"lichen"} # temp fix will become obsolete
-if(any(names(predictors) == "temperate_deciduous")){w <- which(names(predictors) == "temperate_deciduous");names(predictors)[w]<-"deciduous"} # temp fix will become obsolete
-#ss <- scoff(predictors$mean_annual_air_temperature)[1] # temp fix for scoff differently applied
-#oo <- scoff(predictors$mean_annual_air_temperature )[2]
-#predictors$mean_annual_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$mean_annual_air_temperature) * ss) + oo
-#ss <- scoff(predictors$annual_range_of_air_temperature)[1] # temp fix for scoff differently applied
-#oo <- scoff(predictors$annual_range_of_air_temperature )[2]
-#predictors$annual_range_of_air_temperature <- ((rast("data/predictors_500_NA.tif", raw = TRUE)$annual_range_of_air_temperature) * ss) + oo
 
  #png("plot.png", width = 10, height = 10, units = "in", res = 300);plot(crop(aggregate(p$small$southstlawrence, 2), obs$habitat$small), mar = c(0,0,0,0));plot(st_geometry(obs$habitat$small), add = TRUE);dev.off()
 
