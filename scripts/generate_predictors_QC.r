@@ -298,11 +298,11 @@ variables <- variables[-grep("tropical", variables$name), ]
 
 if(TRUE){
   desc <- variables
-  names(desc) <- c("collection", "var", "variable", "fr", "url")
+  names(desc) <- c("collection", "stac", "var", "variable", "fr", "url")
   #desc <- desc[, c("collection", "variable")]
   #desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc", paste0(desc$variable, ".tif"))
   write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
-  system(sprintf("s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-io/sdm_predictors/qc/", tmpath))
+  system(sprintf(". ~/.ssh/s5cmd_bq.sh; s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-sdm/sdm_predictors/qc/", tmpath))
   x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
 }
 
