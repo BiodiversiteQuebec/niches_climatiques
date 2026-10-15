@@ -446,7 +446,7 @@ graphics.off()
 #species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
 
 if(TRUE){
-  spe <- file.path(path_raster, sp)
+  spe <- file.path(path_raster, gsub(" ", "_", sp))
   temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
   cmd <- paste0(
     "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
