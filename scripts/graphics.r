@@ -378,7 +378,6 @@ dev.off()
 ####################################################################
 ### Évaluations ####################################################
 
-for(sp in species){
 file_pol <- gsub(".tif", ".gpkg", file.path(path_raster, paste0(gsub(" ", "_", sp), "_range_", echelle, ".tif")))
 
 evaluate_models <- c("ClimatX2 (HabitatNA)", "ClimatGAM (HabitatNA)", "ClimatX2 (HabitatQC)", "ClimatGAM (HabitatQC)")
@@ -427,17 +426,6 @@ lapply(seq_along(ran), function(i){
     #add_range2()
 })
 dev.off()
-}
-
-
-
-
-
-
-
-
-
-
 
 graphics.off()
 
@@ -458,21 +446,17 @@ graphics.off()
 #species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
 
 if(TRUE){
-  #species_list <- gsub(" ", "_", species)
-  species_list <- gsub(" ", "_", sp)
-  for (ss in species_list) {
-    spe <- file.path(path_raster, ss)
-    temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
-    cmd <- paste0(
-      "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
-      #"for f in ", spe, "*.gpkg; do ",
-      "for f in $(ls ", spe, "*.gpkg | grep -v observation | grep -v _all.gpkg); do ",
-      "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
-      "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
-    )
-    cat(cmd, "\n")
-    system(cmd)
-  }
+  spe <- file.path(path_raster, sp)
+  temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
+  cmd <- paste0(
+    "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
+    #"for f in ", spe, "*.gpkg; do ",
+    "for f in $(ls ", spe, "*.gpkg | grep -v observation | grep -v _all.gpkg); do ",
+    "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
+    "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
+  )
+  cat(cmd, "\n")
+  system(cmd)
 }
 
 
