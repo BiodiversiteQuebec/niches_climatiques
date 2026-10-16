@@ -76,7 +76,7 @@ for(i in 1:nrow(cases)){
 
 }
 
-system("~/s5cmd --dry-run --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/*_change.pmtiles' s3://bq-io/niches_climatiques/storymap/")
+system(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --dry-run --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/*_change.pmtiles' s3://bq-sdm/niches_climatiques/storymap/")
 
 
 
@@ -94,7 +94,7 @@ for(i in species){
   )
 }
 
-system("~/s5cmd --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/*storymap_sdm.tif' s3://bq-io/niches_climatiques/storymap/")
+system(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/*storymap_sdm.tif' s3://bq-sdm/niches_climatiques/storymap/")
 
 
 
@@ -125,7 +125,7 @@ st_write(aires, "storymap_ranges.gpkg", append = FALSE)
 
 system("ogr2ogr -f PMTiles storymap_ranges.pmtiles storymap_ranges.gpkg storymap_ranges")
  
-system("~/s5cmd --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/storymap_ranges.pmtiles' s3://bq-io/niches_climatiques/storymap/") 
+system(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/storymap_ranges.pmtiles' s3://bq-sdm/niches_climatiques/storymap/") 
 
 
 
