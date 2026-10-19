@@ -152,7 +152,7 @@ for(ii in seq_along(pages)){
       ),      
       range_evaluation = list(
         toc = "Aires de répartition QC",
-        desc = "Aires de distribution provenant des modèles soumis à l'évaluation"
+        desc = "Aires de distribution actuelles des modèles soumis à l'évaluation"
       )                
     )
     
