@@ -68,7 +68,7 @@ plg <- list(size = c(0.33, 1.25), tic.box.col = "#ddd", tic.lwd = 0.5, tic.col =
 #plg <- list(size = c(0.5, 1.5))#, tic.box.col = "#ddd", tic.lwd = 0.5, tic.col = "#ccc", tic = "out")
 #sdm_cols <- terrain.colors(200)
 sdm_cols <- coloScale(1:200, c("grey90", "palegreen3", "forestgreen", "darkgreen","black"))[1:170]
-range_cols <- adjustcolor("forestgreen", 0.75)
+range_cols <- adjustcolor("darkgreen", 0.5)
 
 
 png(topng(gsub(".tif", "_coarse.tif", file_sdm)), units = "in", height = 6, width = 7.5, res = 300)
