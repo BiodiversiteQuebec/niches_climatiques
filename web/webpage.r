@@ -184,7 +184,7 @@ for(ii in seq_along(pages)){
   
   
   
-  src<-"https://object-arbutus.alliancecan.ca/d68de45e9bdf42269bb4a5fba19d525f:bq-sdm/niches_climatiques/figures2"
+  src<-"https://object-arbutus.alliancecan.ca/d68de45e9bdf42269bb4a5fba19d525f:bq-sdm/niches_climatiques/figures3"
   #src<-"/home/frousseu/Downloads/niches_climatiques/results/graphics"
   
   #species<-function(sp,url,copyright,ebirdurl,common,period,n){
