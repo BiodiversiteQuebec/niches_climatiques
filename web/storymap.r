@@ -5,7 +5,8 @@ library(dplyr)
 
 
 
-path_raster <- system("echo $SCRATCH", intern = TRUE) # results/rasters
+#path_raster <- system("echo $SCRATCH", intern = TRUE) # results/rasters
+path_raster <- "/home/frousseu/links/projects/rpp-gonzalez/frousseu/niches_climatiques/results/scratch" # results/rasters
 setwd(path_raster)
 
 display_model <- "climatX2 (habitatQC)"
@@ -76,7 +77,7 @@ for(i in 1:nrow(cases)){
 
 }
 
-system(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --dry-run --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/*_change.pmtiles' s3://bq-sdm/niches_climatiques/storymap/")
+system(sprintf(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --dry-run --numworkers 8 cp -acl public-read --sp '%s/*_change.pmtiles' s3://bq-sdm/niches_climatiques/storymap/", path_raster))
 
 
 
@@ -94,7 +95,7 @@ for(i in species){
   )
 }
 
-system(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/*storymap_sdm.tif' s3://bq-sdm/niches_climatiques/storymap/")
+system(sprintf(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --numworkers 8 cp -acl public-read --sp '%s/*storymap_sdm.tif' s3://bq-sdm/niches_climatiques/storymap/", path_raster))
 
 
 
@@ -125,7 +126,7 @@ st_write(aires, "storymap_ranges.gpkg", append = FALSE)
 
 system("ogr2ogr -f PMTiles storymap_ranges.pmtiles storymap_ranges.gpkg storymap_ranges")
  
-system(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --numworkers 8 cp -acl public-read --sp '/scratch/frousseu/storymap_ranges.pmtiles' s3://bq-sdm/niches_climatiques/storymap/") 
+system(sprintf(". ~/.ssh/s5cmd_bq.sh; ~/s5cmd --numworkers 8 cp -acl public-read --sp '%s/storymap_ranges.pmtiles' s3://bq-sdm/niches_climatiques/storymap/", path_raster)) 
 
 
 
