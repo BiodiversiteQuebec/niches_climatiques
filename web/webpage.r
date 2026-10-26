@@ -117,9 +117,12 @@ for(ii in seq_along(pages)){
       as.data.frame() |> mutate(nom = "Évaluation", type = "evaluations")   
     b10 <- i[1, ] |>
       lapply(function(i){gsub("climatX2", "range_evaluation", i)}) |>
-      as.data.frame() |> mutate(type = "evaluations")                       
+      as.data.frame() |> mutate(type = "evaluations")           
+    b11 <- i[1, ] |>
+      lapply(function(i){gsub("climatX2", "range_evaluation_projections", i)}) |>
+      as.data.frame() |> mutate(type = "evaluations")                   
     
-    x <- rbind(a1, a2, i, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10)
+    x <- rbind(a1, a2, i, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11)
     
     name_desc <- list(
       data = list(
@@ -139,21 +142,25 @@ for(ii in seq_along(pages)){
         desc = "Projections des modèles pour le Québec"
       ),
       range_proj_compare = list(
-        toc = "Aires de répartition QC",
+        toc = "Répartitions QC",
         desc = "Projections des aires de répartition pour le Québec"
       ),
       range_proj_small_change = list(
-        toc = "Aires de répartition QC",
+        toc = "Répartitions QC",
         desc = "Projections des changements dans les aires de répartition pour le Québec"
       ),      
       range_proj_large_change = list(
-        toc = "Aires de répartition NA",
+        toc = "Répartitions NA",
         desc = "Projections des changements dans les aires de répartition pour l'Amérique du Nord"
       ),      
       range_evaluation = list(
-        toc = "Aires de répartition QC",
+        toc = "Répartitions QC",
         desc = "Aires de distribution actuelles des modèles soumis à l'évaluation"
-      )                
+      ),      
+      range_evaluation_projections = list(
+        toc = "Répartitions projetées QC",
+        desc = "Aires de distribution actuelles et projetées des modèles soumis à l'évaluation"
+      )                 
     )
     
 
