@@ -83,18 +83,18 @@ for(i in 1:nrow(cases)){
     change <- current |> st_transform(4326) |> mutate(change = "stable")
   } else {
 
-    minus <- st_difference(current, projected) |> st_geometry() |> st_union() |> st_as_sf() |> st_transform(4326) |> mutate(change = "loss")
-    plus <- st_difference(projected, current) |> st_geometry() |> st_as_sf() |> st_transform(4326)  |> mutate(change = "gain")
-    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> st_transform(4326) |> mutate(change = "stable")
+    minus <- st_difference(current, projected) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_union() |> st_as_sf() |> st_transform(4326) |> mutate(change = "loss") |> st_make_valid()
+    plus <- st_difference(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> st_transform(4326)  |> mutate(change = "gain") |> st_make_valid()
+    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> st_transform(4326) |> mutate(change = "stable") |> st_make_valid()
 
     change <- rbind(minus, plus, equal)
   }
 
-  change <- st_intersection(change, qc) # make sure with buffer on precise locations that it does not extend pas the QC polygon 
+  change <- st_intersection(change, qc) |> st_make_valid() # make sure with buffer on precise locations that it does not extend pas the QC polygon 
 
 
   #png("/home/frousseu/links/projects/rpp-gonzalez/frousseu/niches_climatiques/plot.png", width = 7, height = 7, res = 300, units = "in")
-  #plot(st_geometry(equal), border = NA, col = adjustcolor("forestgreen", 0.5))
+  #plot(st_geometry(change), border = NA, col = adjustcolor(c("tomato", "forestgreen", "blue"), 0.5))
   #dev.off()
 
   st_write(change, file.path(path_raster, gsub(".pmtiles", "_change.gpkg", cases$newfile[i])), append = FALSE)
