@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=rpp-gonzalez
-#SBATCH --time=15:00:00
+#SBATCH --time=10:00:00
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=200G 
 #SBATCH --job-name=storymap

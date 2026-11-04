@@ -37,11 +37,10 @@ smooth_range <- function(file, layer, out = sub("\\.gpkg$", "_smoothed.gpkg", fi
 
 #path_raster <- system("echo $SCRATCH", intern = TRUE) # results/rasters
 
-qc <- st_read("data/QC.gpkg") |> 
-  st_transform(4326)
-
 path_raster <- "/home/frousseu/links/projects/rpp-gonzalez/frousseu/niches_climatiques/results/scratch" # results/rasters
 setwd(path_raster)
+
+qc <- st_read("../../data/QC.gpkg")
 
 display_model <- "climatX2 (habitatQC)"
 pat <- "_range_small.gpkg"
@@ -68,7 +67,7 @@ cases$newfile <- paste(paste(cases$species, cases$scenarios, cases$timeperiod, s
 #cases <- cases[1:2, ]
 
 
-for(i in 1:nrow(cases)){
+for(i in 64:nrow(cases)){
   print(cases$file[i])  
   #system(
   #  sprintf("ogr2ogr -f PMTiles %s %s %s -nln model", cases$newfile[i], cases$file[i], shQuote(cases$layer[i]))
@@ -77,24 +76,24 @@ for(i in 1:nrow(cases)){
   current <- smooth_range(file = gsub("_proj_", "_", cases$file[i]), layer = display_model, out = "current.gpkg") |>
     st_read()
   projected <- smooth_range(file = cases$file[i], layer = cases$layer[i], out = "projected.gpkg") |>
-    st_read()  
+    st_read()
 
   if(cases$scenarios[i] == "ssp000"){
-    change <- current |> st_transform(4326) |> mutate(change = "stable")
+    change <- current |> mutate(change = "stable")
   } else {
 
-    minus <- st_difference(current, projected) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_union() |> st_as_sf() |> st_transform(4326) |> mutate(change = "loss") |> st_make_valid()
-    plus <- st_difference(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> st_transform(4326)  |> mutate(change = "gain") |> st_make_valid()
-    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> st_transform(4326) |> mutate(change = "stable") |> st_make_valid()
+    minus <- st_difference(current, projected) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_union() |> st_as_sf() |> mutate(change = "loss") |> st_make_valid()
+    plus <- st_difference(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> mutate(change = "gain") |> st_make_valid()
+    equal <- st_intersection(projected, current) |> st_collection_extract("POLYGON") |> st_cast("MULTIPOLYGON") |> st_union() |> st_geometry() |> st_as_sf() |> mutate(change = "stable") |> st_make_valid()
 
     change <- rbind(minus, plus, equal)
   }
 
-  change <- st_intersection(change, qc) |> st_make_valid() # make sure with buffer on precise locations that it does not extend pas the QC polygon 
+  change <- st_intersection(change, qc) |> st_transform(4326) |> st_make_valid() # make sure with buffer on precise locations that it does not extend pas the QC polygon 
 
 
   #png("/home/frousseu/links/projects/rpp-gonzalez/frousseu/niches_climatiques/plot.png", width = 7, height = 7, res = 300, units = "in")
-  #plot(st_geometry(change), border = NA, col = adjustcolor(c("tomato", "forestgreen", "blue"), 0.5))
+  #plot(st_geometry(plus), border = NA, col = adjustcolor(c("tomato", "forestgreen", "blue"), 0.5))
   #dev.off()
 
   st_write(change, file.path(path_raster, gsub(".pmtiles", "_change.gpkg", cases$newfile[i])), append = FALSE)
