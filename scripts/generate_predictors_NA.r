@@ -69,7 +69,6 @@ st_write(region, file.path(tmpath, "NA.gpkg"), append = FALSE)
 x <- st_read(file.path(tmpath, "NA.gpkg"))
 
 ### STAC information
-stac_old <- "https://io.biodiversite-quebec.ca/stac/"
 stac_bq <- "https://io.biodiversite-quebec.ca/stac2/"
 stac_biab <- "https://stac.geobon.org/"
 coll <- "chelsa-clim"
@@ -165,8 +164,8 @@ collections[[coll]]$stac <- rep("stac_bq", length(ids))
 ### Ouranos ####################################
 coll <- "ouranos_climate_projections"
 
-ids <- get_ids(coll, stac(get("stac_old")))
-fr <- get_fr(coll, stac(get("stac_old")))
+ids <- get_ids(coll, stac(get("stac_bq")))
+fr <- get_fr(coll, stac(get("stac_bq")))
  
 grep("2030|2060|2090", ids, value = TRUE) |>
  strsplit("_") |>
