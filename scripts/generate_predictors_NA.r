@@ -64,6 +64,20 @@ na <- st_transform(na, epsg)
 na <- na[!na$NAME_1 %in% c("Hawaii"), ]
 na <- na[-grep("Aleutians", na$NAME_2), ]
 na <- st_union(na)
+
+
+qc_atlas <- ratlas::db_read_table(table_name = "regions", type = "admin", scale = 1, output_geometry = TRUE) |>
+  sf::st_as_sf() |>
+  sf::st_transform(epsg)
+
+buf <- st_sfc(st_point(c(-74.560676, 45.043618)), crs = 4326) |> # There are are FSL parts in Ontario that GADM doesn't get so cover them up
+  st_transform(epsg) |>
+  st_buffer(100000, nQuadSegs = 90)
+
+na <- c(st_geometry(na), st_geometry(qc_atlas), st_geometry(buf)) |> # GADM doesn't get FSL right so get all of it
+  st_union() |>
+  st_as_sf()
+
 region <- na
 st_write(region, file.path(tmpath, "NA.gpkg"), append = FALSE)
 x <- st_read(file.path(tmpath, "NA.gpkg"))
