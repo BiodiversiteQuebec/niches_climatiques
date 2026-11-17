@@ -81,13 +81,12 @@ g <- st_intersection(qc_atlas, qc_gadm)
 qc <- rbind(g[, "geometry"], pols[c(2, 4), "geometry"]) |>
   st_union()
 
-region <- qc
+region <- qc_atlas # used to be qc a merge of gadm and atlas
 st_write(region, file.path(tmpath, "QC.gpkg"), append = FALSE)
 
 # png("plot.png", width = 5, height = 5, units = "in", res = 300); plot(st_geometry(qc)); dev.off()
 
 ### STAC information
-stac_old <- "https://io.biodiversite-quebec.ca/stac/"
 stac_bq <- "https://io.biodiversite-quebec.ca/stac2/"
 stac_biab <- "https://stac.geobon.org/"
 coll <- "chelsa-clim"
@@ -131,19 +130,19 @@ collections <- list(
     "mhc", "mhc", "Hauteur de la canopée", "stac_bq"
   ),
   "sigeom_zones_morphosedimentologiques_percentage" = c(
-    "Alluvion_1", "alluvion", "% de dépôts d'alluvions", "stac_old",
-    "Dépôt_2", "versant", "% de dépôts de versants", "stac_old",
-    "Éolien_3", "eolien", "% de dépôts éoliens", "stac_old",
-    "Glaciaire_4", "glaciaire", "% de dépôts glaciaires", "stac_old",
-    "Anthropogénique_5", "anthropogenique", "% de dépôts anthropogéniques", "stac_old",
-    "Lacustre_6", "lacustre", "% de dépôts lacustres", "stac_old",
-    "Glaciolacustre_7", "glaciolacustre", "% de dépôts glaciolacustres", "stac_old",
-    "Marin_8", "marin", "% de dépôts marins", "stac_old",
-    "Glaciomarin_9", "glaciomarin", "% de dépôts glaciomarins", "stac_old",
-    "Organique_10", "organique", "% de dépôts organiques", "stac_old",
-    "Quaternaire_11", "quaternaire", "% de dépôts quaternaires", "stac_old",
-    "Roche_12", "roche", "% de dépôts rocheux", "stac_old",
-    "Till_13", "till", "% de dépôts de till", "stac_old"
+    "Alluvion_1", "alluvion", "% de dépôts d'alluvions", "stac_bq",
+    "Depot_2", "versant", "% de dépôts de versants", "stac_bq",
+    "Eolien_3", "eolien", "% de dépôts éoliens", "stac_bq",
+    "Glaciaire_4", "glaciaire", "% de dépôts glaciaires", "stac_bq",
+    "Anthropogenique_5", "anthropogenique", "% de dépôts anthropogéniques", "stac_bq",
+    "Lacustre_6", "lacustre", "% de dépôts lacustres", "stac_bq",
+    "Glaciolacustre_7", "glaciolacustre", "% de dépôts glaciolacustres", "stac_bq",
+    "Marin_8", "marin", "% de dépôts marins", "stac_bq",
+    "Glaciomarin_9", "glaciomarin", "% de dépôts glaciomarins", "stac_bq",
+    "Organique_10", "organique", "% de dépôts organiques", "stac_bq",
+    "Quaternaire_11", "quaternaire", "% de dépôts quaternaires", "stac_bq",
+    "Roche_12", "roche", "% de dépôts rocheux", "stac_bq",
+    "Till_13", "till", "% de dépôts de till", "stac_bq"
   ),
   "mhp2023_percentage" = c(
     "Eau_peu_profonde_1", "eau_peu_profonde", "% d'eau peu profonde", "stac_bq",
@@ -169,7 +168,7 @@ collections <- list(
     "distance_to_cliffs", "distance_to_cliffs", "Distance aux falaises", "stac_bq"
   ),
   "geomorphons_percentages" = c(
-    "flat", "flat", "% de terrains plats", "stac_old"
+    "flat", "flat", "% de terrains plats", "stac_bq"
   ),
   "carte_eco_code_terrain_depot" = c(
     "distance_aux_habitats_tortues", "distance_aux_habitats_tortues", "Distance aux habitats de tortues", "stac_bq"
@@ -245,8 +244,8 @@ collections[[coll]]$stac <- rep("stac_bq", length(ids))
 ### Ouranos ####################################
 coll <- "ouranos_climate_projections"
 
-ids <- get_ids(coll, stac(get("stac_old")))
-fr <- get_fr(coll, stac(get("stac_old")))
+ids <- get_ids(coll, stac(get("stac_bq")))
+fr <- get_fr(coll, stac(get("stac_bq")))
  
 grep("2030|2060|2090", ids, value = TRUE) |>
  strsplit("_") |>
@@ -303,7 +302,7 @@ if(TRUE){
   #desc$url <- file.path("/vsicurl/https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc", paste0(desc$variable, ".tif"))
   write.csv(desc, file.path(tmpath, "description.csv"), row.names = FALSE)
   system(sprintf(". ~/.ssh/s5cmd_bq.sh; s5cmd --numworkers 8 cp -acl public-read --sp '%s/*.csv' s3://bq-sdm/sdm_predictors/qc/", tmpath))
-  x <- read.csv("https://object-arbutus.cloud.computecanada.ca/bq-io/sdm_predictors/qc/description.csv")
+  x <- read.csv("https://object-arbutus.alliancecan.ca/d68de45e9bdf42269bb4a5fba19d525f:bq-sdm/sdm_predictors/qc/description.csv")
 }
 
 #r <- rast("/home/frousseu/data2/qc/P1_AnnMeanTemp.tif")
