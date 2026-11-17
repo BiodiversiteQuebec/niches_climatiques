@@ -156,7 +156,7 @@ names(ran) <- names(models[i])
 writeRaster(ran, file_range, overwrite = overwrite, gdal = gdal)
 
 polran <- ifel(ran == 1, 1, NA) |>
-  aggregate(5, fun = "max", na.rm = TRUE) |>
+  #aggregate(5, fun = "max", na.rm = TRUE) |>
   as.polygons() |>
   st_as_sf()
 
@@ -188,7 +188,7 @@ pr_proj <- lapply(seq_along(predictions_proj), function(j){
   }
 writeRaster(ran_proj, file_range_proj, overwrite = o, gdal = g)
 polran_proj <- ifel(ran_proj == 1, 1, NA) |>
-  aggregate(5, fun = "max", na.rm = TRUE) |>
+  #aggregate(5, fun = "max", na.rm = TRUE) |>
   as.polygons() |>
   st_as_sf()
 st_write(polran_proj, file_pol_proj, layer = paste(names(models[i]), names(predictions_proj)[j]), append = a, delete_dsn = dd, delete_layer = dl)

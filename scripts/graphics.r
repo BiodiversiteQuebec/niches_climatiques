@@ -12,10 +12,10 @@ add_range2 <- function(){
 }
 
 plot_lakes <- function(lwd = 0.1, ...){
-  plot(st_geometry(lakes), col = "white", border = NA, add = TRUE)
-  plot(st_geometry(rivers), col = "white", add = TRUE, ...)
-  plot(st_geometry(hydrolakes), col = "white",  border = NA, add = TRUE)
-  plot(st_geometry(lakes), col = "white",  border = NA, add = TRUE)
+  plot(st_geometry(lakes), col = "white", border = NA, lwd = lwd, add = TRUE)
+  plot(st_geometry(rivers), col = "white", lwd = lwd, add = TRUE, ...)
+  plot(st_geometry(hydrolakes), col = "white", lwd = lwd,  border = NA, add = TRUE)
+  plot(st_geometry(lakes), col = "white", lwd = lwd,  border = NA, add = TRUE)
 }
 
 plot_max <- function(x){
@@ -427,6 +427,107 @@ lapply(seq_along(ran), function(i){
 })
 dev.off()
 
+
+
+
+
+
+
+if(TRUE){
+  #for(sp in species[4:13]){
+  spe <- file.path(path_raster, gsub(" ", "_", sp))
+  temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
+  cmd <- paste0(
+    "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
+    #"for f in ", spe, "*.gpkg; do ",
+    "for f in $(ls ", spe, "*.gpkg | grep -v observation | grep -v _all.gpkg); do ",
+    "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
+    "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
+  )
+  cat(cmd, "\n")
+  system(cmd)
+  #}
+}
+
+
+
+####################################################################
+### Évaluations along projections ##################################
+
+#for(sp in species){
+file_pol <- file.path(path_raster, paste0(gsub(" ", "_", sp), "_all.gpkg"))
+
+evaluate_models <- c("ClimatX2 (HabitatNA)", "ClimatGAM (HabitatNA)", "ClimatX2 (HabitatQC)", "ClimatGAM (HabitatQC)")
+ee <- expand.grid(model = evaluate_models, scenario = c("", grep("ssp370", scenarios, value = TRUE)))
+ee$model <- factor(ee$model, level = evaluate_models)
+ee$scenario <- factor(ee$scenario, level = unique(ee$scenario))
+ee <- ee[order(ee$model, ee$scenario), ] |>
+  apply(1, function(i){paste(i, collapse = " ")}) |>
+  trimws() |>
+  unname()
+
+ran <- lapply(ee, function(i){
+  if(grepl("NA", i)){
+    x <- st_read(gsub("small", "large", file_pol), layer = i)
+  } else {
+    x <- st_read(gsub("large", "small", file_pol), layer = i)
+  }
+  st_intersection(x, qc)
+})
+names(ran) <- ee
+
+win <- lapply(ran, function(i){
+  lat <- st_bbox(qc) |> st_transform(epsg)
+  st_bbox(i) |> 
+    st_as_sfc() |> 
+    st_as_sf() |> 
+    st_buffer(50000) |>
+    #st_crop(c(xmin = -Inf, ymin = 117000, xmax = Inf, ymax = Inf)) |>
+    st_crop(qc)
+}) |> do.call("rbind", args = _) |> st_union()
+
+ar <- diff(st_bbox(win)[c(1, 3)]) / diff(st_bbox(win)[c(2, 4)])
+w <- 25
+
+png("plot.png", units = "in", height = w / ar, width = w, res = 500)
+line_height <- par("cin")[2]
+dev.off() # dummy plot to get dims of margins
+
+nrows <- 2 # assumes two rows
+top_margin_lines <- 4
+total_height <- w / ar + nrows * top_margin_lines * line_height
+
+fn <- file.path("results/graphics", paste0(gsub(" ", "_", sp), "_range_evaluation_projections.png"))
+png(fn, units = "in", height = 10, width = 6, res = 500)
+par(mfrow = c(4, 3), mar = c(0, 0, 0, 0), oma = c(1, 2, 1, 0))
+lapply(seq_along(ran), function(i){
+    #plot(crop(crop(x, st_buffer(x, 250000), mask = FALSE), qc, mask = TRUE), axes = FALSE, add = FALSE, plg = plg, col = range_cols, legend = FALSE, mar = c(0, 0, 2, 0), nc = 3, main = i)
+    x <- ran[[i]]
+    #plot(st_geometry(win), border = NA, xaxs = "i", yaxs = "i")
+    plot(st_geometry(qc), border = NA, col = "grey90", add = FALSE, xpd = FALSE)
+    plot(x, axes = FALSE, add = TRUE, plg = plg, col = range_cols, border = NA, legend = FALSE)
+    plot_lakes(lwd = 0.1)
+    if(i %in% seq(1, 12, by = 3)){
+      mtext(side = 2, line = 0, text = names(ran)[i], col = "grey70", font = 2, cex = 0.75)
+    }
+    if(i %in% c(1)){
+      mtext(side = 3, line = -0.5, text = "Actuel", col = "grey70", font = 2, cex = 0.75)
+    }
+    if(i %in% c(2:3)){
+      mtext(side = 3, line = -0.5, text = gsub("_", " ", sub("^([^ ]* ){2}", "", names(ran)[i])), col = "grey70", font = 2, cex = 0.75)
+    }  
+    if(i %in% c(10)){
+      mtext(side = 1, line = -0.5, text = "Actuel", col = "grey70", font = 2, cex = 0.75)
+    }
+    if(i %in% c(11:12)){
+      mtext(side = 1, line = -0.5, text = gsub("_", " ", sub("^([^ ]* ){2}", "", names(ran)[i])), col = "grey70", font = 2, cex = 0.75)
+    }      
+    #plot_foreground(observations = TRUE, echelle = "small")
+    #add_range2()
+})
+dev.off()
+#}
+
 graphics.off()
 
 
@@ -444,24 +545,6 @@ graphics.off()
 #done
 
 #species_list <- c("Pseudacris_triseriata", "Aquila_chrysaetos", "Bombycilla_garrulus")
-
-if(TRUE){
-  for(sp in species[4:13]){
-  spe <- file.path(path_raster, gsub(" ", "_", sp))
-  temp <- substr(basename(spe), 1, 5) # the temp file so files do not overwrite themselves
-  cmd <- paste0(
-    "cp ", spe, "_range_large.gpkg ", path_raster, "/", temp, ".gpkg && ",
-    #"for f in ", spe, "*.gpkg; do ",
-    "for f in $(ls ", spe, "*.gpkg | grep -v observation | grep -v _all.gpkg); do ",
-    "ogr2ogr -f GPKG -update -overwrite ", path_raster, "/", temp, ".gpkg \"$f\"; done && ",
-    "mv ", path_raster, "/", temp, ".gpkg ", spe, "_all.gpkg"
-  )
-  cat(cmd, "\n")
-  system(cmd)
-  }
-}
-
-
 
 
 if(FALSE){

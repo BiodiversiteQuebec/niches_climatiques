@@ -27,17 +27,17 @@ En général, les conditions climatiques ne sont pas les seuls éléments expliq
 
 Dans certains cas, des variables ont été considérées comme demeurant stables dans le temps, bien qu'à long terme, les changements climatiques pourraient avoir un impact sur ces variables. Par exemple, les milieux humides pourraient être influencés par les changements climatiques, mais nous avons considéré que cette influence serait probablement faible sur les périodes de temps considérées pour les analyses. Il en va de même pour les milieux agricoles et urbains. Dans certains cas, le milieu forestier (indépendemment de la composition forestière) a été considéré comme étant stable dans le temps pour les espèces trouvées dans l'extrême sud du Québec. Pour ces espèces, l'extension anticipée de leur aire de répartition ne dépassera généralement pas la limite actuelle des milieux forestiers et on peut donc assumer que le fait de considérer la forêt comme un prédicteur ne provoquera pas une troncation dans les aires de répartition futures. La variable % de forêts a été créée en additionnant les pourcentages de recouvrement des différents types de milieux forestiers (feuillus, mixtes, conifériens, etc.)   
 
-Certaines variables ont été combinées pour former des variables plus générales lorsque ces variables étaient trop précises par rapport au besoin des espèces ou incomplète sur l,ensemble du territoire.
+Certaines variables ont été combinées pour former des variables plus générales lorsque ces variables étaient trop précises par rapport au besoin des espèces ou incomplète sur l'ensemble du territoire.
 
-- les différents types de tourbières ont été combinés pour former une seule variable étant donné que les types de tourbières n'étaient pas disponibles pour l'ensemble des endroits désignés comme étant des tourbières.
+- les différents types de tourbières ont été combinées pour former une seule variable "tourbière" étant donné que les types de tourbières n'étaient pas spécifiés pour l'ensemble des endroits désignés comme étant des tourbières.
 
 - les dépôts meubles ont été identifiés en regroupant l'ensemble des types de dépôts sauf les dépôts anthopogénique et organiques et la roche en place.
 
-- la distance par rapport à l'eau à été calculée en prenant la distance par rapport aux lacs et aux rivières représentées par des polygones dans la GRHQ
+- la distance par rapport à l'eau à été calculée en prenant la distance par rapport aux lacs et aux rivières représentées par des polygones dans la Géobase du réseau hydrographique du Québec (GRHQ)
 
 - la distance à la côte a été calculée en prenant en considération la distance aux plans d'eau salée et la distance au Fleuve St-Laurent et certains de ses plus gros affluents (Rivière des Outaouais, partie aval du Richelieu) (log)
 
-- les milieux ouverts naturels ont été identifiés comme étant tout les milieux non-forestiers
+- les milieux ouverts naturels ont été identifiés comme étant tous les milieux non-forestiers et non-urbains
 
 Plusieurs barrières naturelles importantes sont présentes sur le territoire québécois. Par exemple, le Fleuve St-Laurent constitue une barrière majeure pour certaines espèces confinées au sud du St-Laurent ou des Grands Lacs comme la salamandre sombre des montagnes ou la salamandre pourpre. L'utilisation de variable binaire a été initialement employée pour contraindre les distributions modélisées de ces espèces. Cependant, d'autres barrières à la dispersion sont fort probablement existantes, mais beaucoup moins évidentes et facile à intégrer dans la modélisation. Afin d'uniformiser la méthodologie employée pour l'ensemble des espèces et éviter les traitements particuliers, nous avons finalement retiré ces variables pour obtenir les distributions potentielles basée sur le climat [et pour éviter de considérer ces barrières évidentes à la dispersion pour ces espèces]{style="background-color: #ffeb3b; padding: 0 0px;"}. De plus, afin de considérer différentes approches de mitigation des changements climatiques comme la migration assistée, il semble préférable d'estimer les distributions potentielles basées sur le climat et les habitats sans nécessairement considérer les obstacles à la dispersion.
 

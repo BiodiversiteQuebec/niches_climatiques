@@ -22,6 +22,7 @@
 !methods/results/
 !methods/results/**
 !.gitignore
+!job.sh
 .tex
 .log
 .out
