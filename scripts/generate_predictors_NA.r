@@ -97,7 +97,7 @@ collections <- list(
   ),
   "earthenv_topography" = c(
     "elevation", "earthenv_elevation", "Élévation", "stac_biab",
-    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique" "stac_biab"
+    "vrm", "earthenv_ruggedness", "Indice de rugosité topographique", "stac_biab"
   ),
   "soilgrids" = c(
     "sand_0-5cm", "sand", "% de sable", "stac_biab",
@@ -107,14 +107,14 @@ collections <- list(
     "nitrogen_0-5cm", "nitrogen", "Azote", "stac_biab",
     "bdod_0-5cm", "bulk_density", "Densité volumique", "stac_biab",
     "soc_0-5cm", "soil_organic_carbon", "Carbone organique du sol", "stac_biab",
-    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique" "stac_biab"
+    "ocd_0-5cm", "organic_carbon_density", "Densité de carbone organique", "stac_biab"
   ),
   "distance_to_roads" = c(
-    "distance_to_roads", "distance_to_roads", "Distance aux routes" "stac_biab"
+    "distance_to_roads", "distance_to_roads", "Distance aux routes", "stac_biab"
   ),
   "silvis" = c(
    "NDVI16_cumulative", "ndvi", "NDVI", "stac_biab",
-   "LAI8_cumulative", "lai", "Index de surface foliaire" "stac_biab"
+   "LAI8_cumulative", "lai", "Index de surface foliaire", "stac_biab"
   ),
   "ghmts" = c(
     "GHMTS", "human_modification", "Modifications humaines", "stac_biab"
@@ -125,7 +125,7 @@ collections <- lapply(collections, function(i){
   list(
     var = i[seq(1, length(i), by = 4)],
     name = i[seq(2, length(i), by = 4)],
-    fr = i[seq(3, length(i), by = 4)] 
+    fr = i[seq(3, length(i), by = 4)], 
     stac = i[seq(4, length(i), by = 4)]  
   )
 })
@@ -206,7 +206,7 @@ kfr <- fr[match(kids, ids)]
 collections[[coll]]$var <- kids
 collections[[coll]]$name <- sub("(_|\\s)[^_\\s]*$", "", kids)
 collections[[coll]]$fr <- sub("(_|\\s)[^_\\s]*$", "", kfr)
-
+collections[[coll]]$stac <- rep("stac_bq", length(kids))
 
 #####################################################
 ### Pool variables together #########################
