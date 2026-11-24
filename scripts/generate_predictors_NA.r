@@ -118,7 +118,10 @@ collections <- list(
   ),
   "ghmts" = c(
     "GHMTS", "human_modification", "Modifications humaines", "stac_biab"
-  )
+  ),
+  "esa_worldcover_2021_percentage" = c(
+    "herbaceous_wetland_90", "herbaceous_wetland", "% de milieux humides herbacés", "stac_bq"
+  )  
 )
 
 collections <- lapply(collections, function(i){
